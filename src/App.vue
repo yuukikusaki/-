@@ -226,6 +226,6 @@ header {
 }
 
 main {
-  margin-right: 100px;
+  margin: 50px;
 }
 </style>

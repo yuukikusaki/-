@@ -1,30 +1,32 @@
 <template>
-  <div class="lobby-container">
+  <div class="home-container">
     <!-- 游戏列表区 -->
     <aside class="game-list">
       <el-card class="box-card">
         <div slot="header" class="clearfix">
           <span>游戏列表</span>
         </div>
-        <div
-          v-for="(item,index) in gameList"
-          :key="index++"
-          class="text item"
-        >
-        <span>{{index}}</span>
-        <span>{{item.name}}</span>
-        <span>{{item.type}}</span>
+        <div v-for="(item,index) in gameList" :key="index++" class="text item">
+          <span>{{index}}</span>
+          <span>{{item.name}}</span>
+          <span>{{item.type}}</span>
         </div>
       </el-card>
     </aside>
     <!-- 游戏卡片区 -->
-    <router-view></router-view>
-    <div class="card-list">
-      <div class="game-card" v-for="(item,index) in gameList" :key="index">
-        <img :src="item.img" />
-        <div class="game-info">
-          <span>{{item.name}}</span>
-          <el-button type="danger" size="small" @click="$router.push({path:'/lobby',query:{id:item.id}})">进入游戏</el-button>
+    <!-- <router-view></router-view> -->
+    <div class="game-container">
+      <div class="card-list">
+        <div class="game-card" v-for="(item,index) in gameList" :key="index">
+          <img :src="item.img" />
+          <div class="game-info">
+            <span>{{item.name}}</span>
+            <el-button
+              type="danger"
+              size="small"
+              @click="$router.push({path:'/lobby',query:{id:item.id}})"
+            >进入游戏</el-button>
+          </div>
         </div>
       </div>
     </div>
@@ -42,21 +44,27 @@ export default {
     this.getGameList();
   },
   methods: {
-    getGameList(){
-      this.gameList = this.$store.getters.getGameList
+    getGameList() {
+      this.gameList = this.$store.getters.getGameList;
     },
-    test(){
-      this.$http.get('users/test');
+    test() {
+      this.$http.get("users/test");
     }
-  },
+  }
 };
 </script>
 
 <style lang="scss">
-.lobby-container {
-  display: flex;
+.home-container {
+  // display: flex;
 }
 // 游戏列表区 start
+.game-list {
+  width: 180px;
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+}
 .item {
   margin-bottom: 18px;
 }
@@ -69,17 +77,16 @@ export default {
 .clearfix:after {
   clear: both;
 }
-
-.game-list {
-  width: 400px;
-}
-.text{
+.text {
   display: flex;
   justify-content: space-between;
 }
 // 游戏列表区 end
 
 // 游戏卡片区 start
+.game-container {
+  margin-left: 180px;
+}
 .card-list {
   display: flex;
   flex-wrap: wrap;
