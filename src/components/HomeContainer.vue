@@ -55,9 +55,9 @@ export default {
 </script>
 
 <style lang="scss">
-.home-container {
-  // display: flex;
-}
+// .home-container {
+//   // display: flex;
+// }
 // 游戏列表区 start
 .game-list {
   width: 180px;
