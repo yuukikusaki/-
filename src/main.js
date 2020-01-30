@@ -14,6 +14,13 @@ import App from './App.vue'
 import VueCookies from 'vue-cookies'
 Vue.use(VueCookies)
 
+// 引入 socket
+import VueSocketIO from 'vue-socket.io'
+Vue.use(new VueSocketIO({
+  debug:true,
+  connection:'http://localhost:3000',
+}));
+
 import router from './router/router'
 import VueRouter from 'vue-resource'
 Vue.use(VueRouter)

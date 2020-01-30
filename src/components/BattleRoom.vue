@@ -1,0 +1,57 @@
+<template>
+  <div id="battle-contaioner">
+    <div style="width:800px;height:600px;margin:0 auto;">
+      <canvas id="mycanvas" width="800" height="600"></canvas>
+    </div>
+  </div>
+</template>
+
+<script>
+import PokerResource from "../js/fight_the_landlords/pokerResource";
+import PokerGame from "../js/fight_the_landlords/pokerGame";
+export default {
+  data() {
+    return {
+      roomMode: "",
+      Resource:null,
+    };
+  },
+  sockets: {
+    connect() {
+      window.console.log("连接成功");
+    },
+  },
+  created() {
+    this.selectRoom();
+    this.setImage();
+  },
+  mounted() {
+    this.setCanvas();
+  },
+  methods: {
+    selectRoom() {
+      this.roomMode = this.$route.query;
+    },
+    // socket 连接
+    
+    setImage() {
+      // 设置图片
+      const pokerResource = new PokerResource();
+      this.Resource = JSON.parse(pokerResource.getResource());
+    },
+    setCanvas() {
+      new PokerGame({
+        canvasid: "#mycanvas",
+        pokerResource: this.Resource
+      });
+    }
+  }
+};
+</script>
+
+<style lang="scss">
+canvas {
+  background-color: #ccc;
+  margin: 0 auto;
+}
+</style>

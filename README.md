@@ -34,6 +34,15 @@
 3. vuex内获取新的房间列表
 4. 刷新列表
 
+# BattleRoom
+## 游戏流程逻辑（此处事件没指明时全是 socket ）
+1. 进入页面时 socket 连接
+2. 点击开始/准备按钮后执行准备事件`onready()`
+3. 三人全准备后接受发牌事件`deal(pokerList)`，收到自己分到的牌组
+4. 系统开始发牌
+5. 发牌结束，开始决定地主,点击分数之后执行`landlord(score)`
+6. 把选择的分数显示在canvas上，并决定地主
+
 # vuex store
 ```js
 this.$store.getters.方法名
