@@ -14,7 +14,10 @@
             <div class="game-join">
               <span>房间人数</span>
               <div class="bottom clearfix">
-                <el-button type="primary" round>进入房间</el-button>
+                <el-button type="primary" round
+                @click="$router.push({
+                  path:'/battle',
+                  query:{gameID:gameInfo.id,roomID:o.roomID}})">进入房间</el-button>
               </div>
             </div>
           </div>
@@ -76,6 +79,7 @@ export default {
       newRoomInfo.roomID = this.roomList.length+1;
       newRoomInfo.roomName = this.gameInfo.name;
       newRoomInfo.roomPass = this.roomPass;
+      // 应该是向服务器发送消息
       this.$store.commit('addNewRoom',newRoomInfo);
       this.dialogVisible = false;
     }
