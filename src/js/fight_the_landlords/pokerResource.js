@@ -13,6 +13,9 @@ class PokerResource {
     }
     // 设置扑克牌图片数据
     setPokerImage() {
+        // 添加大小王
+        this.images.push({ name: "小王", point: 14 });
+        this.images.push({ name: "大王", point: 15 });
         //给对应牌加上花色
         for (let i = 0; i < this.colors.length; i++) {
             for (let j = 0; j < this.numbers.length; j++) {
@@ -21,9 +24,6 @@ class PokerResource {
                 this.images.push({ name, point });
             }
         }
-        // 添加大小王
-        this.images.push({ name: "小王", point: 14 });
-        this.images.push({ name: "大王", point: 15 });
 
         // 添加图片链接
         for (let i = 0; i < this.images.length; i++) {
@@ -39,18 +39,18 @@ class PokerResource {
         // 添加背景图片
         this.images.push({ name: "bgImage", url: `${imgHttp}/bg1.png` });
         // 开始按钮
-        this.images.push({ name:"startBtn",url:`${imgHttp}/kaishi.png`})
+        this.images.push({ name: "startBtn", url: `${imgHttp}/kaishi.png` })
         // 点数
         this.images.push({ name: "one", socre: 1, url: `${imgHttp}/yf.png` });
         this.images.push({ name: "two", socre: 2, url: `${imgHttp}/ef.png` });
         this.images.push({ name: "three", socre: 3, url: `${imgHttp}/sf.png` });
         // 牌背面
-        this.images.push({ name:"pokerBack",url:`${imgHttp}/pokerback.png`});
+        this.images.push({ name: "pokerBack", url: `${imgHttp}/pokerback.png` });
     }
 
-    setPosition(){
-        for(let i=0;i<this.images.length;i++){
-            this.images[i].positon = {x:null,y:null}
+    setPosition() {
+        for (let i = 0; i < this.images.length; i++) {
+            this.images[i].positon = { x: null, y: null }
         }
     }
 

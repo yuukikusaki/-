@@ -93,8 +93,7 @@ export default {
   width: 180px;
   height: 500px;
   position: fixed;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 20%;
   background-color: #ccc;
 }
 .lobby-container {

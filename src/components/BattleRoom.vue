@@ -9,17 +9,23 @@
 <script>
 import PokerResource from "../js/fight_the_landlords/pokerResource";
 import PokerGame from "../js/fight_the_landlords/pokerGame";
+
 export default {
   data() {
     return {
       roomMode: "",
-      Resource:null,
+      Resource: null,
+      pokerGame: null // 游戏对象
     };
   },
   sockets: {
     connect() {
       window.console.log("连接成功");
     },
+    // 发牌
+    deal(pokerList) {
+      this.pokerGame.dealCards(pokerList);
+    }
   },
   created() {
     this.selectRoom();
@@ -33,16 +39,17 @@ export default {
       this.roomMode = this.$route.query;
     },
     // socket 连接
-    
+
     setImage() {
       // 设置图片
       const pokerResource = new PokerResource();
       this.Resource = JSON.parse(pokerResource.getResource());
     },
     setCanvas() {
-      new PokerGame({
-        canvasid: "#mycanvas",
-        pokerResource: this.Resource
+      this.pokerGame = new PokerGame({
+        canvasid: "#mycanvas", // 传入canvas
+        pokerResource: this.Resource, // 传入资源
+        that: this // 传入 this，为了button能执行socket
       });
     }
   }
