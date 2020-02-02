@@ -9,7 +9,8 @@ class PokerGame {
         this.pokerImage = this.pokerResource.images;
         this.loadedRes = {}; // 加载完毕的资源
         // 保存设置完毕的资源，背景图片分开，0位置存放Y区域对象
-        this.settedRes = { button: [], poker: {} };
+        this.settedRes = { button: {}, poker: {} };
+        this.button = []
         this.deck = [];
         // 背景及一些初始化图片
         this.bgImage = null;
@@ -82,14 +83,14 @@ class PokerGame {
         this.startBtn = new ButtonEvent(this.that);
         this.startBtn.setPosition("startBtn", [canvasW / 2 - btnW / 2, btnY, btnW, btnH]);
         this.ctx.drawImage(this.loadedRes["startBtn"], canvasW / 2 - btnW / 2, btnY, btnW, btnH);
-        this.settedRes.button.push({ y1: btnY, y2: btnY + btnH });
+        this.settedRes.button = { y1: btnY, y2: btnY + btnH };
         this.settedRes.poker = { y1: this.canvasH - 170, y2: this.canvasH };
-        this.settedRes.button.push(this.startBtn);
+        this.button.push(this.startBtn);
         // this.setBtnImage();
     }
 
     // 设置按钮图片
-    setScoreImage() {
+    drawBtn() {
         let canvasW = this.canvasW;
         let btnW = this.btnW;
         let btnH = this.btnH;
@@ -105,7 +106,7 @@ class PokerGame {
         this.ctx.drawImage(this.loadedRes["one"], canvasW / 3 - btnW / 2, btnY, btnW, btnH);
         this.ctx.drawImage(this.loadedRes["two"], canvasW / 2 - btnW / 2, btnY, btnW, btnH);
         this.ctx.drawImage(this.loadedRes["three"], canvasW * 2 / 3 - btnW / 2, btnY, btnW, btnH);
-        this.settedRes.button.push(this.one, this.two, this.three);
+        this.button.push(this.one, this.two, this.three);
     }
 
     // 添加点击事件
@@ -117,18 +118,18 @@ class PokerGame {
             this.point.x = e.layerX;
             this.point.y = e.layerY;
             // 按钮y范围
-            let buttonY1 = this.settedRes.button[0].y1;
-            let buttonY2 = this.settedRes.button[0].y2;
+            let buttonY1 = this.settedRes.button.y1;
+            let buttonY2 = this.settedRes.button.y2;
             // 卡牌y范围
             let pokerY1 = this.settedRes.poker.y1;
             let pokerY2 = this.settedRes.poker.y2;
 
             // 按钮区
             if (this.point.y >= buttonY1 && this.point.y <= buttonY2) {
-                for (let i = 1; i < this.settedRes.button.length; i++) {
-                    let p = this.settedRes.button[i].getPositionX();
+                for (let i = 0; i < this.button.length; i++) {
+                    let p = this.button[i].getPositionX();
                     if (e.layerX >= p.x1 && e.layerX <= p.x2) {
-                        this.settedRes.button[i].onClick();
+                        this.button[i].onClick();
                         // *这里暂时这么写（改好了，这段先保留）
                         // 理论上应该是按钮类发送给服务端，服务端回发调用
                         // this.judgeClickEvent(this.settedRes.button[i]);
@@ -155,7 +156,7 @@ class PokerGame {
         this.pokerList = pokerList;
         // 这里是一个动画动作，应该放入setInterval中
         // 从数组中移除开始按钮
-        this.settedRes.button.pop();
+        this.button.pop();
         // 1. 清空画布
         this.ctx.clearRect(0, 0, this.canvasW, this.canvasH);
         // 2. 发牌动画和显示按钮
@@ -190,7 +191,7 @@ class PokerGame {
     drawPoker(len) {
         this.ctx.clearRect(0, 0, this.canvasW, this.canvasH);
         this.ctx.drawImage(this.loadedRes["bgImage"], 0, 0, this.canvasW, this.canvasH);
-        this.setScoreImage();
+        this.drawBtn();
         let startX = this.canvasW / 2 - 52.5 - (len - 1) * 10;
         let startL = this.canvasH / 2 + 52.5 + (len - 1) * 5 - (this.canvasW - this.canvasH) / 2;
         let startR = this.canvasH / 2 - 52.5 - (len - 1) * 5;
