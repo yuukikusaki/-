@@ -46,6 +46,10 @@ class PokerResource {
         this.images.push({ name: "three", socre: 3, url: `${imgHttp}/sf.png` });
         // 牌背面
         this.images.push({ name: "pokerBack", url: `${imgHttp}/pokerback.png` });
+        // 按钮
+        this.images.push({ name: "pass",url:`${imgHttp}/buchu.png`});
+        this.images.push({ name: "tip",url:`${imgHttp}/tishi.png`});
+        this.images.push({ name: "play", url:`${imgHttp}/chupai.png`});
     }
 
     setPosition() {

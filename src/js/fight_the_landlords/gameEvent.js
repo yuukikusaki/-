@@ -5,8 +5,8 @@ class ButtonEvent {
         // 记录图片位置和长宽
         this.x = null;
         this.y = null;
-        this.width = null;
-        this.height = null;
+        this.w = null;
+        this.h = null;
         this.that = that;
     }
 
@@ -15,23 +15,38 @@ class ButtonEvent {
         this.name = name;
         this.x = positon[0];
         this.y = positon[1];
-        this.width = positon[2];
-        this.height = positon[3];
+        this.w = positon[2];
+        this.h = positon[3];
     }
 
     // 获取图片位置
     getPositionX() {
         let positon = {
             x1: this.x,
-            x2: this.x + this.width,
+            x2: this.x + this.w,
         };
         return positon;
     }
 
     // 点击事件
     onClick() {
-        // alert(this.name)
-        this.that.$socket.emit('onready');
+        alert(this.name)
+        switch (this.name) {
+            case 'startBtn':
+                this.that.$socket.emit('onready');
+                break;
+            case 'pass':
+                // this.that.$socket.emit()
+                break;
+            case 'tip':
+                break;
+            case 'play':
+                // this.that.$socket.emit()
+                break;
+            default:
+                // this.that.$socket.emit('')
+                break;
+        }
         return;
         // 1. 点击之后把数据返回给游戏主类
         // 2. 游戏主类把这些信息发送给服务器
@@ -84,6 +99,10 @@ class PokerEvent {
     setLast(flag) {
         this.isLast = flag;
         window.console.log(this.isLast);
+    }
+
+    getChecked() {
+        return this.isChecked;
     }
 
     // 点击事件

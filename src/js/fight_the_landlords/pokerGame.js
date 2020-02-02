@@ -8,16 +8,15 @@ class PokerGame {
         this.pokerResource = params.pokerResource;
         this.pokerImage = this.pokerResource.images;
         this.loadedRes = {}; // 加载完毕的资源
-        // 保存设置完毕的资源，背景图片分开，0位置存放Y区域对象
+        // 游戏信息
         this.settedRes = { button: {}, poker: {} };
-        this.button = []
-        this.deck = [];
+        this.button = []; // 存储按钮
+        this.deck = []; // 牌组
+        this.checkedDeck = []; // 选中的牌
         // 背景及一些初始化图片
         this.bgImage = null;
         this.startBtn = null;
-        this.one = null;
-        this.two = null;
-        this.three = null;
+        this.isplay = null; // 游戏是否开始
         this.loadAllResource();
         // 位置数据
         this.canvasW = this.canvas.width;
@@ -51,6 +50,7 @@ class PokerGame {
         this.canvas.width = windowW;
         this.canvas.height = windowH;
         this.setBgImage();
+        this.setBtn();
         this.addClickEvent();
     }
 
@@ -89,13 +89,12 @@ class PokerGame {
         // this.setBtnImage();
     }
 
-    // 设置按钮图片
-    drawBtn() {
+    // 设置按钮
+    setBtn() {
         let canvasW = this.canvasW;
         let btnW = this.btnW;
         let btnH = this.btnH;
         let btnY = this.btnY;
-
         // 设置分数按钮
         this.one = new ButtonEvent();
         this.two = new ButtonEvent();
@@ -103,10 +102,33 @@ class PokerGame {
         this.one.setPosition("one", [canvasW / 3 - btnW / 2, btnY, btnW, btnH])
         this.two.setPosition("two", [canvasW / 2 - btnW / 2, btnY, btnW, btnH])
         this.three.setPosition("three", [canvasW * 2 / 3 - btnW / 2, btnY, btnW, btnH]);
-        this.ctx.drawImage(this.loadedRes["one"], canvasW / 3 - btnW / 2, btnY, btnW, btnH);
-        this.ctx.drawImage(this.loadedRes["two"], canvasW / 2 - btnW / 2, btnY, btnW, btnH);
-        this.ctx.drawImage(this.loadedRes["three"], canvasW * 2 / 3 - btnW / 2, btnY, btnW, btnH);
-        this.button.push(this.one, this.two, this.three);
+        // 设置游戏按钮
+        this.pass = new ButtonEvent();
+        this.tip = new ButtonEvent();
+        this.play = new ButtonEvent();
+        this.one.setPosition("pass", [canvasW / 3 - btnW / 2, btnY, btnW, btnH])
+        this.two.setPosition("tip", [canvasW / 2 - btnW / 2, btnY, btnW, btnH])
+        this.three.setPosition("play", [canvasW * 2 / 3 - btnW / 2, btnY, btnW, btnH]);
+    }
+
+    // 描绘按钮
+    drawBtn() {
+        let canvasW = this.canvasW;
+        let btnW = this.btnW;
+        let btnH = this.btnH;
+        let btnY = this.btnY;
+        if (this.isplay) {
+            this.ctx.drawImage(this.loadedRes["pass"], canvasW / 3 - btnW / 2, btnY, btnW, btnH);
+            this.ctx.drawImage(this.loadedRes["tip"], canvasW / 2 - btnW / 2, btnY, btnW, btnH);
+            this.ctx.drawImage(this.loadedRes["play"], canvasW * 2 / 3 - btnW / 2, btnY, btnW, btnH);
+            this.button = [];
+            this.button.push(this.pass,this.tip,this.play);
+        } else {
+            this.ctx.drawImage(this.loadedRes["one"], canvasW / 3 - btnW / 2, btnY, btnW, btnH);
+            this.ctx.drawImage(this.loadedRes["two"], canvasW / 2 - btnW / 2, btnY, btnW, btnH);
+            this.ctx.drawImage(this.loadedRes["three"], canvasW * 2 / 3 - btnW / 2, btnY, btnW, btnH);
+            this.button.push(this.one, this.two, this.three);
+        }
     }
 
     // 添加点击事件
