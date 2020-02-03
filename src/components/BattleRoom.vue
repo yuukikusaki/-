@@ -55,6 +55,7 @@ export default {
     play(){
       this.pokerGame.isplay = true;
       this.pokerGame.drawPoker(17);
+      this.pokerGame.setBtn();
     }
   }
 };

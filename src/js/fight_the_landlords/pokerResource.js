@@ -47,9 +47,9 @@ class PokerResource {
         // 牌背面
         this.images.push({ name: "pokerBack", url: `${imgHttp}/pokerback.png` });
         // 按钮
-        this.images.push({ name: "pass",url:`${imgHttp}/buchu.png`});
-        this.images.push({ name: "tip",url:`${imgHttp}/tishi.png`});
-        this.images.push({ name: "play", url:`${imgHttp}/chupai.png`});
+        this.images.push({ name: "pass", url: `${imgHttp}/buchu.png` });
+        this.images.push({ name: "tip", url: `${imgHttp}/tishi.png` });
+        this.images.push({ name: "play", url: `${imgHttp}/chupai.png` });
     }
 
     setPosition() {
@@ -65,6 +65,7 @@ class PokerResource {
 
 }
 
+export const resource = new PokerResource().getResource();
 export default PokerResource;
 // // 打乱牌组
     // pokerList.sort(() => {

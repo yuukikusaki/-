@@ -1,13 +1,13 @@
 // 按钮类
 class ButtonEvent {
-    constructor(that) {
+    constructor(vm) {
         this.name = null;
         // 记录图片位置和长宽
         this.x = null;
         this.y = null;
         this.w = null;
         this.h = null;
-        this.that = that;
+        this.vm = vm;
     }
 
     // 设置图片位置
@@ -30,13 +30,14 @@ class ButtonEvent {
 
     // 点击事件
     onClick() {
-        alert(this.name)
+        window.console.log(this.name)
         switch (this.name) {
             case 'startBtn':
-                this.that.$socket.emit('onready');
+                this.vm.$socket.emit('onready');
                 break;
             case 'pass':
                 // this.that.$socket.emit()
+                // that.drawPoker(that.deck);
                 break;
             case 'tip':
                 break;
@@ -51,6 +52,24 @@ class ButtonEvent {
         // 1. 点击之后把数据返回给游戏主类
         // 2. 游戏主类把这些信息发送给服务器
         // 3. 如果是卡牌，则改变位置
+    }
+}
+
+class PassButton extends ButtonEvent {
+    constructor(that) {
+        super();
+        this.that = that;
+    }
+
+    onClick(deck) {
+        deck.map(card => {
+            window.console.log()
+            if (card.getChecked()) {
+                card.isChecked = false;
+                card.y += 20;
+            }
+        });
+        this.that.drawPoker(deck.length);
     }
 }
 
@@ -98,7 +117,7 @@ class PokerEvent {
     // 标记为最后一张图片
     setLast(flag) {
         this.isLast = flag;
-        window.console.log(this.isLast);
+        window.console.log(this.name);
     }
 
     getChecked() {
@@ -120,4 +139,4 @@ class PokerEvent {
     }
 }
 
-export { ButtonEvent, PokerEvent }
+export { ButtonEvent, PassButton, PokerEvent }
