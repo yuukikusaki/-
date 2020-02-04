@@ -1,9 +1,9 @@
 import { resource } from './pokerResource'
-import { ButtonEvent, PassButton,PokerEvent } from './gameEvent'
+import { ButtonEvent, startBtn, PassBtn, PlayBtn, PokerEvent } from './gameEvent'
 
 // 初始化类
 class GameInit {
-    constructor(canvasid, that) {
+    constructor(canvasid, vm) {
         // canvas 信息
         this.canvas = document.querySelector(canvasid);
         this.ctx = this.canvas.getContext("2d");
@@ -20,7 +20,7 @@ class GameInit {
         this.btnY = this.canvasH * 0.618;
         // 点击事件
         this.point = { x: null, y: null };
-        this.that = that; // vm实例
+        this.that = vm; // vm实例
     }
     // 读取资源
     loadAllResource() {
@@ -48,7 +48,7 @@ class GameInit {
         // 设置背景图片
         this.ctx.drawImage(this.loadedRes["bgImage"], 0, 0, canvasW, canvasH);
         // 设置开始按钮
-        this.startBtn = new ButtonEvent(this.that);
+        this.startBtn = new startBtn(this.that);
         this.startBtn.setPosition("startBtn", [canvasW / 2 - btnW / 2, btnY, btnW, btnH]);
         this.ctx.drawImage(this.loadedRes["startBtn"], canvasW / 2 - btnW / 2, btnY, btnW, btnH);
         this.settedRes.button = { y1: btnY, y2: btnY + btnH };
@@ -71,16 +71,16 @@ class GameInit {
             this.one.setPosition("one", [canvasW / 3 - btnW / 2, btnY, btnW, btnH])
             this.two.setPosition("two", [canvasW / 2 - btnW / 2, btnY, btnW, btnH])
             this.three.setPosition("three", [canvasW * 2 / 3 - btnW / 2, btnY, btnW, btnH]);
-            this.button.push(this.one,this.two,this.three);
+            this.button.push(this.one, this.two, this.three);
         } else {
             // 设置游戏按钮
-            this.pass = new PassButton(this);
+            this.pass = new PassBtn(this.vm, this);
             this.tip = new ButtonEvent(this.that);
-            this.play = new ButtonEvent(this.that);
+            this.play = new PlayBtn(this.vm, this);
             this.pass.setPosition("pass", [canvasW / 3 - btnW / 2, btnY, btnW, btnH])
             this.tip.setPosition("tip", [canvasW / 2 - btnW / 2, btnY, btnW, btnH])
             this.play.setPosition("play", [canvasW * 2 / 3 - btnW / 2, btnY, btnW, btnH]);
-            this.button = [this.pass,this.tip,this.play];
+            this.button = [this.pass, this.tip, this.play];
         }
     }
 
@@ -164,7 +164,6 @@ class PokerGame extends GameInit {
         this.canvas.width = windowW;
         this.canvas.height = windowH;
         this.setBgImage();
-        this.setBtn();
         this.addClickEvent();
     }
 
@@ -190,6 +189,7 @@ class PokerGame extends GameInit {
 
     // 发牌
     dealCards(pokerList) {
+        this.setBtn();
         this.pokerList = pokerList;
         // 这里是一个动画动作，应该放入setInterval中
         // 从数组中移除开始按钮
@@ -209,9 +209,9 @@ class PokerGame extends GameInit {
     }
     // 调用卡牌类
     createPokerClass(pokerName, position) {
-        pokerName = new PokerEvent();
-        pokerName.setPosition(position);
-        this.deck.push(pokerName);
+        const newPoker = new PokerEvent(pokerName);
+        newPoker.setPosition(position);
+        this.deck.push(newPoker);
     }
 
     // 动画
@@ -237,6 +237,7 @@ class PokerGame extends GameInit {
                 this.loadedRes[this.pokerList[i].name],
                 startX + i * 20,
                 this.deck[i].y);
+            this.deck[i].changePosition(startX + i*20);
             if (i == this.deck.length - 1) {
                 this.deck[i].setLast(true);
                 this.drawBtn();
@@ -259,6 +260,19 @@ class PokerGame extends GameInit {
             );
             this.ctx.rotate(-Math.PI / 2);
             this.ctx.translate(-this.canvasW, 0);
+        }
+    }
+
+    // 出牌展示
+    drawDealList(dealList){
+        const len = dealList.length;
+        let startX = this.canvasW / 2 - 52.5 - (len - 1) * 10;
+        for (let i = 0; i < len; i++) {
+            // 自己
+            this.ctx.drawImage(
+                this.loadedRes[dealList[i].name],
+                startX + i * 20,
+                this.deck[i].y-250);
         }
     }
 }

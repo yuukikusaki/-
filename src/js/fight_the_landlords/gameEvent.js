@@ -1,6 +1,6 @@
 // 按钮类
 class ButtonEvent {
-    constructor(vm) {
+    constructor(vm,that) {
         this.name = null;
         // 记录图片位置和长宽
         this.x = null;
@@ -8,6 +8,7 @@ class ButtonEvent {
         this.w = null;
         this.h = null;
         this.vm = vm;
+        this.that = that;
     }
 
     // 设置图片位置
@@ -28,54 +29,67 @@ class ButtonEvent {
         return positon;
     }
 
-    // 点击事件
+
+    // 1. 点击之后把数据返回给游戏主类
+    // 2. 游戏主类把这些信息发送给服务器
+    // 3. 如果是卡牌，则改变位置
+
+}
+
+// startBtn 按钮
+class startBtn extends ButtonEvent {
+    constructor(vm,that) {
+        super(vm,that);
+    }
+
     onClick() {
-        window.console.log(this.name)
-        switch (this.name) {
-            case 'startBtn':
-                this.vm.$socket.emit('onready');
-                break;
-            case 'pass':
-                // this.that.$socket.emit()
-                // that.drawPoker(that.deck);
-                break;
-            case 'tip':
-                break;
-            case 'play':
-                // this.that.$socket.emit()
-                break;
-            default:
-                // this.that.$socket.emit('')
-                break;
-        }
-        return;
-        // 1. 点击之后把数据返回给游戏主类
-        // 2. 游戏主类把这些信息发送给服务器
-        // 3. 如果是卡牌，则改变位置
+        this.vm.$socket.emit('onready');
     }
 }
 
-class PassButton extends ButtonEvent {
-    constructor(that) {
-        super();
-        this.that = that;
+// pass 按钮
+class PassBtn extends ButtonEvent {
+    constructor(vm,that) {
+        super(vm,that);
     }
 
     onClick(deck) {
         deck.map(card => {
-            window.console.log()
             if (card.getChecked()) {
                 card.isChecked = false;
                 card.y += 20;
             }
         });
         this.that.drawPoker(deck.length);
+        // socket
+        // this.vm.$socket.emit('pass');
     }
+}
+
+class PlayBtn extends ButtonEvent {
+    constructor(vm,that) {
+        super(vm,that);
+    }
+    onClick(deck){
+        let dealList = [];
+        for(let i=0;i<deck.length;i++){
+            if(deck[i].getChecked()){
+                dealList.push(deck[i]);
+                deck[i] = undefined;
+            }
+        }
+        this.that.deck = deck.filter(c=>c);
+        this.that.drawPoker(this.that.deck.length);
+        this.that.drawDealList(dealList);
+        // this.vm.$socket.emit('deal',dealList);
+    }
+
 }
 
 // 卡牌类
 class PokerEvent {
-    constructor() {
+    constructor(name) {
+        this.name = name
         // 记录图片位置和长宽
         this.x = null;
         this.y = null;
@@ -117,11 +131,15 @@ class PokerEvent {
     // 标记为最后一张图片
     setLast(flag) {
         this.isLast = flag;
-        window.console.log(this.name);
     }
 
     getChecked() {
         return this.isChecked;
+    }
+
+    // 改变位置
+    changePosition(x){
+        this.x = x;
     }
 
     // 点击事件
@@ -139,4 +157,4 @@ class PokerEvent {
     }
 }
 
-export { ButtonEvent, PassButton, PokerEvent }
+export { ButtonEvent, startBtn, PassBtn,PlayBtn, PokerEvent }
