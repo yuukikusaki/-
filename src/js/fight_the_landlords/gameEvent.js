@@ -62,7 +62,7 @@ class PassBtn extends ButtonEvent {
         });
         this.that.drawPoker(deck.length);
         // socket
-        // this.vm.$socket.emit('pass');
+        this.vm.$socket.emit('pass');
     }
 }
 

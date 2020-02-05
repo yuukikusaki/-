@@ -1,8 +1,7 @@
 <template>
   <div id="battle-contaioner">
     <div style="width:800px;height:600px;margin:0 auto;">
-      <el-button @click="play()"
-    type="primary">决定地主（临时）</el-button>
+      <el-button @click="play()" type="primary">决定地主（临时）</el-button>
       <canvas id="mycanvas" width="800" height="600"></canvas>
     </div>
   </div>
@@ -15,7 +14,7 @@ import PokerGame from "../js/fight_the_landlords/pokerGame";
 export default {
   data() {
     return {
-      roomMode: "",
+      room:null, // 房间信息
       Resource: null,
       pokerGame: null // 游戏对象
     };
@@ -30,15 +29,16 @@ export default {
     }
   },
   created() {
-    this.selectRoom();
+    this.sendRoom();
     this.setImage();
   },
   mounted() {
     this.setCanvas();
   },
   methods: {
-    selectRoom() {
-      this.roomMode = this.$route.query;
+    sendRoom() {
+      this.room = this.$route.query;
+      this.$socket.emit('room',this.room);
     },
     setImage() {
       // 设置图片
@@ -52,7 +52,7 @@ export default {
         that: this // 传入 this，为了button能执行socket
       });
     },
-    play(){
+    play() {
       this.pokerGame.isplay = true;
       this.pokerGame.drawPoker(17);
       this.pokerGame.setBtn();
