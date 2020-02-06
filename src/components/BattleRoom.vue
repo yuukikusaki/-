@@ -26,7 +26,11 @@ export default {
     // 发牌
     deal(pokerList) {
       this.pokerGame.dealCards(pokerList);
-    }
+    },
+    // 测试用
+    test(data){
+      window.console.log(data);
+    } 
   },
   created() {
     this.sendRoom();
@@ -38,7 +42,7 @@ export default {
   methods: {
     sendRoom() {
       this.room = this.$route.query;
-      this.$socket.emit('room',this.room);
+      this.$socket.emit('joinRoom',this.room);
     },
     setImage() {
       // 设置图片

@@ -1,4 +1,5 @@
-let imgHttp = "http://localhost:3000/images/fight_the_landlords"
+// let imgHttp = "http://localhost:3000/images/fight_the_landlords"
+const imgHttp = "/fight_the_landlords";
 // 创建牌组
 class PokerResource {
     constructor() {
