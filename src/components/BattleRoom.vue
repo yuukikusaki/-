@@ -20,9 +20,6 @@ export default {
     };
   },
   sockets: {
-    connect() {
-      window.console.log("连接成功");
-    },
     // 发牌
     deal(pokerList) {
       this.pokerGame.dealCards(pokerList);

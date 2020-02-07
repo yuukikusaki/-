@@ -7,17 +7,13 @@
         <el-card :body-style="{ padding: '0px' }" v-for="(o, index) in roomList" :key="index">
           <div class="game-info">
             <div class="game-img">
-              <img
-                :src="gameInfo.img"
-              />
+              <img :src="gameInfo.img" />
             </div>
             <div class="game-join">
               <span>房间人数</span>
               <div class="bottom clearfix">
-                <el-button type="primary" round
-                @click="$router.push({
-                  path:'/battle',
-                  query:{gameID:gameInfo.id,roomID:o.roomID}})">进入房间</el-button>
+                <el-button type="primary" round 
+                @click="joinRoom(index+1)">进入房间</el-button>
               </div>
             </div>
           </div>
@@ -30,13 +26,12 @@
         <p>游戏名称：{{gameInfo.name}}</p>
         <div class="setPass">
           <span>房间密码：</span>
-          <el-input placeholder="请输入密码" v-model="roomPass" show-password
-          maxlength="6"></el-input>
+          <el-input placeholder="请输入密码" v-model="roomPass" show-password maxlength="6"></el-input>
         </div>
         <!-- 关闭区 -->
         <span slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="createNewRoom()">确 定</el-button>
+          <el-button type="primary" @click="crtNewRoom()">确 定</el-button>
         </span>
       </el-dialog>
     </div>
@@ -51,13 +46,21 @@ export default {
       gameId: null,
       gameInfo: {}, // 游戏信息
       roomPass: null, // 房间密码
-      roomList:[], // 房间列表
+      roomList: [] // 房间列表
     };
+  },
+  sockets:{
+    connect() {
+      window.console.log("连接成功");
+    },
+    flashRoom(room){
+      this.getRoomList(room);
+    }
   },
   created() {
     this.getGameId();
     this.getGameInfo();
-    this.getRoomList();
+    // this.getRoomList();
   },
   methods: {
     // 获取游戏id
@@ -65,23 +68,34 @@ export default {
       this.gameId = this.$route.query.id;
     },
     // 从 store 中获取游戏信息
-    getGameInfo() {      
+    getGameInfo() {
       this.gameInfo = this.$store.getters.getGameList[this.gameId - 1];
       window.console.log(this.gameInfo);
     },
     // 获取游戏列表
-    getRoomList(){
-      this.roomList = this.$store.getters.getRoomList;
+    getRoomList(room) {
+      this.roomList.push(room);
+      // 改为 socket 获取列表
+      // this.roomList = this.$store.getters.getRoomList;
     },
     // 创建新房间
-    createNewRoom(){
-      let newRoomInfo = {};
-      newRoomInfo.roomID = this.roomList.length+1;
-      newRoomInfo.roomName = this.gameInfo.name;
-      newRoomInfo.roomPass = this.roomPass;
+    crtNewRoom() {
+      let newRoom = {};
+      newRoom.id = this.roomList.length + 1;
+      newRoom.name = this.gameInfo.name;
+      newRoom.pass = this.roomPass;
       // 应该是向服务器发送消息
-      this.$store.commit('addNewRoom',newRoomInfo);
+      this.$socket.emit("crtRoom", newRoom);
+      this.joinRoom(newRoom.id);
       this.dialogVisible = false;
+      // this.joinRoom(newRoom.id);
+    },
+    // 加入房间
+    joinRoom(index) {
+      this.$router.push({
+        path: "/battle",
+        query: { gid: this.gameId, rid: index }
+      });
     }
   }
 };
@@ -135,7 +149,7 @@ export default {
   bottom: 20px;
   right: 70px;
 }
-.el-input{
+.el-input {
   width: 70%;
 }
 </style>

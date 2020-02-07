@@ -1,5 +1,5 @@
 // 按钮类
-class ButtonEvent {
+class Button {
     constructor(vm,that) {
         this.name = null;
         // 记录图片位置和长宽
@@ -37,18 +37,23 @@ class ButtonEvent {
 }
 
 // startBtn 按钮
-class startBtn extends ButtonEvent {
+class startBtn extends Button {
     constructor(vm,that) {
         super(vm,that);
     }
 
     onClick() {
-        this.vm.$socket.emit('onready');
+        this.vm.$socket.emit('onready',this.vm.room.rid);
     }
 }
 
-// pass 按钮
-class PassBtn extends ButtonEvent {
+// 抢地主 按钮
+class scoreBtn extends Button{
+
+}
+
+// 不出 按钮
+class PassBtn extends Button {
     constructor(vm,that) {
         super(vm,that);
     }
@@ -66,7 +71,13 @@ class PassBtn extends ButtonEvent {
     }
 }
 
-class PlayBtn extends ButtonEvent {
+// 提示 按钮
+class tipBtn extends Button{
+
+}
+
+// 出牌 按钮
+class PlayBtn extends Button {
     constructor(vm,that) {
         super(vm,that);
     }
@@ -157,4 +168,4 @@ class PokerEvent {
     }
 }
 
-export { ButtonEvent, startBtn, PassBtn,PlayBtn, PokerEvent }
+export { scoreBtn, startBtn,tipBtn, PassBtn,PlayBtn, PokerEvent }

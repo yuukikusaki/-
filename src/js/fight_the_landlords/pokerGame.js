@@ -1,5 +1,5 @@
 import { resource } from './pokerResource'
-import { ButtonEvent, startBtn, PassBtn, PlayBtn, PokerEvent } from './gameEvent'
+import { scoreBtn, startBtn, PassBtn, tipBtn, PlayBtn, PokerEvent } from './gameEvent'
 
 // 初始化类
 class GameInit {
@@ -20,7 +20,7 @@ class GameInit {
         this.btnY = this.canvasH * 0.618;
         // 点击事件
         this.point = { x: null, y: null };
-        this.that = vm; // vm实例
+        this.vm = vm; // vm实例
     }
     // 读取资源
     loadAllResource() {
@@ -48,7 +48,7 @@ class GameInit {
         // 设置背景图片
         this.ctx.drawImage(this.loadedRes["bgImage"], 0, 0, canvasW, canvasH);
         // 设置开始按钮
-        this.startBtn = new startBtn(this.that);
+        this.startBtn = new startBtn(this.vm);
         this.startBtn.setPosition("startBtn", [canvasW / 2 - btnW / 2, btnY, btnW, btnH]);
         this.ctx.drawImage(this.loadedRes["startBtn"], canvasW / 2 - btnW / 2, btnY, btnW, btnH);
         this.settedRes.button = { y1: btnY, y2: btnY + btnH };
@@ -65,9 +65,9 @@ class GameInit {
         let btnY = this.btnY;
         // 设置分数按钮
         if (!this.isplay) {
-            this.one = new ButtonEvent(this.that);
-            this.two = new ButtonEvent(this.that);
-            this.three = new ButtonEvent(this.that);
+            this.one = new scoreBtn(this.that);
+            this.two = new scoreBtn(this.that);
+            this.three = new scoreBtn(this.that);
             this.one.setPosition("one", [canvasW / 3 - btnW / 2, btnY, btnW, btnH])
             this.two.setPosition("two", [canvasW / 2 - btnW / 2, btnY, btnW, btnH])
             this.three.setPosition("three", [canvasW * 2 / 3 - btnW / 2, btnY, btnW, btnH]);
@@ -75,7 +75,7 @@ class GameInit {
         } else {
             // 设置游戏按钮
             this.pass = new PassBtn(this.vm, this);
-            this.tip = new ButtonEvent(this.that);
+            this.tip = new tipBtn();
             this.play = new PlayBtn(this.vm, this);
             this.pass.setPosition("pass", [canvasW / 3 - btnW / 2, btnY, btnW, btnH])
             this.tip.setPosition("tip", [canvasW / 2 - btnW / 2, btnY, btnW, btnH])
@@ -237,7 +237,7 @@ class PokerGame extends GameInit {
                 this.loadedRes[this.pokerList[i].name],
                 startX + i * 20,
                 this.deck[i].y);
-            this.deck[i].changePosition(startX + i*20);
+            this.deck[i].changePosition(startX + i * 20);
             if (i == this.deck.length - 1) {
                 this.deck[i].setLast(true);
                 this.drawBtn();
@@ -264,7 +264,7 @@ class PokerGame extends GameInit {
     }
 
     // 出牌展示
-    drawDealList(dealList){
+    drawDealList(dealList) {
         const len = dealList.length;
         let startX = this.canvasW / 2 - 52.5 - (len - 1) * 10;
         for (let i = 0; i < len; i++) {
@@ -272,7 +272,7 @@ class PokerGame extends GameInit {
             this.ctx.drawImage(
                 this.loadedRes[dealList[i].name],
                 startX + i * 20,
-                this.deck[i].y-250);
+                this.deck[i].y - 250);
         }
     }
 }
