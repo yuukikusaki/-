@@ -275,6 +275,54 @@ class PokerGame extends GameInit {
                 this.deck[i].y - 250);
         }
     }
+
+    // 别人出的牌
+    drawOthers(card, direction) {
+        let w =null;
+        switch (direction) {
+            case 'left':
+                w = 200;
+                break;
+            case 'right':
+                w = this.canvasW - 300 - 20 * (card.length - 1);
+                break;
+        }
+        window.console.log(w);
+        for (let i = 0; i < card.length; i++) {
+            this.ctx.drawImage(
+                this.loadedRes[card[i].name],
+                w+i*20,
+                this.canvasH / 2 - 100,
+            );
+        }
+    }
+
+    // 画左边
+    drawLeft(card, w) {
+        for (let i = 0; i < card.length; i++) {
+            this.ctx.drawImage(
+                this.loadedRes[card[i].name],
+                w,
+                this.canvasH / 2 - 75,
+            );
+        }
+    }
+
+    // 画右边
+    drawRight(card) {
+        let startR = this.canvasH / 2 - 52.5 - (card.length - 1) * 5;
+        this.ctx.translate(this.canvasW, 0);
+        this.ctx.rotate(Math.PI / 2);
+        for (let i = 0; i < card.length; i++) {
+            this.ctx.drawImage(
+                this.loadedRes[card[i].name],
+                startR + i * 10,
+                200,
+            );
+        }
+        this.ctx.rotate(-Math.PI / 2);
+        this.ctx.translate(-this.canvasW, 0);
+    }
 }
 
 export default PokerGame;

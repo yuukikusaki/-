@@ -24,6 +24,10 @@ export default {
     deal(pokerList) {
       this.pokerGame.dealCards(pokerList);
     },
+    // 接收别人出的牌并打印出来
+    draw(data){
+      this.pokerGame.drawOthers(data[0],data[1]);
+    },
     // 测试用
     test(data){
       window.console.log(data);
