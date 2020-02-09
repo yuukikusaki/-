@@ -49,7 +49,12 @@ class startBtn extends Button {
 
 // 抢地主 按钮
 class scoreBtn extends Button{
-
+    constructor(vm,that){
+        super(vm,that);
+    }
+    onClick(score){
+        this.vm.$socket.emit('next',score);
+    }
 }
 
 // 不出 按钮
@@ -67,7 +72,7 @@ class PassBtn extends Button {
         });
         this.that.drawPoker(deck.length);
         // socket
-        this.vm.$socket.emit('pass');
+        this.vm.$socket.emit('next',null);
     }
 }
 
@@ -92,7 +97,7 @@ class PlayBtn extends Button {
         this.that.deck = deck.filter(c=>c);
         this.that.drawPoker(this.that.deck.length);
         this.that.drawDealList(dealList);
-        this.vm.$socket.emit('play',dealList);
+        this.vm.$socket.emit('next',dealList);
     }
 
 }
