@@ -13,7 +13,7 @@
               <span>房间人数</span>
               <div class="bottom clearfix">
                 <el-button type="primary" round 
-                @click="joinRoom(index+1)">进入房间</el-button>
+                @click="joinRoom(index)">进入房间</el-button>
               </div>
             </div>
           </div>
@@ -53,14 +53,14 @@ export default {
     connect() {
       window.console.log("连接成功");
     },
-    flashRoom(room){
-      this.getRoomList(room);
+    rooms(roomList){
+      this.flashRooms(roomList);
     }
   },
   created() {
     this.getGameId();
     this.getGameInfo();
-    // this.getRoomList();
+    this.getRooms();
   },
   methods: {
     // 获取游戏id
@@ -72,26 +72,30 @@ export default {
       this.gameInfo = this.$store.getters.getGameList[this.gameId - 1];
       window.console.log(this.gameInfo);
     },
-    // 获取游戏列表
-    getRoomList(room) {
-      this.roomList.push(room);
+    // 获取房间列表
+    getRooms() {
+      this.$socket.emit('flashroom');
       // 改为 socket 获取列表
       // this.roomList = this.$store.getters.getRoomList;
+    },
+    // 更新房间列表
+    flashRooms(roomList){
+      this.roomList = roomList;
     },
     // 创建新房间
     crtNewRoom() {
       let newRoom = {};
-      newRoom.id = this.roomList.length + 1;
       newRoom.name = this.gameInfo.name;
       newRoom.pass = this.roomPass;
       // 应该是向服务器发送消息
       this.$socket.emit("crtRoom", newRoom);
-      this.joinRoom(newRoom.id);
+      this.joinRoom(this.roomList.length);
       this.dialogVisible = false;
       // this.joinRoom(newRoom.id);
     },
     // 加入房间
     joinRoom(index) {
+      this.$socket.emit('joinRoom',index);
       this.$router.push({
         path: "/battle",
         query: { gid: this.gameId, rid: index }

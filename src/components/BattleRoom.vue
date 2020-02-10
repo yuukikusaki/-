@@ -43,7 +43,6 @@ export default {
   methods: {
     sendRoom() {
       this.room = this.$route.query;
-      this.$socket.emit('joinRoom',this.room);
     },
     setImage() {
       // 设置图片
