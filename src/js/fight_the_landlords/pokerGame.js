@@ -19,6 +19,7 @@ class GameInit {
         this.btnH = this.canvasH / 12;
         this.btnY = this.canvasH * 0.618;
         // 点击事件
+        this.isfocus = true; // 按钮能否使用
         this.point = { x: null, y: null };
         this.vm = vm; // vm实例
     }
@@ -101,6 +102,9 @@ class GameInit {
 
             // 按钮区
             if (this.point.y >= buttonY1 && this.point.y <= buttonY2) {
+                if(this.isfocus==false){
+                    return;
+                }
                 window.console.log(this.button);
                 for (let i = 0; i < this.button.length; i++) {
                     let p = this.button[i].getPositionX();

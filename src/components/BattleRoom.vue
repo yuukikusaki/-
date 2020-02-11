@@ -24,6 +24,10 @@ export default {
     deal(pokerList) {
       this.pokerGame.dealCards(pokerList);
     },
+    isfocus(flag){
+      this.pokerGame.isfocus = flag;
+      window.console.log(flag)
+    },
     // 接收别人出的牌并打印出来
     draw(data){
       this.pokerGame.drawOthers(data[0],data[1]);
