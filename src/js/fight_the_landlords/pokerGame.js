@@ -66,9 +66,9 @@ class GameInit {
         let btnY = this.btnY;
         // 设置分数按钮
         if (!this.isplay) {
-            this.one = new scoreBtn(this.that);
-            this.two = new scoreBtn(this.that);
-            this.three = new scoreBtn(this.that);
+            this.one = new scoreBtn(this.vm, this.that, 1);
+            this.two = new scoreBtn(this.vm, this.that, 1);
+            this.three = new scoreBtn(this.vm, this.that, 1);
             this.one.setPosition("one", [canvasW / 3 - btnW / 2, btnY, btnW, btnH])
             this.two.setPosition("two", [canvasW / 2 - btnW / 2, btnY, btnW, btnH])
             this.three.setPosition("three", [canvasW * 2 / 3 - btnW / 2, btnY, btnW, btnH]);
@@ -102,7 +102,7 @@ class GameInit {
 
             // 按钮区
             if (this.point.y >= buttonY1 && this.point.y <= buttonY2) {
-                if(this.isfocus==false){
+                if (this.isfocus == false) {
                     return;
                 }
                 window.console.log(this.button);
@@ -122,7 +122,7 @@ class GameInit {
                     let p = this.deck[i].getPositionX();
                     if (e.layerX >= p.x1 && e.layerX <= p.x2) {
                         this.deck[i].onClick();
-                        this.drawPoker(this.deck.length);
+                        this.drawPoker(this.deck.length, this.left, this.right);
                         break;
                     }
                 }
@@ -145,6 +145,9 @@ class PokerGame extends GameInit {
         this.bgImage = null;
         this.startBtn = null;
         this.isplay = false; // 游戏是否开始
+        // 两边玩家
+        this.left = 17;
+        this.right = 17;
         this.loadAllResource();
     }
 
@@ -221,7 +224,7 @@ class PokerGame extends GameInit {
     // 动画
     dealAmine(len) {
         setTimeout(() => {
-            this.drawPoker(len);
+            this.drawPoker(len, len, len);
             if (len < this.pokerList.length) {
                 this.dealAmine(++len);
             }
@@ -229,13 +232,13 @@ class PokerGame extends GameInit {
     }
 
     // 卡牌布局
-    drawPoker(len) {
+    drawPoker(mlen, llen, rlen) {
         this.ctx.clearRect(0, 0, this.canvasW, this.canvasH);
         this.ctx.drawImage(this.loadedRes["bgImage"], 0, 0, this.canvasW, this.canvasH);
-        let startX = this.canvasW / 2 - 52.5 - (len - 1) * 10;
-        let startL = this.canvasH / 2 + 52.5 + (len - 1) * 5 - (this.canvasW - this.canvasH) / 2;
-        let startR = this.canvasH / 2 - 52.5 - (len - 1) * 5;
-        for (let i = 0; i < len; i++) {
+        let startX = this.canvasW / 2 - 52.5 - (mlen - 1) * 10;
+        let startL = this.canvasH / 2 + 52.5 + (llen - 1) * 5 - (this.canvasW - this.canvasH) / 2;
+        let startR = this.canvasH / 2 - 52.5 - (rlen - 1) * 5;
+        for (let i = 0; i < mlen; i++) {
             // 自己
             this.ctx.drawImage(
                 this.loadedRes[this.pokerList[i].name],
@@ -246,25 +249,29 @@ class PokerGame extends GameInit {
                 this.deck[i].setLast(true);
                 this.drawBtn();
             }
-            // 平移加旋转，x，y轴也旋转了，虚拟的已经画上去了
-            // 这里改的只是绘画方向，变回去之后已经写好的也不会变
-            this.ctx.translate(this.canvasW, 0);
-            this.ctx.rotate(Math.PI / 2);
-            // 左边
+        }
+        // 平移加旋转，x，y轴也旋转了，虚拟的已经画上去了
+        // 这里改的只是绘画方向，变回去之后已经写好的也不会变
+        this.ctx.translate(this.canvasW, 0);
+        this.ctx.rotate(Math.PI / 2);
+        // 左边
+        for (let i = 0; i < llen; i++) {
             this.ctx.drawImage(
                 this.loadedRes["pokerBack"],
                 startL - i * 10,
                 this.canvasW - 150,
             );
-            // 右边
+        }
+        // 右边
+        for (let i = 0; i < rlen; i++) {
             this.ctx.drawImage(
                 this.loadedRes["pokerBack"],
                 startR + i * 10,
                 0,
             );
-            this.ctx.rotate(-Math.PI / 2);
-            this.ctx.translate(-this.canvasW, 0);
         }
+        this.ctx.rotate(-Math.PI / 2);
+        this.ctx.translate(-this.canvasW, 0);
     }
 
     // 出牌展示
@@ -280,52 +287,54 @@ class PokerGame extends GameInit {
         }
     }
 
-    // 别人出的牌
-    drawOthers(card, direction) {
-        let w =null;
+    // 改变牌数
+    changeCardNum(card, direction) {
+        let w = null;
+        switch (direction) {
+            case 'left':
+                this.left -= card.length;
+                w = 200;
+                break;
+            case 'right':
+                this.right -= card.length;
+                w = this.canvasW - 300 - 20 * (card.length - 1);
+                break;
+            default:
+                break;
+        }
+        this.drawPoker(this.deck.length, this.left, this.right);
+        this.drawOthers(card, w);
+    }
+
+    // 把分数画出来
+    drawScore(score, direction) {
+        let w = null;
         switch (direction) {
             case 'left':
                 w = 200;
                 break;
             case 'right':
-                w = this.canvasW - 300 - 20 * (card.length - 1);
+                w = this.canvasW - 300;
                 break;
+            default:
+                break
         }
-        window.console.log(w);
+        // 设置字体
+        this.ctx.font = "72px bold 黑体";
+        // 设置颜色
+        this.ctx.fillStyle = "#ff0";
+        this.ctx.fillText(score,w,this.canvasH/2);
+    }
+
+    // 别人出的牌
+    drawOthers(card, w) {
         for (let i = 0; i < card.length; i++) {
             this.ctx.drawImage(
                 this.loadedRes[card[i].name],
-                w+i*20,
+                w + i * 20,
                 this.canvasH / 2 - 100,
             );
         }
-    }
-
-    // 画左边
-    drawLeft(card, w) {
-        for (let i = 0; i < card.length; i++) {
-            this.ctx.drawImage(
-                this.loadedRes[card[i].name],
-                w,
-                this.canvasH / 2 - 75,
-            );
-        }
-    }
-
-    // 画右边
-    drawRight(card) {
-        let startR = this.canvasH / 2 - 52.5 - (card.length - 1) * 5;
-        this.ctx.translate(this.canvasW, 0);
-        this.ctx.rotate(Math.PI / 2);
-        for (let i = 0; i < card.length; i++) {
-            this.ctx.drawImage(
-                this.loadedRes[card[i].name],
-                startR + i * 10,
-                200,
-            );
-        }
-        this.ctx.rotate(-Math.PI / 2);
-        this.ctx.translate(-this.canvasW, 0);
     }
 }
 

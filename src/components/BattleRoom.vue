@@ -14,7 +14,7 @@ import PokerGame from "../js/fight_the_landlords/pokerGame";
 export default {
   data() {
     return {
-      room:null, // 房间信息
+      room: null, // 房间信息
       Resource: null,
       pokerGame: null // 游戏对象
     };
@@ -24,18 +24,24 @@ export default {
     deal(pokerList) {
       this.pokerGame.dealCards(pokerList);
     },
-    isfocus(flag){
+    // 按钮事件
+    isfocus(flag) {
       this.pokerGame.isfocus = flag;
-      window.console.log(flag)
+      window.console.log(flag);
     },
     // 接收别人出的牌并打印出来
-    draw(data){
-      this.pokerGame.drawOthers(data[0],data[1]);
+    draw(data) {
+      window.console.log(typeof data[0])
+      if (typeof data[0] == "number") {
+        this.pokerGame.drawScore(data[0], data[1]);
+      } else {
+        this.pokerGame.changeCardNum(data[0], data[1]);
+      }
     },
     // 测试用
-    test(data){
+    test(data) {
       window.console.log(data);
-    } 
+    }
   },
   created() {
     this.sendRoom();
@@ -62,7 +68,7 @@ export default {
     },
     play() {
       this.pokerGame.isplay = true;
-      this.pokerGame.drawPoker(17);
+      this.pokerGame.drawPoker(17, 17, 17);
       this.pokerGame.setBtn();
     }
   }
