@@ -8,14 +8,12 @@
 </template>
 
 <script>
-import PokerResource from "../js/fight_the_landlords/pokerResource";
 import PokerGame from "../js/fight_the_landlords/pokerGame";
 
 export default {
   data() {
     return {
       room: null, // 房间信息
-      Resource: null,
       pokerGame: null // 游戏对象
     };
   },
@@ -45,7 +43,6 @@ export default {
   },
   created() {
     this.sendRoom();
-    this.setImage();
   },
   mounted() {
     this.setCanvas();
@@ -54,15 +51,9 @@ export default {
     sendRoom() {
       this.room = this.$route.query;
     },
-    setImage() {
-      // 设置图片
-      const pokerResource = new PokerResource();
-      this.Resource = JSON.parse(pokerResource.getResource());
-    },
     setCanvas() {
       this.pokerGame = new PokerGame({
         canvasid: "#mycanvas", // 传入canvas
-        pokerResource: this.Resource, // 传入资源
         that: this // 传入 this，为了button能执行socket
       });
     },

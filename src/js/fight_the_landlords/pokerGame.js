@@ -1,5 +1,5 @@
-import { resource } from './pokerResource'
-import { scoreBtn, startBtn, PassBtn, tipBtn, PlayBtn, PokerEvent } from './gameEvent'
+import PokerResource  from './pokerResource'
+import { ScoreBtn, StartBtn, PassBtn, TipBtn, PlayBtn, PokerEvent } from './gameEvent'
 
 // 初始化类
 class GameInit {
@@ -7,7 +7,7 @@ class GameInit {
         // canvas 信息
         this.canvas = document.querySelector(canvasid);
         this.ctx = this.canvas.getContext("2d");
-        this.pokerResource = JSON.parse(resource);
+        this.pokerResource = PokerResource;
         this.pokerImage = this.pokerResource.images;
         this.loadedRes = {}; // 加载完毕的资源
         // 读取资源
@@ -49,7 +49,7 @@ class GameInit {
         // 设置背景图片
         this.ctx.drawImage(this.loadedRes["bgImage"], 0, 0, canvasW, canvasH);
         // 设置开始按钮
-        this.startBtn = new startBtn(this.vm);
+        this.startBtn = new StartBtn(this.vm);
         this.startBtn.setPosition("startBtn", [canvasW / 2 - btnW / 2, btnY, btnW, btnH]);
         this.ctx.drawImage(this.loadedRes["startBtn"], canvasW / 2 - btnW / 2, btnY, btnW, btnH);
         this.settedRes.button = { y1: btnY, y2: btnY + btnH };
@@ -66,9 +66,9 @@ class GameInit {
         let btnY = this.btnY;
         // 设置分数按钮
         if (!this.isplay) {
-            this.one = new scoreBtn(this.vm, this.that, 1);
-            this.two = new scoreBtn(this.vm, this.that, 1);
-            this.three = new scoreBtn(this.vm, this.that, 1);
+            this.one = new ScoreBtn(this.vm, this.that, 1);
+            this.two = new ScoreBtn(this.vm, this.that, 1);
+            this.three = new ScoreBtn(this.vm, this.that, 1);
             this.one.setPosition("one", [canvasW / 3 - btnW / 2, btnY, btnW, btnH])
             this.two.setPosition("two", [canvasW / 2 - btnW / 2, btnY, btnW, btnH])
             this.three.setPosition("three", [canvasW * 2 / 3 - btnW / 2, btnY, btnW, btnH]);
@@ -76,7 +76,7 @@ class GameInit {
         } else {
             // 设置游戏按钮
             this.pass = new PassBtn(this.vm, this);
-            this.tip = new tipBtn();
+            this.tip = new TipBtn();
             this.play = new PlayBtn(this.vm, this);
             this.pass.setPosition("pass", [canvasW / 3 - btnW / 2, btnY, btnW, btnH])
             this.tip.setPosition("tip", [canvasW / 2 - btnW / 2, btnY, btnW, btnH])

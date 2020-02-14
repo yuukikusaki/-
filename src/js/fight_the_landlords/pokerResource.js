@@ -1,74 +1,72 @@
 // let imgHttp = "http://localhost:3000/images/fight_the_landlords"
-const imgHttp = "/fight_the_landlords";
-// 创建牌组
-class PokerResource {
-    constructor() {
-        this.resource = {}; // 总资源对象
-        this.images = []; //图片
-        // 扑克牌图片
-        this.colors = ["黑桃", "红桃", "梅花", "方块"];
-        this.numbers = [[1, "3"], [2, "4"], [3, "5"], [4, "6"], [5, "7"], [6, "8"], [7, "9"], [8, "10"], [9, "J"], [10, "Q"], [11, "K"], [12, "A"], [13, "2"]];
-        this.setPokerImage();
-        this.setItemImage();
-        this.setPosition();
-    }
-    // 设置扑克牌图片数据
-    setPokerImage() {
-        // 添加大小王
-        this.images.push({ name: "小王", point: 14 });
-        this.images.push({ name: "大王", point: 15 });
-        //给对应牌加上花色
-        for (let i = 0; i < this.colors.length; i++) {
-            for (let j = 0; j < this.numbers.length; j++) {
-                let name = this.colors[i] + this.numbers[j][1];
-                let point = this.numbers[j][0];
-                this.images.push({ name, point });
-            }
-        }
+// const imgHttp = "/fight_the_landlords";
 
-        // 添加图片链接
-        for (let i = 0; i < this.images.length; i++) {
-            this.images[i].url = `${imgHttp}/${i + 1}.jpg`;
-        }
-
-        // 把图片数据放入资源中
-        this.resource.images = this.images;
-    }
-
-    // 设定背景和按钮图片数据
-    setItemImage() {
-        // 添加背景图片
-        this.images.push({ name: "bgImage", url: `${imgHttp}/bg1.png` });
-        // 开始按钮
-        this.images.push({ name: "startBtn", url: `${imgHttp}/kaishi.png` })
-        // 点数
-        this.images.push({ name: "one", socre: 1, url: `${imgHttp}/yf.png` });
-        this.images.push({ name: "two", socre: 2, url: `${imgHttp}/ef.png` });
-        this.images.push({ name: "three", socre: 3, url: `${imgHttp}/sf.png` });
-        // 牌背面
-        this.images.push({ name: "pokerBack", url: `${imgHttp}/pokerback.png` });
-        // 按钮
-        this.images.push({ name: "pass", url: `${imgHttp}/buchu.png` });
-        this.images.push({ name: "tip", url: `${imgHttp}/tishi.png` });
-        this.images.push({ name: "play", url: `${imgHttp}/chupai.png` });
-    }
-
-    setPosition() {
-        for (let i = 0; i < this.images.length; i++) {
-            this.images[i].positon = { x: null, y: null }
-        }
-    }
-
-    // 以 json 格式返回资源
-    getResource() {
-        return JSON.stringify(this.resource)
-    }
-
+const PokerResource = {
+    images: [
+        { name: "小王", point: 14, url: "/fight_the_landlords/1.jpg" },
+        { name: "大王", point: 15, url: "/fight_the_landlords/2.jpg" },
+        { name: "黑桃3", point: 1, url: "/fight_the_landlords/3.jpg" },
+        { name: "黑桃4", point: 2, url: "/fight_the_landlords/4.jpg" },
+        { name: "黑桃5", point: 3, url: "/fight_the_landlords/5.jpg" },
+        { name: "黑桃6", point: 4, url: "/fight_the_landlords/6.jpg" },
+        { name: "黑桃7", point: 5, url: "/fight_the_landlords/7.jpg" },
+        { name: "黑桃8", point: 6, url: "/fight_the_landlords/8.jpg" },
+        { name: "黑桃9", point: 7, url: "/fight_the_landlords/9.jpg" },
+        { name: "黑桃10", point: 8, url: "/fight_the_landlords/10.jpg" },
+        { name: "黑桃J", point: 9, url: "/fight_the_landlords/11.jpg" },
+        { name: "黑桃Q", point: 10, url: "/fight_the_landlords/12.jpg" },
+        { name: "黑桃K", point: 11, url: "/fight_the_landlords/13.jpg" },
+        { name: "黑桃A", point: 12, url: "/fight_the_landlords/14.jpg" },
+        { name: "黑桃2", point: 13, url: "/fight_the_landlords/15.jpg" },
+        { name: "红桃3", point: 1, url: "/fight_the_landlords/16.jpg" },
+        { name: "红桃4", point: 2, url: "/fight_the_landlords/17.jpg" },
+        { name: "红桃5", point: 3, url: "/fight_the_landlords/18.jpg" },
+        { name: "红桃6", point: 4, url: "/fight_the_landlords/19.jpg" },
+        { name: "红桃7", point: 5, url: "/fight_the_landlords/20.jpg" },
+        { name: "红桃8", point: 6, url: "/fight_the_landlords/21.jpg" },
+        { name: "红桃9", point: 7, url: "/fight_the_landlords/22.jpg" },
+        { name: "红桃10", point: 8, url: "/fight_the_landlords/23.jpg" },
+        { name: "红桃J", point: 9, url: "/fight_the_landlords/24.jpg" },
+        { name: "红桃Q", point: 10, url: "/fight_the_landlords/25.jpg" },
+        { name: "红桃K", point: 11, url: "/fight_the_landlords/26.jpg" },
+        { name: "红桃A", point: 12, url: "/fight_the_landlords/27.jpg" },
+        { name: "红桃2", point: 13, url: "/fight_the_landlords/28.jpg" },
+        { name: "梅花3", point: 1, url: "/fight_the_landlords/29.jpg" },
+        { name: "梅花4", point: 2, url: "/fight_the_landlords/30.jpg" },
+        { name: "梅花5", point: 3, url: "/fight_the_landlords/31.jpg" },
+        { name: "梅花6", point: 4, url: "/fight_the_landlords/32.jpg" },
+        { name: "梅花7", point: 5, url: "/fight_the_landlords/33.jpg" },
+        { name: "梅花8", point: 6, url: "/fight_the_landlords/34.jpg" },
+        { name: "梅花9", point: 7, url: "/fight_the_landlords/35.jpg" },
+        { name: "梅花10", point: 8, url: "/fight_the_landlords/36.jpg" },
+        { name: "梅花J", point: 9, url: "/fight_the_landlords/37.jpg" },
+        { name: "梅花Q", point: 10, url: "/fight_the_landlords/38.jpg" },
+        { name: "梅花K", point: 11, url: "/fight_the_landlords/39.jpg" },
+        { name: "梅花A", point: 12, url: "/fight_the_landlords/40.jpg" },
+        { name: "梅花2", point: 13, url: "/fight_the_landlords/41.jpg" },
+        { name: "方块3", point: 1, url: "/fight_the_landlords/42.jpg" },
+        { name: "方块4", point: 2, url: "/fight_the_landlords/43.jpg" },
+        { name: "方块5", point: 3, url: "/fight_the_landlords/44.jpg" },
+        { name: "方块6", point: 4, url: "/fight_the_landlords/45.jpg" },
+        { name: "方块7", point: 5, url: "/fight_the_landlords/46.jpg" },
+        { name: "方块8", point: 6, url: "/fight_the_landlords/47.jpg" },
+        { name: "方块9", point: 7, url: "/fight_the_landlords/48.jpg" },
+        { name: "方块10", point: 8, url: "/fight_the_landlords/49.jpg" },
+        { name: "方块J", point: 9, url: "/fight_the_landlords/50.jpg" },
+        { name: "方块Q", point: 10, url: "/fight_the_landlords/51.jpg" },
+        { name: "方块K", point: 11, url: "/fight_the_landlords/52.jpg" },
+        { name: "方块A", point: 12, url: "/fight_the_landlords/53.jpg" },
+        { name: "方块2", point: 13, url: "/fight_the_landlords/54.jpg" },
+        { name: "bgImage", url: "/fight_the_landlords/bg1.png" },
+        { name: "startBtn", url: "/fight_the_landlords/kaishi.png" },
+        { name: "one", socre: 1, url: "/fight_the_landlords/yf.png" },
+        { name: "two", socre: 2, url: "/fight_the_landlords/ef.png" },
+        { name: "three", socre: 3, url: "/fight_the_landlords/sf.png" },
+        { name: "pokerBack", url: "/fight_the_landlords/pokerback.png" },
+        { name: "pass", url: "/fight_the_landlords/buchu.png" },
+        { name: "tip", url: "/fight_the_landlords/tishi.png" },
+        { name: "play", url: "/fight_the_landlords/chupai.png" }
+    ]
 }
 
-export const resource = new PokerResource().getResource();
 export default PokerResource;
-// // 打乱牌组
-    // pokerList.sort(() => {
-    //     return Math.random() > 0.5 ? -1 : 1;
-    // });

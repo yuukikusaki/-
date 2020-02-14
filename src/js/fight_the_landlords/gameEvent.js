@@ -37,7 +37,7 @@ class Button {
 }
 
 // startBtn 按钮
-class startBtn extends Button {
+class StartBtn extends Button {
     constructor(vm,that) {
         super(vm,that);
     }
@@ -48,7 +48,7 @@ class startBtn extends Button {
 }
 
 // 抢地主 按钮
-class scoreBtn extends Button{
+class ScoreBtn extends Button{
     constructor(vm,that,score){
         super(vm,that);
         this.score = score;
@@ -78,7 +78,7 @@ class PassBtn extends Button {
 }
 
 // 提示 按钮
-class tipBtn extends Button{
+class TipBtn extends Button{
 
 }
 
@@ -174,4 +174,4 @@ class PokerEvent {
     }
 }
 
-export { scoreBtn, startBtn,tipBtn, PassBtn,PlayBtn, PokerEvent }
+export { ScoreBtn, StartBtn,TipBtn, PassBtn,PlayBtn, PokerEvent }
