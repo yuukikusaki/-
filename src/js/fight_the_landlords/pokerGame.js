@@ -67,8 +67,8 @@ class GameInit {
         // 设置分数按钮
         if (!this.isplay) {
             this.one = new ScoreBtn(this.vm, this.that, 1);
-            this.two = new ScoreBtn(this.vm, this.that, 1);
-            this.three = new ScoreBtn(this.vm, this.that, 1);
+            this.two = new ScoreBtn(this.vm, this.that, 2);
+            this.three = new ScoreBtn(this.vm, this.that, 3);
             this.one.setPosition("one", [canvasW / 3 - btnW / 2, btnY, btnW, btnH])
             this.two.setPosition("two", [canvasW / 2 - btnW / 2, btnY, btnW, btnH])
             this.three.setPosition("three", [canvasW * 2 / 3 - btnW / 2, btnY, btnW, btnH]);

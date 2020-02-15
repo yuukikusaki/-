@@ -18,6 +18,11 @@ export default {
     };
   },
   sockets: {
+    // 地主
+    lord(landCard){
+      window.console.log('ok')
+      window.console.log(landCard);
+    },
     // 发牌
     deal(pokerList) {
       this.pokerGame.dealCards(pokerList);
