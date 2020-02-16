@@ -19,9 +19,18 @@ export default {
   },
   sockets: {
     // 地主
-    lord(landCard){
-      window.console.log('ok')
+    landlord(landCard){
       window.console.log(landCard);
+      // 注意一下顺序，特别是地主牌显示
+      this.play();
+      this.pokerGame.drawLandCard(landCard);
+      this.pokerGame.insertCard();
+    },
+    // 农民
+    farmer(landCard){
+      window.console.log(`farmer${landCard}`);
+      this.play();
+      this.pokerGame.drawLandCard(landCard);
     },
     // 发牌
     deal(pokerList) {

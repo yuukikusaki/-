@@ -1,4 +1,4 @@
-import PokerResource  from './pokerResource'
+import PokerResource from './pokerResource'
 import { ScoreBtn, StartBtn, PassBtn, TipBtn, PlayBtn, PokerEvent } from './gameEvent'
 
 // 初始化类
@@ -209,14 +209,14 @@ class PokerGame extends GameInit {
         // 2.2 发牌动画，应该传入获得的牌组
         let startX = this.canvasW / 2 - 52.5 - 16 * 10;
         for (let i = 0; i < this.pokerList.length; i++) {
-            this.createPokerClass(this.pokerList[i].name,
+            this.createPokerClass(this.pokerList[i],
                 [startX + i * 20, this.canvasH - 150, 20, 150]);
         }
         this.dealAmine(1);
     }
     // 调用卡牌类
-    createPokerClass(pokerName, position) {
-        const newPoker = new PokerEvent(pokerName);
+    createPokerClass(poker, position) {
+        const newPoker = new PokerEvent(poker.name,poker.point);
         newPoker.setPosition(position);
         this.deck.push(newPoker);
     }
@@ -287,6 +287,25 @@ class PokerGame extends GameInit {
         }
     }
 
+    // 地主牌显示
+    drawLandCard(landCard) {
+        for (let i = 0; i < 3; i++) {
+            this.ctx.drawImage(this.loadedRes[landCard[i].name],
+                this.canvasW / 2 - 72 + i * 20.5, 0);
+        }
+    }
+
+    // 地主增加牌
+    insertCard(landCard) {
+        for (let i=0; i < this.pokerList.length; i++) {
+            window.console.log(this.pokerList[i]);
+                if(landCard[i].point>this.pokerList[i].point){
+                    landCard.splice(i,0,landCard[i]);
+                }
+        }
+        // 创建新的卡牌队列
+    }
+
     // 改变牌数
     changeCardNum(card, direction) {
         let w = null;
@@ -323,7 +342,7 @@ class PokerGame extends GameInit {
         this.ctx.font = "72px bold 黑体";
         // 设置颜色
         this.ctx.fillStyle = "#ff0";
-        this.ctx.fillText(score,w,this.canvasH/2);
+        this.ctx.fillText(score, w, this.canvasH / 2);
     }
 
     // 别人出的牌

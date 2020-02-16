@@ -105,7 +105,7 @@ class PlayBtn extends Button {
 
 // 卡牌类
 class PokerEvent {
-    constructor(name) {
+    constructor(name,point) {
         this.name = name
         // 记录图片位置和长宽
         this.x = null;
@@ -113,6 +113,7 @@ class PokerEvent {
         this.width = null;
         this.height = null;
         this.isLast = false;
+        this.point = point;
         this.isChecked = false;
     }
 
