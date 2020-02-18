@@ -216,7 +216,7 @@ class PokerGame extends GameInit {
     }
     // 调用卡牌类
     createPokerClass(poker, position) {
-        const newPoker = new PokerEvent(poker.name,poker.point);
+        const newPoker = new PokerEvent(poker.name, poker.point);
         newPoker.setPosition(position);
         this.deck.push(newPoker);
     }
@@ -229,6 +229,35 @@ class PokerGame extends GameInit {
                 this.dealAmine(++len);
             }
         }, 300)
+    }
+
+    drawFunc(number, cards,position) {
+        // 可以用 switch case判断是什么
+        // 按顺序来
+        // 可以把每个分开来，把背景和安奈u放进这里，别的用case执行
+        // 修改牌型也要单独列出来
+        // 基础布局(背景，按钮，卡牌)
+        this.drawPoker(this.deck.length, this.left, this.right);
+        // 地主牌展示(需要传入数据)
+        this.landCard = cards; // 为了之后也能显示，需要加这个
+        this.drawLandCard(this.landCard);
+        // ---- 上面是需要经常展示的 ----
+        switch (number) {
+            case 0:
+                this.insertCard(cards); // 增加地主牌
+                break;
+            case 1:
+                this.changeCardNum(cards,position); // 出牌展示
+                break;
+            case 2:
+                this.drawOthers(cards); // 别人的牌
+                break;
+            case 3:
+                // 农民那里展示
+                break;
+            default:
+                break;
+        }        
     }
 
     // 卡牌布局
@@ -297,11 +326,11 @@ class PokerGame extends GameInit {
 
     // 地主增加牌
     insertCard(landCard) {
-        for (let i=0; i < this.pokerList.length; i++) {
+        for (let i = 0; i < this.pokerList.length; i++) {
             window.console.log(this.pokerList[i]);
-                if(landCard[i].point>this.pokerList[i].point){
-                    landCard.splice(i,0,landCard[i]);
-                }
+            if (landCard[i].point > this.pokerList[i].point) {
+                landCard.splice(i, 0, landCard[i]);
+            }
         }
         // 创建新的卡牌队列
     }
