@@ -122,7 +122,7 @@ class GameInit {
                     let p = this.deck[i].getPositionX();
                     if (e.layerX >= p.x1 && e.layerX <= p.x2) {
                         this.deck[i].onClick();
-                        this.drawPoker(this.deck.length, this.left, this.right);
+                        this.drawFunc();
                         break;
                     }
                 }
@@ -148,6 +148,7 @@ class PokerGame extends GameInit {
         // 两边玩家
         this.left = 17;
         this.right = 17;
+        this.landCard = null; // 地主牌
         this.loadAllResource();
     }
 
@@ -227,43 +228,56 @@ class PokerGame extends GameInit {
             this.drawPoker(len, len, len);
             if (len < this.pokerList.length) {
                 this.dealAmine(++len);
+            } else if (len == this.pokerList.length) {
+                this.drawBtn();
             }
         }, 300)
     }
 
-    drawFunc(number, cards,position) {
+    // 画图顺序
+    drawFunc(type, cards, position) {
         // 可以用 switch case判断是什么
         // 按顺序来
         // 可以把每个分开来，把背景和安奈u放进这里，别的用case执行
         // 修改牌型也要单独列出来
         // 基础布局(背景，按钮，卡牌)
+        // 1. 清空屏幕
+        this.ctx.clearRect(0, 0, this.canvasW, this.canvasH);
+        // 2. 画上背景
+        this.ctx.drawImage(this.loadedRes["bgImage"], 0, 0, this.canvasW, this.canvasH);
+        // 3. 画上按钮
+        this.drawBtn();
+        // 4. 画卡牌
         this.drawPoker(this.deck.length, this.left, this.right);
-        // 地主牌展示(需要传入数据)
-        this.landCard = cards; // 为了之后也能显示，需要加这个
+        // 5. 地主牌展示(需要传入数据)
         this.drawLandCard(this.landCard);
         // ---- 上面是需要经常展示的 ----
-        switch (number) {
-            case 0:
+        switch (type) {
+            case 1:
                 this.insertCard(cards); // 增加地主牌
                 break;
-            case 1:
-                this.changeCardNum(cards,position); // 出牌展示
-                break;
             case 2:
-                this.drawOthers(cards); // 别人的牌
+                this.drawDeal(cards); // 自己出的牌
                 break;
             case 3:
+                this.changeCardNum(cards, position); // 出牌展示
+                break;
+            case 4:
+                this.drawOthers(cards); // 别人的牌
+                break;
+            case 5:
                 // 农民那里展示
+                break;
+            case 6:
+                this.drawLandCard();
                 break;
             default:
                 break;
-        }        
+        }
     }
 
     // 卡牌布局
     drawPoker(mlen, llen, rlen) {
-        this.ctx.clearRect(0, 0, this.canvasW, this.canvasH);
-        this.ctx.drawImage(this.loadedRes["bgImage"], 0, 0, this.canvasW, this.canvasH);
         let startX = this.canvasW / 2 - 52.5 - (mlen - 1) * 10;
         let startL = this.canvasH / 2 + 52.5 + (llen - 1) * 5 - (this.canvasW - this.canvasH) / 2;
         let startR = this.canvasH / 2 - 52.5 - (rlen - 1) * 5;
@@ -276,7 +290,6 @@ class PokerGame extends GameInit {
             this.deck[i].changePosition(startX + i * 20);
             if (i == this.deck.length - 1) {
                 this.deck[i].setLast(true);
-                this.drawBtn();
             }
         }
         // 平移加旋转，x，y轴也旋转了，虚拟的已经画上去了
@@ -304,7 +317,7 @@ class PokerGame extends GameInit {
     }
 
     // 出牌展示
-    drawDealList(dealList) {
+    drawDeal(dealList) {
         const len = dealList.length;
         let startX = this.canvasW / 2 - 52.5 - (len - 1) * 10;
         for (let i = 0; i < len; i++) {
@@ -318,6 +331,9 @@ class PokerGame extends GameInit {
 
     // 地主牌显示
     drawLandCard(landCard) {
+        if(landCard == null){
+            return false;
+        }
         for (let i = 0; i < 3; i++) {
             this.ctx.drawImage(this.loadedRes[landCard[i].name],
                 this.canvasW / 2 - 72 + i * 20.5, 0);
@@ -326,9 +342,12 @@ class PokerGame extends GameInit {
 
     // 地主增加牌
     insertCard(landCard) {
-        for (let i = 0; i < this.pokerList.length; i++) {
+        if(landCard == null){
+            return false;
+        }
+        for (let i = i; i < this.pokerList.length; i++) {
             window.console.log(this.pokerList[i]);
-            if (landCard[i].point > this.pokerList[i].point) {
+            if (landCard[i].point > this.pokerList[i - 1].point) {
                 landCard.splice(i, 0, landCard[i]);
             }
         }

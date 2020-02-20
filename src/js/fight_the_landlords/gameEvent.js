@@ -96,8 +96,7 @@ class PlayBtn extends Button {
             }
         }
         this.that.deck = deck.filter(c=>c);
-        this.that.drawPoker(this.that.deck.length,this.that.left,this.that.right);
-        this.that.drawDealList(dealList);
+        this.that.drawFunc(2,dealList);
         this.vm.$socket.emit('next',dealList);
     }
 

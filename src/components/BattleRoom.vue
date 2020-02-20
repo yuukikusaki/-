@@ -22,15 +22,16 @@ export default {
     landlord(landCard){
       window.console.log(landCard);
       // 注意一下顺序，特别是地主牌显示
-      this.play();
-      this.pokerGame.drawLandCard(landCard);
-      this.pokerGame.insertCard();
+      this.pokerGame.landCard = landCard;
+      this.play(); // 以后要整合进去
+      this.pokerGame.drawFunc(0,landCard);
+      // this.pokerGame.insertCard();
     },
     // 农民
     farmer(landCard){
-      window.console.log(`farmer${landCard}`);
-      this.play();
-      this.pokerGame.drawLandCard(landCard);
+      this.pokerGame.landCard = landCard;
+      this.play();  // 需要整合
+      this.pokerGame.drawFunc(0,landCard);
     },
     // 发牌
     deal(pokerList) {
@@ -73,7 +74,7 @@ export default {
     },
     play() {
       this.pokerGame.isplay = true;
-      this.pokerGame.drawPoker(17, 17, 17);
+      // this.pokerGame.drawPoker(17, 17, 17);
       this.pokerGame.setBtn();
     }
   }
