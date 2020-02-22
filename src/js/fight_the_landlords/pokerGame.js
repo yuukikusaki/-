@@ -149,6 +149,8 @@ class PokerGame extends GameInit {
         this.left = 17;
         this.right = 17;
         this.landCard = null; // 地主牌
+        this.positionX = null; // 横向坐标
+        this.deskCard = null; // 桌面上的牌
         this.loadAllResource();
     }
 
@@ -251,13 +253,16 @@ class PokerGame extends GameInit {
         this.drawPoker(this.deck.length, this.left, this.right);
         // 5. 地主牌展示(需要传入数据)
         this.drawLandCard(this.landCard);
+        // 6. 别人出的牌
+        this.drawOthers();
         // ---- 上面是需要经常展示的 ----
+        // 感觉这个可以不用了。。。
         switch (type) {
             case 1:
                 this.insertCard(cards); // 增加地主牌
                 break;
             case 2:
-                this.drawDeal(cards); // 自己出的牌
+                this.drawDeal(); // 自己出的牌
                 break;
             case 3:
                 this.changeCardNum(cards, position); // 出牌展示
@@ -318,20 +323,22 @@ class PokerGame extends GameInit {
 
     // 出牌展示
     drawDeal(dealList) {
+        this.deskCard = dealList;
         const len = dealList.length;
         let startX = this.canvasW / 2 - 52.5 - (len - 1) * 10;
-        for (let i = 0; i < len; i++) {
-            // 自己
-            this.ctx.drawImage(
-                this.loadedRes[dealList[i].name],
-                startX + i * 20,
-                this.deck[i].y - 250);
-        }
+        this.positionX = startX;
+        // for (let i = 0; i < len; i++) {
+        //     // 自己
+        //     this.ctx.drawImage(
+        //         this.loadedRes[dealList[i].name],
+        //         startX + i * 20,
+        //         this.deck[i].y - 250);
+        // }
     }
 
     // 地主牌显示
     drawLandCard(landCard) {
-        if(landCard == null){
+        if (landCard == null) {
             return false;
         }
         for (let i = 0; i < 3; i++) {
@@ -342,7 +349,7 @@ class PokerGame extends GameInit {
 
     // 地主增加牌
     insertCard(landCard) {
-        if(landCard == null){
+        if (landCard == null) {
             return false;
         }
         for (let i = i; i < this.pokerList.length; i++) {
@@ -356,21 +363,19 @@ class PokerGame extends GameInit {
 
     // 改变牌数
     changeCardNum(card, direction) {
-        let w = null;
+        this.deskCard = card
         switch (direction) {
             case 'left':
                 this.left -= card.length;
-                w = 200;
+                this.positionX = 200;
                 break;
             case 'right':
                 this.right -= card.length;
-                w = this.canvasW - 300 - 20 * (card.length - 1);
+                this.positionX = this.canvasW - 300 - 20 * (card.length - 1);
                 break;
             default:
                 break;
         }
-        this.drawPoker(this.deck.length, this.left, this.right);
-        this.drawOthers(card, w);
     }
 
     // 把分数画出来
@@ -394,11 +399,14 @@ class PokerGame extends GameInit {
     }
 
     // 别人出的牌
-    drawOthers(card, w) {
-        for (let i = 0; i < card.length; i++) {
+    drawOthers() {
+        if (this.deskCard == null) {
+            return;
+        }
+        for (let i = 0; i < this.deskCard.length; i++) {
             this.ctx.drawImage(
-                this.loadedRes[card[i].name],
-                w + i * 20,
+                this.loadedRes[this.deskCard[i].name],
+                this.positionX + i * 20,
                 this.canvasH / 2 - 100,
             );
         }

@@ -1,7 +1,6 @@
 <template>
   <div id="battle-contaioner">
     <div style="width:800px;height:600px;margin:0 auto;">
-      <el-button @click="play()" type="primary">决定地主（临时）</el-button>
       <canvas id="mycanvas" width="800" height="600"></canvas>
     </div>
   </div>
@@ -48,7 +47,8 @@ export default {
       if (typeof data[0] == "number") {
         this.pokerGame.drawScore(data[0], data[1]);
       } else {
-        this.pokerGame.changeCardNum(data[0], data[1]);
+        this.pokerGame.changeCardNum( data[0],data[1]);
+        this.pokerGame.drawFunc();
       }
     },
     // 测试用

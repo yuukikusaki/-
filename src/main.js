@@ -18,7 +18,7 @@ Vue.use(VueCookies)
 import VueSocketIO from 'vue-socket.io'
 Vue.use(new VueSocketIO({
   debug:true,
-  connection:'http://localhost:3000',
+  connection:'http://192.168.0.102:3000',
 }));
 
 import router from './router/router'
