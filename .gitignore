@@ -2,7 +2,7 @@
 node_modules
 /dist
 package-lock.json
-fight_the_landlords
+public/fight_the_landlords
 
 # local env files
 .env.local

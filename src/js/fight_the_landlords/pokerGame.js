@@ -66,13 +66,15 @@ class GameInit {
         let btnY = this.btnY;
         // 设置分数按钮
         if (!this.isplay) {
+            this.buqiang = new ScoreBtn(this.vm, this.that, 0);
             this.one = new ScoreBtn(this.vm, this.that, 1);
             this.two = new ScoreBtn(this.vm, this.that, 2);
             this.three = new ScoreBtn(this.vm, this.that, 3);
-            this.one.setPosition("one", [canvasW / 3 - btnW / 2, btnY, btnW, btnH])
-            this.two.setPosition("two", [canvasW / 2 - btnW / 2, btnY, btnW, btnH])
-            this.three.setPosition("three", [canvasW * 2 / 3 - btnW / 2, btnY, btnW, btnH]);
-            this.button.push(this.one, this.two, this.three);
+            this.buqiang.setPosition("buqinag", [canvasW / 4 - btnW / 3, btnY, btnW, btnH])
+            this.one.setPosition("one", [canvasW / 2 - btnW * 1.125, btnY, btnW, btnH])
+            this.two.setPosition("two", [canvasW / 2 + btnW / 8, btnY, btnW, btnH])
+            this.three.setPosition("three", [canvasW * 3 / 4 - btnW * 2 / 3, btnY, btnW, btnH]);
+            this.button = [this.buqiang, this.one, this.two, this.three];
         } else {
             // 设置游戏按钮
             this.pass = new PassBtn(this.vm, this);
@@ -187,13 +189,11 @@ class PokerGame extends GameInit {
             this.ctx.drawImage(this.loadedRes["pass"], canvasW / 3 - btnW / 2, btnY, btnW, btnH);
             this.ctx.drawImage(this.loadedRes["tip"], canvasW / 2 - btnW / 2, btnY, btnW, btnH);
             this.ctx.drawImage(this.loadedRes["play"], canvasW * 2 / 3 - btnW / 2, btnY, btnW, btnH);
-            this.button = [];
-            this.button.push(this.pass, this.tip, this.play);
         } else {
-            this.ctx.drawImage(this.loadedRes["one"], canvasW / 3 - btnW / 2, btnY, btnW, btnH);
-            this.ctx.drawImage(this.loadedRes["two"], canvasW / 2 - btnW / 2, btnY, btnW, btnH);
-            this.ctx.drawImage(this.loadedRes["three"], canvasW * 2 / 3 - btnW / 2, btnY, btnW, btnH);
-            this.button.push(this.one, this.two, this.three);
+            this.ctx.drawImage(this.loadedRes["buqiang"], canvasW / 4 - btnW / 3, btnY, btnW, btnH)
+            this.ctx.drawImage(this.loadedRes["one"], canvasW / 2 - btnW * 1.125, btnY, btnW, btnH);
+            this.ctx.drawImage(this.loadedRes["two"], canvasW / 2 + btnW / 8, btnY, btnW, btnH);
+            this.ctx.drawImage(this.loadedRes["three"], canvasW * 3 / 4 - btnW * 2 / 3, btnY, btnW, btnH);
         }
     }
 
@@ -202,8 +202,6 @@ class PokerGame extends GameInit {
         this.setBtn();
         this.pokerList = pokerList;
         // 这里是一个动画动作，应该放入setInterval中
-        // 从数组中移除开始按钮
-        this.button.pop();
         // 1. 清空画布
         this.ctx.clearRect(0, 0, this.canvasW, this.canvasH);
         // 2. 发牌动画和显示按钮
@@ -233,12 +231,12 @@ class PokerGame extends GameInit {
             } else if (len == this.pokerList.length) {
                 this.drawBtn();
             }
-        }, 300)
+        }, 0) // 暂时归零
     }
 
     // 画图顺序
     drawFunc(type, cards, position) {
-        // 可以用 switch case判断是什么
+        // 可以用 switch case判断是什么（我觉得这个可以去掉了）
         // 按顺序来
         // 可以把每个分开来，把背景和安奈u放进这里，别的用case执行
         // 修改牌型也要单独列出来
@@ -289,7 +287,7 @@ class PokerGame extends GameInit {
         for (let i = 0; i < mlen; i++) {
             // 自己
             this.ctx.drawImage(
-                this.loadedRes[this.pokerList[i].name],
+                this.loadedRes[this.deck[i].name],
                 startX + i * 20,
                 this.deck[i].y);
             this.deck[i].changePosition(startX + i * 20);
@@ -322,7 +320,7 @@ class PokerGame extends GameInit {
     }
 
     // 出牌展示
-    drawDeal(dealList) {
+    setDeal(dealList) {
         this.deskCard = dealList;
         const len = dealList.length;
         let startX = this.canvasW / 2 - 52.5 - (len - 1) * 10;

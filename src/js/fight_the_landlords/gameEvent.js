@@ -1,3 +1,5 @@
+// import cardType from './pokerRule'
+
 // 按钮类
 class Button {
     constructor(vm,that) {
@@ -54,6 +56,7 @@ class ScoreBtn extends Button{
         this.score = score;
     }
     onClick(){
+        window.console.log(this.score)
         this.vm.$socket.emit('next',this.score);
     }
 }
@@ -96,9 +99,9 @@ class PlayBtn extends Button {
             }
         }
         this.that.deck = deck.filter(c=>c);
-        this.that.drawDeal(dealList);
+        this.that.setDeal(dealList);
         this.that.drawFunc(0,dealList);
-        this.vm.$socket.emit('next',dealList);
+        // this.vm.$socket.emit('next',dealList);
     }
 
 }
