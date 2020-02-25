@@ -1,4 +1,4 @@
-// import cardType from './pokerRule'
+import cardType from './pokerRule'
 
 // 按钮类
 class Button {
@@ -45,7 +45,7 @@ class StartBtn extends Button {
     }
 
     onClick() {
-        this.vm.$socket.emit('onready',this.vm.room.rid);
+        this.vm.$socket.emit('onready');
     }
 }
 
@@ -91,14 +91,17 @@ class PlayBtn extends Button {
         super(vm,that);
     }
     onClick(deck){
+        // 先放入出牌列表
         let dealList = [];
-        for(let i=0;i<deck.length;i++){
-            if(deck[i].getChecked()){
-                dealList.push(deck[i]);
-                deck[i] = undefined;
+        deck.map(c =>{
+            if(c.getChecked()){
+                dealList.push(c);
             }
-        }
-        this.that.deck = deck.filter(c=>c);
+        });
+        alert(cardType(dealList));
+        if(cardType(dealList) == 'err'){ return; }
+        // 删除牌组中的卡牌
+        this.that.deck = deck.filter(c=>!c.getChecked());
         this.that.setDeal(dealList);
         this.that.drawFunc(0,dealList);
         // this.vm.$socket.emit('next',dealList);

@@ -14,16 +14,23 @@ function cardType(card){
         }
     }
     if(len == 3){
-        if(card[0].point == card[1].point == card[2].point){
+        if(card[0].point == card[1].point&&card[1].point == card[2].point){
             type = 'triple';
         }else{
-            type = 'err'
+            type = 'err';
         }
     }
     if(len == 4){
-        if(card.every(c => c.point === card[0].pont)){
-            type = 'bomb';
-        }
+       if(card[1].point==card[2].point){
+           if((card[0].point==card[1].point||card[1].point==card[3].point)
+           &&card[0].point!=card[3].point){
+               type = 'twa';
+           }else if(card[0]==card[1]&&card[1]==card[3]){
+               type = 'boom';
+           }else{
+               type = 'err';
+           }
+       }
     }
     
     return type;

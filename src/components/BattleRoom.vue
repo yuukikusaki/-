@@ -1,5 +1,6 @@
 <template>
   <div id="battle-contaioner">
+    <el-button @click="replay()">重新开始</el-button>
     <div style="width:800px;height:600px;margin:0 auto;">
       <canvas id="mycanvas" width="800" height="600"></canvas>
     </div>
@@ -76,6 +77,10 @@ export default {
       this.pokerGame.isplay = true;
       // this.pokerGame.drawPoker(17, 17, 17);
       this.pokerGame.setBtn();
+    },
+    // 重新发牌
+    replay(){
+      this.$socket.emit('onready')
     }
   }
 };
