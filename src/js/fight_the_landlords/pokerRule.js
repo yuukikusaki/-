@@ -66,38 +66,95 @@
     }
 */
 
+// 判断是不是连续
+function isseries(arr) {
+    if (arr[0] - arr[arr.length - 1] == arr.length - 1) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+// 重复数函数
+function CountList(){
+    this.one = []; // 只出现一次
+    this.two = []; // 重复两次
+    this.three = []; // 重复三次
+    this.four = []; // 重复四次
+}
+
+// 计算重复数
+function count(cards) {
+    const arr = [new Set(cards)];
+    const countList = new CountList();
+    arr.forEach(item=>{
+        const count = arr.lastIndex(item)-arr.indexOf(item)+1;
+        if(count==1){
+            countList.one.push(item);
+        }else if(count==2){
+            countList.two.push(item);
+        }else if(count==3){
+            countList.three.push(item);
+        }else{
+            countList.four.push(item);
+        }
+    });
+    return countList;
+}
+
+// 确定牌型
 function cardType(card) {
-    let type = null;
     const len = card.length;
-    if (len == 1) {
-        type = 'single';
+    if (len < 1) {
+        return false;
     }
-    if (len == 2) {
-        if (card[0].point == card[1].point) {
-            type = 'pair';
+    let type = null;
+    // 转换成数字型数组
+    let countList = count(card);
+    window.console.log(countList);
+
+    // 以 5 为界限分开来
+    if (len <= 5) {
+        if (len == 1) { // 单牌
+            type = 'single';
+        } else if (len == 2) {
+            if (card[0].point == card[1].point) {
+                type = 'pair'; // 对子
+            } else if (card[0].point == 15 && card[1].point == 14) {
+                type = 'rocket'; // 王炸
+            } else {
+                type = 'err';
+            }
+        } else if (len == 3) {
+            if (card[0].point == card[1].point && card[1].point == card[2].point) {
+                type = 'triple'; // 三张
+            } else {
+                type = 'err';
+            }
+        } else if (len == 4) {
+            if (card[1].point == card[2].point) {
+                if ((card[0].point == card[1].point || card[1].point == card[3].point)
+                    && card[0].point != card[3].point) {
+                    type = 'twa'; // 三带一
+                } else if (card[0] == card[1] && card[1] == card[3]) {
+                    type = 'boom'; // 炸弹
+                } else {
+                    type = 'err';
+                }
+            } else {
+                type = 'err';
+            }
         } else {
-            type = 'err';
-        }
-    }
-    if (len == 3) {
-        if (card[0].point == card[1].point && card[1].point == card[2].point) {
-            type = 'triple';
-        } else {
-            type = 'err';
-        }
-    }
-    if (len == 4) {
-        if (card[1].point == card[2].point) {
-            if ((card[0].point == card[1].point || card[1].point == card[3].point)
-                && card[0].point != card[3].point) {
-                type = 'twa';
-            } else if (card[0] == card[1] && card[1] == card[3]) {
-                type = 'boom';
+            if (isseries(card)) {
+                type = 'straight';
             } else {
                 type = 'err';
             }
         }
+    } else {
+        // 
     }
+
 
     return type;
 }
