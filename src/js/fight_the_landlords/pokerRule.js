@@ -39,7 +39,6 @@
         }
     }
     大于 5 时
-    1. 一个方法判断一个里面一次的有i个重复两次的 j 个，三次的 k 个
     2. 一个方法判断顺子
     3. 重复两次的有 m 个
     if(j==0&&k==0){
@@ -68,6 +67,10 @@
 
 // 判断是不是连续
 function isseries(arr) {
+    // 有大小王或者 2 就直接报错
+    if (arr.some(c => { c >= 13 })) {
+        return false;
+    }
     if (arr[0] - arr[arr.length - 1] == arr.length - 1) {
         return true;
     } else {
@@ -76,29 +79,37 @@ function isseries(arr) {
 }
 
 // 重复数函数
-function CountList(){
-    this.one = []; // 只出现一次
-    this.two = []; // 重复两次
-    this.three = []; // 重复三次
-    this.four = []; // 重复四次
+class CountList {
+    constructor() {
+        this.one = []; // 只出现一次
+        this.two = []; // 重复两次
+        this.three = []; // 重复三次
+        this.four = []; // 重复四次
+    }
+    set() {
+        this.one = [...new Set(this.one)];
+        this.two = [...new Set(this.two)];
+        this.three = [...new Set(this.three)];
+        this.four = [...new Set(this.four)];
+    }
 }
 
 // 计算重复数
-function count(cards) {
-    const arr = [new Set(cards)];
+function count(list) {
     const countList = new CountList();
-    arr.forEach(item=>{
-        const count = arr.lastIndex(item)-arr.indexOf(item)+1;
-        if(count==1){
+    list.map(item => {
+        const count = list.lastIndexOf(item) - list.indexOf(item) + 1;
+        if (count == 1) {
             countList.one.push(item);
-        }else if(count==2){
+        } else if (count == 2) {
             countList.two.push(item);
-        }else if(count==3){
+        } else if (count == 3) {
             countList.three.push(item);
-        }else{
+        } else {
             countList.four.push(item);
         }
     });
+    countList.set();
     return countList;
 }
 
@@ -109,8 +120,8 @@ function cardType(card) {
         return false;
     }
     let type = null;
-    // 转换成数字型数组
-    let countList = count(card);
+    let list = card.map(c => { return c.point; }); // 卡牌大小列表
+    let countList = count(list);
     window.console.log(countList);
 
     // 以 5 为界限分开来
@@ -118,41 +129,56 @@ function cardType(card) {
         if (len == 1) { // 单牌
             type = 'single';
         } else if (len == 2) {
-            if (card[0].point == card[1].point) {
+            if (countList.two.length == 1) {
                 type = 'pair'; // 对子
-            } else if (card[0].point == 15 && card[1].point == 14) {
+            } else if (countList.one.length[0] == 15 && countList.one.length[1] == 14) {
                 type = 'rocket'; // 王炸
             } else {
                 type = 'err';
             }
         } else if (len == 3) {
-            if (card[0].point == card[1].point && card[1].point == card[2].point) {
+            if (countList.three.length == 1) {
                 type = 'triple'; // 三张
             } else {
                 type = 'err';
             }
         } else if (len == 4) {
-            if (card[1].point == card[2].point) {
-                if ((card[0].point == card[1].point || card[1].point == card[3].point)
-                    && card[0].point != card[3].point) {
-                    type = 'twa'; // 三带一
-                } else if (card[0] == card[1] && card[1] == card[3]) {
-                    type = 'boom'; // 炸弹
-                } else {
-                    type = 'err';
-                }
+            if (countList.three.length == 1) {
+                type = 'twa'; // 三带一
+            } else if (countList.four.length == 1) {
+                type = 'boom'; // 炸弹
             } else {
                 type = 'err';
             }
         } else {
-            if (isseries(card)) {
-                type = 'straight';
+            if (isseries(countList.one)) {
+                type = 'straight'; // 顺子
             } else {
                 type = 'err';
             }
         }
     } else {
-        // 
+        // 1. 一个方法判断一个里面一次的有i个重复两次的 j 个，三次的 k 个
+
+        if (countList.one.length == len && isseries(countList.one)) {
+            type = 'straight'; // 顺子
+        } else if (countList.two.length * 2 == len && isseries(countList.two)) {
+            type = 'sop'; // 连对
+        } else if (countList.three.length * 3 == len && isseries(countList.two)) {
+            type = 'sot'; // 三连对
+        } else {
+            if (countList.three.length == 0 || isseries(countList.three) == false) {
+                type = 'err';
+            }
+            if (countList.one.length * 2 + countList.three * 3 == len) {
+                type = 'sota'; // 飞机带单
+            }
+            else if (countList.two.length * 2 + countList.three.length * 3 == len) {
+                type = 'stop'; // 飞机带双
+            } else {
+                type = 'err';
+            }
+        }
     }
 
 
