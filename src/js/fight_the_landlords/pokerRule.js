@@ -166,16 +166,20 @@ function cardType(card) {
             type = 'sop'; // 连对
         } else if (countList.three.length * 3 == len && isseries(countList.two)) {
             type = 'sot'; // 三连对
-        } else {
-            if (countList.three.length == 0 || isseries(countList.three) == false) {
-                type = 'err';
-            }
-            if (countList.one.length * 2 + countList.three * 3 == len) {
+        } else if (countList.three.length == 0 && isseries(countList.three)) { 
+            if (countList.one.length * 2 + countList.three.length * 3 == len) {
                 type = 'sota'; // 飞机带单
-            }
-            else if (countList.two.length * 2 + countList.three.length * 3 == len) {
+            }else if (countList.two.length * 2 + countList.three.length * 3 == len) {
                 type = 'stop'; // 飞机带双
             } else {
+                type = 'err';
+            }
+        } else if(countList.four.length == 0 && isseries(countList.four)){
+            if (countList.one.length * 2 + countList.four.length * 4 == len) {
+                type = 'fbta'; // 四带二
+            }else if (countList.two.length * 2 + countList.four.length * 4 == len) {
+                type = 'fptp'; // 四带二对;
+            }else{
                 type = 'err';
             }
         }

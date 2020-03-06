@@ -67,14 +67,16 @@ class GameInit {
         // 设置分数按钮
         if (!this.isplay) {
             this.buqiang = new ScoreBtn(this.vm, this.that, 0);
-            this.one = new ScoreBtn(this.vm, this.that, 1);
-            this.two = new ScoreBtn(this.vm, this.that, 2);
-            this.three = new ScoreBtn(this.vm, this.that, 3);
-            this.buqiang.setPosition("buqinag", [canvasW / 4 - btnW / 3, btnY, btnW, btnH])
-            this.one.setPosition("one", [canvasW / 2 - btnW * 1.125, btnY, btnW, btnH])
-            this.two.setPosition("two", [canvasW / 2 + btnW / 8, btnY, btnW, btnH])
-            this.three.setPosition("three", [canvasW * 3 / 4 - btnW * 2 / 3, btnY, btnW, btnH]);
-            this.button = [this.buqiang, this.one, this.two, this.three];
+            this.qiang = new ScoreBtn(this.vm,this.that,1)
+            // this.one = new ScoreBtn(this.vm, this.that, 1);
+            // this.two = new ScoreBtn(this.vm, this.that, 2);
+            // this.three = new ScoreBtn(this.vm, this.that, 3);
+            this.buqiang.setPosition("不抢", [canvasW / 2 - btnW*1.5, btnY, btnW, btnH]);
+            this.qiang.setPosition("抢地主", [canvasW / 2 + btnW*0.5, btnY, btnW, btnH]);
+            // this.one.setPosition("one", [canvasW / 2 - btnW * 1.125, btnY, btnW, btnH])
+            // this.two.setPosition("two", [canvasW / 2 + btnW / 8, btnY, btnW, btnH])
+            // this.three.setPosition("three", [canvasW * 3 / 4 - btnW * 2 / 3, btnY, btnW, btnH]);
+            this.button = [this.buqiang, this.qiang];
         } else {
             // 设置游戏按钮
             this.pass = new PassBtn(this.vm, this);
@@ -190,10 +192,11 @@ class PokerGame extends GameInit {
             this.ctx.drawImage(this.loadedRes["tip"], canvasW / 2 - btnW / 2, btnY, btnW, btnH);
             this.ctx.drawImage(this.loadedRes["play"], canvasW * 2 / 3 - btnW / 2, btnY, btnW, btnH);
         } else {
-            this.ctx.drawImage(this.loadedRes["buqiang"], canvasW / 4 - btnW / 3, btnY, btnW, btnH)
-            this.ctx.drawImage(this.loadedRes["one"], canvasW / 2 - btnW * 1.125, btnY, btnW, btnH);
-            this.ctx.drawImage(this.loadedRes["two"], canvasW / 2 + btnW / 8, btnY, btnW, btnH);
-            this.ctx.drawImage(this.loadedRes["three"], canvasW * 3 / 4 - btnW * 2 / 3, btnY, btnW, btnH);
+            this.ctx.drawImage(this.loadedRes["不抢"], canvasW / 2 - btnW *1.5, btnY, btnW, btnH)
+            this.ctx.drawImage(this.loadedRes["抢地主"], canvasW / 2 + btnW*0.5, btnY, btnW, btnH)
+            // this.ctx.drawImage(this.loadedRes["one"], canvasW / 2 - btnW * 1.125, btnY, btnW, btnH);
+            // this.ctx.drawImage(this.loadedRes["two"], canvasW / 2 + btnW / 8, btnY, btnW, btnH);
+            // this.ctx.drawImage(this.loadedRes["three"], canvasW * 3 / 4 - btnW * 2 / 3, btnY, btnW, btnH);
         }
     }
 
