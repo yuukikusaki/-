@@ -56,7 +56,6 @@ class ScoreBtn extends Button{
         this.score = score;
     }
     onClick(){
-        window.console.log(this.score)
         this.vm.$socket.emit('next',this.score);
     }
 }

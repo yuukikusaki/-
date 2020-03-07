@@ -24,14 +24,21 @@ export default {
       // 注意一下顺序，特别是地主牌显示
       this.pokerGame.landCard = landCard;
       this.play(); // 以后要整合进去
-      this.pokerGame.drawFunc(0,landCard);
+      // 地主放入地主牌
+      this.pokerGame.insertCard(landCard);
+      this.pokerGame.drawFunc();
       // this.pokerGame.insertCard();
     },
     // 农民
-    farmer(landCard){
-      this.pokerGame.landCard = landCard;
+    farmer(data){
+      this.pokerGame.landCard = data[0];
+      if(data[1]=='left'){
+        this.pokerGame.left += 3;
+      }else{
+        this.pokerGame.right += 3;
+      }
       this.play();  // 需要整合
-      this.pokerGame.drawFunc(0,landCard);
+      this.pokerGame.drawFunc();
     },
     // 发牌
     deal(pokerList) {

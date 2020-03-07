@@ -84,9 +84,10 @@ export default {
     },
     // 创建新房间
     crtNewRoom() {
-      let newRoom = {};
-      newRoom.name = this.gameInfo.name;
-      newRoom.pass = this.roomPass;
+      const newRoom = {
+        name : this.gameInfo.name,
+        pass : this.roomPass
+      };
       // 应该是向服务器发送消息
       this.$socket.emit("crtRoom", newRoom);
       this.joinRoom(this.roomList.length);

@@ -67,12 +67,12 @@ class GameInit {
         // 设置分数按钮
         if (!this.isplay) {
             this.buqiang = new ScoreBtn(this.vm, this.that, 0);
-            this.qiang = new ScoreBtn(this.vm,this.that,1)
+            this.qiang = new ScoreBtn(this.vm, this.that, 1)
             // this.one = new ScoreBtn(this.vm, this.that, 1);
             // this.two = new ScoreBtn(this.vm, this.that, 2);
             // this.three = new ScoreBtn(this.vm, this.that, 3);
-            this.buqiang.setPosition("不抢", [canvasW / 2 - btnW*1.5, btnY, btnW, btnH]);
-            this.qiang.setPosition("抢地主", [canvasW / 2 + btnW*0.5, btnY, btnW, btnH]);
+            this.buqiang.setPosition("不抢", [canvasW / 2 - btnW * 1.5, btnY, btnW, btnH]);
+            this.qiang.setPosition("抢地主", [canvasW / 2 + btnW * 0.5, btnY, btnW, btnH]);
             // this.one.setPosition("one", [canvasW / 2 - btnW * 1.125, btnY, btnW, btnH])
             // this.two.setPosition("two", [canvasW / 2 + btnW / 8, btnY, btnW, btnH])
             // this.three.setPosition("three", [canvasW * 3 / 4 - btnW * 2 / 3, btnY, btnW, btnH]);
@@ -192,8 +192,8 @@ class PokerGame extends GameInit {
             this.ctx.drawImage(this.loadedRes["tip"], canvasW / 2 - btnW / 2, btnY, btnW, btnH);
             this.ctx.drawImage(this.loadedRes["play"], canvasW * 2 / 3 - btnW / 2, btnY, btnW, btnH);
         } else {
-            this.ctx.drawImage(this.loadedRes["不抢"], canvasW / 2 - btnW *1.5, btnY, btnW, btnH)
-            this.ctx.drawImage(this.loadedRes["抢地主"], canvasW / 2 + btnW*0.5, btnY, btnW, btnH)
+            this.ctx.drawImage(this.loadedRes["不抢"], canvasW / 2 - btnW * 1.5, btnY, btnW, btnH)
+            this.ctx.drawImage(this.loadedRes["抢地主"], canvasW / 2 + btnW * 0.5, btnY, btnW, btnH)
             // this.ctx.drawImage(this.loadedRes["one"], canvasW / 2 - btnW * 1.125, btnY, btnW, btnH);
             // this.ctx.drawImage(this.loadedRes["two"], canvasW / 2 + btnW / 8, btnY, btnW, btnH);
             // this.ctx.drawImage(this.loadedRes["three"], canvasW * 3 / 4 - btnW * 2 / 3, btnY, btnW, btnH);
@@ -211,18 +211,18 @@ class PokerGame extends GameInit {
         // 2.1 先放背景图片
         this.ctx.drawImage(this.loadedRes["bgImage"], 0, 0, this.canvasW, this.canvasH);
         // 2.2 发牌动画，应该传入获得的牌组
-        let startX = this.canvasW / 2 - 52.5 - 16 * 10;
-        for (let i = 0; i < this.pokerList.length; i++) {
-            this.createPokerClass(this.pokerList[i],
-                [startX + i * 20, this.canvasH - 150, 20, 150]);
-        }
+        this.createPokerClass();
         this.dealAmine(1);
     }
     // 调用卡牌类
-    createPokerClass(poker, position) {
-        const newPoker = new PokerEvent(poker.name, poker.point);
-        newPoker.setPosition(position);
-        this.deck.push(newPoker);
+    createPokerClass() {
+        let startX = this.canvasW / 2 - 52.5 - 16 * 10;
+        for (let i = 0; i < this.pokerList.length; i++) {
+            const poker = new PokerEvent(this.pokerList[i].name, this.pokerList[i].point);
+            poker.setPosition([startX + i * 20, this.canvasH - 150, 20, 150]);
+            this.deck.push(poker);
+        }
+
     }
 
     // 动画
@@ -238,8 +238,7 @@ class PokerGame extends GameInit {
     }
 
     // 画图顺序
-    drawFunc(type, cards, position) {
-        // 可以用 switch case判断是什么（我觉得这个可以去掉了）
+    drawFunc() {
         // 按顺序来
         // 可以把每个分开来，把背景和安奈u放进这里，别的用case执行
         // 修改牌型也要单独列出来
@@ -252,34 +251,11 @@ class PokerGame extends GameInit {
         this.drawBtn();
         // 4. 画卡牌
         this.drawPoker(this.deck.length, this.left, this.right);
-        // 5. 地主牌展示(需要传入数据)
+        // 5. 地主牌展示
         this.drawLandCard(this.landCard);
         // 6. 别人出的牌
         this.drawOthers();
         // ---- 上面是需要经常展示的 ----
-        // 感觉这个可以不用了。。。
-        switch (type) {
-            case 1:
-                this.insertCard(cards); // 增加地主牌
-                break;
-            case 2:
-                this.drawDeal(); // 自己出的牌
-                break;
-            case 3:
-                this.changeCardNum(cards, position); // 出牌展示
-                break;
-            case 4:
-                this.drawOthers(cards); // 别人的牌
-                break;
-            case 5:
-                // 农民那里展示
-                break;
-            case 6:
-                this.drawLandCard();
-                break;
-            default:
-                break;
-        }
     }
 
     // 卡牌布局
@@ -353,13 +329,17 @@ class PokerGame extends GameInit {
         if (landCard == null) {
             return false;
         }
-        for (let i = i; i < this.pokerList.length; i++) {
-            window.console.log(this.pokerList[i]);
-            if (landCard[i].point > this.pokerList[i - 1].point) {
-                landCard.splice(i, 0, landCard[i]);
+        this.deck = [];
+        landCard.map(c => {
+            for (let i = 0; i < this.pokerList.length; i++) {
+                if (c.point > this.pokerList[i].point) {
+                    this.pokerList.splice(i, 0, c);
+                    break;
+                }
             }
-        }
+        });
         // 创建新的卡牌队列
+        this.createPokerClass();
     }
 
     // 改变牌数

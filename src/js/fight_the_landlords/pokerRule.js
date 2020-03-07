@@ -122,38 +122,39 @@ function cardType(card) {
     let type = null;
     let list = card.map(c => { return c.point; }); // 卡牌大小列表
     let countList = count(list);
-    window.console.log(countList);
-
+    window.console.log(countList)
     // 以 5 为界限分开来
     if (len <= 5) {
         if (len == 1) { // 单牌
-            type = 'single';
+            type = '单牌';
         } else if (len == 2) {
             if (countList.two.length == 1) {
-                type = 'pair'; // 对子
-            } else if (countList.one.length[0] == 15 && countList.one.length[1] == 14) {
-                type = 'rocket'; // 王炸
+                type = '对子'; // 对子
+            } else if (countList.one[0] == 15 && countList.one[1] == 14) {
+                type = '王炸'; // 王炸
             } else {
                 type = 'err';
             }
         } else if (len == 3) {
             if (countList.three.length == 1) {
-                type = 'triple'; // 三张
+                type = '三张'; // 三张
             } else {
                 type = 'err';
             }
         } else if (len == 4) {
             if (countList.three.length == 1) {
-                type = 'twa'; // 三带一
+                type = '三带一'; // 三带一
             } else if (countList.four.length == 1) {
-                type = 'boom'; // 炸弹
+                type = '炸弹'; // 炸弹
             } else {
                 type = 'err';
             }
         } else {
             if (isseries(countList.one)) {
-                type = 'straight'; // 顺子
-            } else {
+                type = '顺子'; // 顺子
+            } else if(countList.three.length==1&&countList.two.length==1){
+                type = '三带二'; // 三带二
+            }else {
                 type = 'err';
             }
         }
@@ -161,27 +162,29 @@ function cardType(card) {
         // 1. 一个方法判断一个里面一次的有i个重复两次的 j 个，三次的 k 个
 
         if (countList.one.length == len && isseries(countList.one)) {
-            type = 'straight'; // 顺子
+            type = '顺子'; // 顺子
         } else if (countList.two.length * 2 == len && isseries(countList.two)) {
-            type = 'sop'; // 连对
+            type = '连对'; // 连对
         } else if (countList.three.length * 3 == len && isseries(countList.two)) {
-            type = 'sot'; // 三连对
+            type = '三连对'; // 三连对
         } else if (countList.three.length == 0 && isseries(countList.three)) { 
             if (countList.one.length * 2 + countList.three.length * 3 == len) {
-                type = 'sota'; // 飞机带单
+                type = '飞机'; // 飞机带单
             }else if (countList.two.length * 2 + countList.three.length * 3 == len) {
-                type = 'stop'; // 飞机带双
+                type = '飞机'; // 飞机带双
             } else {
                 type = 'err';
             }
-        } else if(countList.four.length == 0 && isseries(countList.four)){
-            if (countList.one.length * 2 + countList.four.length * 4 == len) {
-                type = 'fbta'; // 四带二
+        } else if(countList.four.length == 1){
+            if (countList.one.length + countList.four.length * 4 == len) {
+                type = '四带二'; // 四带二
             }else if (countList.two.length * 2 + countList.four.length * 4 == len) {
-                type = 'fptp'; // 四带二对;
+                type = '四带二'; // 四带二对;
             }else{
                 type = 'err';
             }
+        }else{
+            type = 'err';
         }
     }
 
