@@ -1,4 +1,4 @@
-import cardType from './pokerRule'
+import {candeal} from './pokerRule'
 
 // 按钮类
 class Button {
@@ -75,7 +75,7 @@ class PassBtn extends Button {
         });
         this.that.drawPoker(deck.length);
         // socket
-        this.vm.$socket.emit('next',null);
+        this.vm.$socket.emit('next',[]);
     }
 }
 
@@ -97,13 +97,19 @@ class PlayBtn extends Button {
                 dealList.push(c);
             }
         });
-        alert(cardType(dealList));
-        if(cardType(dealList) == 'err'){ return; }
+        let typeRank = candeal(dealList,this.that.oTR);
+        if(typeRank==false){
+            return;
+        }
         // 删除牌组中的卡牌
         this.that.deck = deck.filter(c=>!c.getChecked());
         this.that.setDeal(dealList);
-        this.that.drawFunc(0,dealList);
-        // this.vm.$socket.emit('next',dealList);
+        this.that.drawFunc();
+        if(this.that.deck.length==0){
+            typeRank = 'win';
+        }
+        const dealinfo={typeRank,dealList};
+        this.vm.$socket.emit('next',dealinfo);
     }
 
 }

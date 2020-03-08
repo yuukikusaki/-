@@ -155,6 +155,7 @@ class PokerGame extends GameInit {
         this.landCard = null; // 地主牌
         this.positionX = null; // 横向坐标
         this.deskCard = null; // 桌面上的牌
+        this.oTR = null;
         this.loadAllResource();
     }
 
@@ -251,11 +252,12 @@ class PokerGame extends GameInit {
         this.drawBtn();
         // 4. 画卡牌
         this.drawPoker(this.deck.length, this.left, this.right);
-        // 5. 地主牌展示
-        this.drawLandCard(this.landCard);
-        // 6. 别人出的牌
+        // 5. 写文字
+        this.drawText();
+        // 6. 地主牌展示
+        this.drawLandCard();
+        // 7. 别人出的牌
         this.drawOthers();
-        // ---- 上面是需要经常展示的 ----
     }
 
     // 卡牌布局
@@ -314,12 +316,12 @@ class PokerGame extends GameInit {
     }
 
     // 地主牌显示
-    drawLandCard(landCard) {
-        if (landCard == null) {
+    drawLandCard() {
+        if (this.landCard == null) {
             return false;
         }
         for (let i = 0; i < 3; i++) {
-            this.ctx.drawImage(this.loadedRes[landCard[i].name],
+            this.ctx.drawImage(this.loadedRes[this.landCard[i].name],
                 this.canvasW / 2 - 72 + i * 20.5, 0);
         }
     }
@@ -343,40 +345,56 @@ class PokerGame extends GameInit {
     }
 
     // 改变牌数
-    changeCardNum(card, direction) {
-        this.deskCard = card
+    changeCardNum(cardInfo, direction) {
+        window.console.log(cardInfo);
+        if(cardInfo.length==0){
+            // 打印文字
+            this.text = '不出';
+            this.tPosition(direction);
+            return;
+        }else{
+            this.oTR = cardInfo.typeRank; // 把牌类型和大小给
+            this.deskCard = cardInfo.dealList;
+            this.pPosition(direction);
+        } 
+    }
+
+    // 卡牌方位
+    pPosition(direction){
         switch (direction) {
             case 'left':
-                this.left -= card.length;
+                this.left -= this.deskCard.length;
                 this.positionX = 200;
                 break;
             case 'right':
-                this.right -= card.length;
-                this.positionX = this.canvasW - 300 - 20 * (card.length - 1);
+                this.right -= this.deskCard.length;
+                this.positionX = this.canvasW - 300 - 20 * (this.deskCard.length - 1);
                 break;
             default:
                 break;
         }
     }
 
-    // 把分数画出来
-    drawScore(score, direction) {
-        let w = null;
+    // 文字方向
+    tPosition(direction){
         switch (direction) {
             case 'left':
-                w = 200;
+                this.tw = 200;
                 break;
             case 'right':
-                w = this.canvasW - 300;
+                this.tw = this.canvasW - 300;
                 break;
             default:
                 break
         }
+    }
+    // 打印文字
+    drawText() {
         // 设置字体
         this.ctx.font = "72px bold 黑体";
         // 设置颜色
         this.ctx.fillStyle = "#ff0";
-        this.ctx.fillText(score, w, this.canvasH / 2);
+        this.ctx.fillText(this.text,this.tw, this.canvasH / 2);
     }
 
     // 别人出的牌

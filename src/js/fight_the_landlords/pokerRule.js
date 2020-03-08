@@ -1,70 +1,30 @@
 // 游戏规则
-// 判断出的是什么类型的牌
-// 单牌（single）、对子（pair）、三张（triplet）、炸弹（boom）
-// 三带一（twa)、三带二（twp）、飞机带单（sota）、飞机带对（sotp）
-// 顺子（straight）、连对（sop）、三连对（sot）
-// 王炸（rocket）、四带二单（fbta）、四带二对（fptp）
-/*
-    一人17张，地主20，顺子最多12
-    1：单牌
-    2：对子、王炸
-    3：三张
-    4：三带一、炸弹
-    5：顺子、三带二
----------------------------------------------
-         顺子（单，双，三） 飞机（单、对）
-    6：顺子、连对、三连对、四带二
-    7：顺子
-    8：顺子、连对、飞机带单、四带二对
-    9：顺子、三连对
-    10：顺子、连对、飞机带对（减-4 %3==0）
-    11：顺子、飞机带单
-    12：顺子、连对、三连对
-    13：无
-    14：连对、飞机带单（减-2 %3==0）
-    15：三连对
-    16：连对、飞机带对
-    17：飞机带单
-*/
-/*
-    {
-        一次:
-        二次:
-        三次:
-        四次:
-    }
-    function 判断连续(){
-        if(arr[0]-arr[arr.length-1]==arr.length-1){
-            return 连续
-        }
-    }
-    大于 5 时
-    2. 一个方法判断顺子
-    3. 重复两次的有 m 个
-    if(j==0&&k==0){
-        判断连续
-        return 顺子
-    }else if(j*2==len){
-        判断连续(m)
-        return 连对
-    }else if(k*3==len){
-        判断连续(n)
-        return 三连对
-    }else {
-        if(k==0 || 判断连续(k)==false){
-            错误
-        }
-        if(2*i+k*3==len){
-            return 飞机带单
-        }
-        else if(2*j+k*3==len){
-            return 飞机带双
-        }else{
-            return 错误
-        }
-    }
-*/
+// 牌点数 3-大王 => 1-15
 
+// 是否可以出牌
+function candeal(dealList,o) {
+    const {type,rank} = cardType(dealList); // 自己的牌
+    // 先判断是不是 err
+    if(type == 'err'){ 
+        return false; 
+    }
+    if(o == null){
+        return {type,rank};
+    }
+    // 别人的牌
+    const otype = o.type;
+    const orank = o.rank;
+    if(rank>50&&rank>orank){ // 我是炸弹（不用管别人是不是炸弹）
+        return {type,rank};
+    }else if(type==otype&&rank>orank){ // 普通牌型，首先相等，其次大小
+        return {type,rank};
+    }else{
+        return false;
+    }
+}
+
+
+// 牌型判断 start
 // 判断是不是连续
 function isseries(arr) {
     // 有大小王或者 2 就直接报错
@@ -78,7 +38,7 @@ function isseries(arr) {
     }
 }
 
-// 重复数函数
+// 重复数类
 class CountList {
     constructor() {
         this.one = []; // 只出现一次
@@ -86,7 +46,7 @@ class CountList {
         this.three = []; // 重复三次
         this.four = []; // 重复四次
     }
-    set() {
+    set() { // 按次数把重复的合一
         this.one = [...new Set(this.one)];
         this.two = [...new Set(this.two)];
         this.three = [...new Set(this.three)];
@@ -119,7 +79,8 @@ function cardType(card) {
     if (len < 1) {
         return false;
     }
-    let type = null;
+    let type = null; // 牌型
+    let rank = 0; // 牌大小
     let list = card.map(c => { return c.point; }); // 卡牌大小列表
     let countList = count(list);
     window.console.log(countList)
@@ -127,69 +88,81 @@ function cardType(card) {
     if (len <= 5) {
         if (len == 1) { // 单牌
             type = '单牌';
+            rank = countList.one[0];
         } else if (len == 2) {
             if (countList.two.length == 1) {
                 type = '对子'; // 对子
+                rank = countList.two[0];
             } else if (countList.one[0] == 15 && countList.one[1] == 14) {
                 type = '王炸'; // 王炸
+                rank = 100; // 无脑压 100    
             } else {
                 type = 'err';
             }
         } else if (len == 3) {
             if (countList.three.length == 1) {
                 type = '三张'; // 三张
+                rank = countList.three[0];
             } else {
                 type = 'err';
             }
         } else if (len == 4) {
             if (countList.three.length == 1) {
                 type = '三带一'; // 三带一
+                rank = countList.three[0];
             } else if (countList.four.length == 1) {
                 type = '炸弹'; // 炸弹
+                rank = countList.four[0] + 50; // 炸弹加 50
             } else {
                 type = 'err';
             }
         } else {
             if (isseries(countList.one)) {
                 type = '顺子'; // 顺子
-            } else if(countList.three.length==1&&countList.two.length==1){
+                rank = countList.one[0];
+            } else if (countList.three.length == 1 && countList.two.length == 1) {
                 type = '三带二'; // 三带二
-            }else {
+                rank = countList.three[0];
+            } else {
                 type = 'err';
             }
         }
     } else {
-        // 1. 一个方法判断一个里面一次的有i个重复两次的 j 个，三次的 k 个
-
         if (countList.one.length == len && isseries(countList.one)) {
             type = '顺子'; // 顺子
+            rank = countList.one[0];
         } else if (countList.two.length * 2 == len && isseries(countList.two)) {
             type = '连对'; // 连对
+            rank = countList.two[0];
         } else if (countList.three.length * 3 == len && isseries(countList.two)) {
             type = '三连对'; // 三连对
-        } else if (countList.three.length == 0 && isseries(countList.three)) { 
-            if (countList.one.length * 2 + countList.three.length * 3 == len) {
+            rank = countList.three[0];
+        } else if (countList.three.length != 0 && isseries(countList.three)) {
+            if (countList.one.length + countList.three.length * 3 == len) {
                 type = '飞机'; // 飞机带单
-            }else if (countList.two.length * 2 + countList.three.length * 3 == len) {
+                rank = countList.three[0];
+            } else if (countList.two.length * 2 + countList.three.length * 3 == len) {
                 type = '飞机'; // 飞机带双
+                rank = countList.three[0];
             } else {
                 type = 'err';
             }
-        } else if(countList.four.length == 1){
+        } else if (countList.four.length == 1) {
             if (countList.one.length + countList.four.length * 4 == len) {
                 type = '四带二'; // 四带二
-            }else if (countList.two.length * 2 + countList.four.length * 4 == len) {
+                rank = countList.four[0];
+            } else if (countList.two.length * 2 + countList.four.length * 4 == len) {
                 type = '四带二'; // 四带二对;
-            }else{
+                rank = countList.four[0];
+            } else {
                 type = 'err';
             }
-        }else{
+        } else {
             type = 'err';
         }
     }
-
-
-    return type;
+    return {type,rank};
 }
+// 牌型判断 end
 
-export default cardType;
+export  {candeal};
