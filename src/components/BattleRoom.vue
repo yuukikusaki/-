@@ -51,13 +51,29 @@ export default {
     },
     // 接收别人出的牌并打印出来
     draw(data) {
-      window.console.log(typeof data[0])
+      // window.console.log(typeof data[0]);
       if (typeof data[0] == "number") {
         this.pokerGame.drawScore(data[0], data[1]);
       } else {
         this.pokerGame.changeCardNum( data[0],data[1]);
         this.pokerGame.drawFunc();
       }
+    },
+    // 清理
+    clear(data){
+      // window.console.log('clear');
+      // 清桌面
+      if(data=="desk"){
+        this.pokerGame.clearDesk();
+        this.pokerGame.drawFunc();
+      }
+    },
+    nopass(flag){
+      this.pokerGame.button[0].reClick(flag);
+    },
+    // 胜利
+    win(data){
+      alert(data);
     },
     // 测试用
     test(data) {
@@ -82,7 +98,6 @@ export default {
     },
     play() {
       this.pokerGame.isplay = true;
-      // this.pokerGame.drawPoker(17, 17, 17);
       this.pokerGame.setBtn();
     },
     // 重新发牌

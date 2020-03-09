@@ -83,7 +83,7 @@ function cardType(card) {
     let rank = 0; // 牌大小
     let list = card.map(c => { return c.point; }); // 卡牌大小列表
     let countList = count(list);
-    window.console.log(countList)
+    // window.console.log(countList)
     // 以 5 为界限分开来
     if (len <= 5) {
         if (len == 1) { // 单牌

@@ -64,16 +64,23 @@ class ScoreBtn extends Button{
 class PassBtn extends Button {
     constructor(vm,that) {
         super(vm,that);
+        this.canClick = false;
     }
 
+    reClick(flag){
+        this.canClick = flag;
+    }
     onClick(deck) {
+        if(this.canClick){
+            return;
+        }
         deck.map(card => {
             if (card.getChecked()) {
                 card.isChecked = false;
                 card.y += 20;
             }
         });
-        this.that.drawPoker(deck.length);
+        this.that.drawFunc();
         // socket
         this.vm.$socket.emit('next',[]);
     }
@@ -98,9 +105,11 @@ class PlayBtn extends Button {
             }
         });
         let typeRank = candeal(dealList,this.that.oTR);
+        window.console.log('next');
         if(typeRank==false){
             return;
         }
+        window.console.log('next');
         // 删除牌组中的卡牌
         this.that.deck = deck.filter(c=>!c.getChecked());
         this.that.setDeal(dealList);
@@ -109,6 +118,7 @@ class PlayBtn extends Button {
             typeRank = 'win';
         }
         const dealinfo={typeRank,dealList};
+        window.console.log('next');
         this.vm.$socket.emit('next',dealinfo);
     }
 

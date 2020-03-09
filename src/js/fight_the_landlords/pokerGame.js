@@ -68,14 +68,8 @@ class GameInit {
         if (!this.isplay) {
             this.buqiang = new ScoreBtn(this.vm, this.that, 0);
             this.qiang = new ScoreBtn(this.vm, this.that, 1)
-            // this.one = new ScoreBtn(this.vm, this.that, 1);
-            // this.two = new ScoreBtn(this.vm, this.that, 2);
-            // this.three = new ScoreBtn(this.vm, this.that, 3);
             this.buqiang.setPosition("不抢", [canvasW / 2 - btnW * 1.5, btnY, btnW, btnH]);
             this.qiang.setPosition("抢地主", [canvasW / 2 + btnW * 0.5, btnY, btnW, btnH]);
-            // this.one.setPosition("one", [canvasW / 2 - btnW * 1.125, btnY, btnW, btnH])
-            // this.two.setPosition("two", [canvasW / 2 + btnW / 8, btnY, btnW, btnH])
-            // this.three.setPosition("three", [canvasW * 3 / 4 - btnW * 2 / 3, btnY, btnW, btnH]);
             this.button = [this.buqiang, this.qiang];
         } else {
             // 设置游戏按钮
@@ -109,14 +103,11 @@ class GameInit {
                 if (this.isfocus == false) {
                     return;
                 }
-                window.console.log(this.button);
+                // window.console.log(this.button);
                 for (let i = 0; i < this.button.length; i++) {
                     let p = this.button[i].getPositionX();
                     if (e.layerX >= p.x1 && e.layerX <= p.x2) {
                         this.button[i].onClick(this.deck);
-                        // *这里暂时这么写（改好了，这段先保留）
-                        // 理论上应该是按钮类发送给服务端，服务端回发调用
-                        // this.judgeClickEvent(this.settedRes.button[i]);
                     }
                 }
             }
@@ -256,8 +247,8 @@ class PokerGame extends GameInit {
         this.drawText();
         // 6. 地主牌展示
         this.drawLandCard();
-        // 7. 别人出的牌
-        this.drawOthers();
+        // 7. 画桌面上的卡牌
+        this.drawDeskCard();
     }
 
     // 卡牌布局
@@ -346,10 +337,9 @@ class PokerGame extends GameInit {
 
     // 改变牌数
     changeCardNum(cardInfo, direction) {
-        window.console.log(cardInfo);
         if(cardInfo.length==0){
             // 打印文字
-            this.text = '不出';
+            this.text = '不要';
             this.tPosition(direction);
             return;
         }else{
@@ -379,27 +369,30 @@ class PokerGame extends GameInit {
     tPosition(direction){
         switch (direction) {
             case 'left':
-                this.tw = 200;
+                this.lw = 170;
                 break;
             case 'right':
-                this.tw = this.canvasW - 300;
+                this.rw = this.canvasW - 250;
                 break;
             default:
-                break
+                break;
         }
     }
+    
     // 打印文字
     drawText() {
         // 设置字体
-        this.ctx.font = "72px bold 黑体";
+        // window.console.log(this.text);
+        this.ctx.font = "36px bold 宋体";
         // 设置颜色
         this.ctx.fillStyle = "#ff0";
-        this.ctx.fillText(this.text,this.tw, this.canvasH / 2);
+        this.ctx.fillText(this.text,this.lw, this.canvasH / 3);
+        this.ctx.fillText(this.text,this.rw, this.canvasH / 3);
     }
 
-    // 别人出的牌
-    drawOthers() {
-        if (this.deskCard == null) {
+    // 画桌面上的卡牌
+    drawDeskCard() {
+        if (!this.deskCard) {
             return;
         }
         for (let i = 0; i < this.deskCard.length; i++) {
@@ -409,6 +402,14 @@ class PokerGame extends GameInit {
                 this.canvasH / 2 - 100,
             );
         }
+    }
+
+    // 清理桌面
+    clearDesk(){
+        this.deskCard = [];
+        this.lw=-500;
+        this.rw=-500;
+        this.oTR = null;
     }
 }
 
