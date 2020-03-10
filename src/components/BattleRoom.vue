@@ -42,18 +42,20 @@ export default {
     },
     // 发牌
     deal(pokerList) {
+      window.console.log(pokerList);
       this.pokerGame.dealCards(pokerList);
     },
     // 按钮事件
     isfocus(flag) {
       this.pokerGame.isfocus = flag;
+      this.pokerGame.drawFunc();
       window.console.log(flag);
     },
     // 接收别人出的牌并打印出来
     draw(data) {
       // window.console.log(typeof data[0]);
       if (typeof data[0] == "number") {
-        this.pokerGame.drawScore(data[0], data[1]);
+        this.pokerGame.robText(data[0], data[1]);
       } else {
         this.pokerGame.changeCardNum( data[0],data[1]);
         this.pokerGame.drawFunc();
@@ -61,12 +63,16 @@ export default {
     },
     // 清理
     clear(data){
-      // window.console.log('clear');
+      window.console.log('clear');
       // 清桌面
-      if(data=="desk"){
+      if(data=="card"){
+        this.pokerGame.clearCard();
+      }else if(data == "text"){
+        this.pokerGame.clearText();
+      }else if(data=="desk"){
         this.pokerGame.clearDesk();
-        this.pokerGame.drawFunc();
       }
+        this.pokerGame.drawFunc();
     },
     nopass(flag){
       this.pokerGame.button[0].reClick(flag);

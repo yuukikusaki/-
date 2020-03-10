@@ -2,8 +2,8 @@ import {candeal} from './pokerRule'
 
 // 按钮类
 class Button {
-    constructor(vm,that) {
-        this.name = null;
+    constructor(name,vm,that) {
+        this.name = name;
         // 记录图片位置和长宽
         this.x = null;
         this.y = null;
@@ -14,8 +14,7 @@ class Button {
     }
 
     // 设置图片位置
-    setPosition(name, positon) {
-        this.name = name;
+    setPosition(positon) {
         this.x = positon[0];
         this.y = positon[1];
         this.w = positon[2];
@@ -40,8 +39,8 @@ class Button {
 
 // startBtn 按钮
 class StartBtn extends Button {
-    constructor(vm,that) {
-        super(vm,that);
+    constructor(name,vm,that) {
+        super(name,vm,that);
     }
 
     onClick() {
@@ -51,19 +50,22 @@ class StartBtn extends Button {
 
 // 抢地主 按钮
 class ScoreBtn extends Button{
-    constructor(vm,that,score){
-        super(vm,that);
+    constructor(name,vm,that,score){
+        super(name,vm,that);
         this.score = score;
     }
     onClick(){
         this.vm.$socket.emit('next',this.score);
+        this.that.text = this.name
+        this.that.tPosition('my');
+        this.that.drawFunc();
     }
 }
 
 // 不出 按钮
 class PassBtn extends Button {
-    constructor(vm,that) {
-        super(vm,that);
+    constructor(name,vm,that) {
+        super(name,vm,that);
         this.canClick = false;
     }
 
@@ -80,9 +82,12 @@ class PassBtn extends Button {
                 card.y += 20;
             }
         });
+        this.that.text = this.name
+        this.that.tPosition('my');
         this.that.drawFunc();
         // socket
         this.vm.$socket.emit('next',[]);
+        this.that.rw = -9999; // 清右边
     }
 }
 
@@ -93,8 +98,8 @@ class TipBtn extends Button{
 
 // 出牌 按钮
 class PlayBtn extends Button {
-    constructor(vm,that) {
-        super(vm,that);
+    constructor(name,vm,that) {
+        super(name,vm,that);
     }
     onClick(deck){
         // 先放入出牌列表
@@ -105,11 +110,9 @@ class PlayBtn extends Button {
             }
         });
         let typeRank = candeal(dealList,this.that.oTR);
-        window.console.log('next');
         if(typeRank==false){
             return;
         }
-        window.console.log('next');
         // 删除牌组中的卡牌
         this.that.deck = deck.filter(c=>!c.getChecked());
         this.that.setDeal(dealList);
@@ -118,8 +121,8 @@ class PlayBtn extends Button {
             typeRank = 'win';
         }
         const dealinfo={typeRank,dealList};
-        window.console.log('next');
         this.vm.$socket.emit('next',dealinfo);
+        this.that.rw = -9999; // 清右边
     }
 
 }

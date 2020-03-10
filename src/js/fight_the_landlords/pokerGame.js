@@ -49,8 +49,8 @@ class GameInit {
         // 设置背景图片
         this.ctx.drawImage(this.loadedRes["bgImage"], 0, 0, canvasW, canvasH);
         // 设置开始按钮
-        this.startBtn = new StartBtn(this.vm);
-        this.startBtn.setPosition("startBtn", [canvasW / 2 - btnW / 2, btnY, btnW, btnH]);
+        this.startBtn = new StartBtn("startBtn", this.vm);
+        this.startBtn.setPosition([canvasW / 2 - btnW / 2, btnY, btnW, btnH]);
         this.ctx.drawImage(this.loadedRes["startBtn"], canvasW / 2 - btnW / 2, btnY, btnW, btnH);
         this.settedRes.button = { y1: btnY, y2: btnY + btnH };
         this.settedRes.poker = { y1: this.canvasH - 170, y2: this.canvasH };
@@ -60,26 +60,25 @@ class GameInit {
 
     // 设置按钮
     setBtn() {
-        let canvasW = this.canvasW;
-        let btnW = this.btnW;
-        let btnH = this.btnH;
-        let btnY = this.btnY;
         // 设置分数按钮
         if (!this.isplay) {
-            this.buqiang = new ScoreBtn(this.vm, this.that, 0);
-            this.qiang = new ScoreBtn(this.vm, this.that, 1)
-            this.buqiang.setPosition("不抢", [canvasW / 2 - btnW * 1.5, btnY, btnW, btnH]);
-            this.qiang.setPosition("抢地主", [canvasW / 2 + btnW * 0.5, btnY, btnW, btnH]);
+            this.buqiang = new ScoreBtn("不抢", this.vm, this, 0);
+            this.qiang = new ScoreBtn("抢地主", this.vm, this, 1)
             this.button = [this.buqiang, this.qiang];
+            let startX = this.canvasW / 2 - (this.button.length * this.btnW * 3 - this.btnW) / 4;
+            this.button.forEach((item, index) => {
+                item.setPosition([startX + index * this.btnW * 1.5, this.btnY, this.btnW, this.btnH]);
+            });
         } else {
             // 设置游戏按钮
-            this.pass = new PassBtn(this.vm, this);
-            this.tip = new TipBtn();
-            this.play = new PlayBtn(this.vm, this);
-            this.pass.setPosition("pass", [canvasW / 3 - btnW / 2, btnY, btnW, btnH])
-            this.tip.setPosition("tip", [canvasW / 2 - btnW / 2, btnY, btnW, btnH])
-            this.play.setPosition("play", [canvasW * 2 / 3 - btnW / 2, btnY, btnW, btnH]);
+            this.pass = new PassBtn("不出", this.vm, this);
+            this.tip = new TipBtn("tip");
+            this.play = new PlayBtn("play", this.vm, this);
             this.button = [this.pass, this.tip, this.play];
+            let startX = this.canvasW / 2 - (this.button.length * this.btnW * 3 - this.btnW) / 4;
+            this.button.forEach((item, index) => {
+                item.setPosition([startX + index * this.btnW * 1.5, this.btnY, this.btnW, this.btnH])
+            });
         }
     }
 
@@ -123,7 +122,7 @@ class GameInit {
                 }
             }
 
-        })
+        });
     }
 }
 
@@ -146,6 +145,7 @@ class PokerGame extends GameInit {
         this.landCard = null; // 地主牌
         this.positionX = null; // 横向坐标
         this.deskCard = null; // 桌面上的牌
+        this.text = '';
         this.oTR = null;
         this.loadAllResource();
     }
@@ -171,25 +171,6 @@ class PokerGame extends GameInit {
         this.canvas.height = windowH;
         this.setBgImage();
         this.addClickEvent();
-    }
-
-    // 描绘按钮
-    drawBtn() {
-        let canvasW = this.canvasW;
-        let btnW = this.btnW;
-        let btnH = this.btnH;
-        let btnY = this.btnY;
-        if (this.isplay) {
-            this.ctx.drawImage(this.loadedRes["pass"], canvasW / 3 - btnW / 2, btnY, btnW, btnH);
-            this.ctx.drawImage(this.loadedRes["tip"], canvasW / 2 - btnW / 2, btnY, btnW, btnH);
-            this.ctx.drawImage(this.loadedRes["play"], canvasW * 2 / 3 - btnW / 2, btnY, btnW, btnH);
-        } else {
-            this.ctx.drawImage(this.loadedRes["不抢"], canvasW / 2 - btnW * 1.5, btnY, btnW, btnH)
-            this.ctx.drawImage(this.loadedRes["抢地主"], canvasW / 2 + btnW * 0.5, btnY, btnW, btnH)
-            // this.ctx.drawImage(this.loadedRes["one"], canvasW / 2 - btnW * 1.125, btnY, btnW, btnH);
-            // this.ctx.drawImage(this.loadedRes["two"], canvasW / 2 + btnW / 8, btnY, btnW, btnH);
-            // this.ctx.drawImage(this.loadedRes["three"], canvasW * 3 / 4 - btnW * 2 / 3, btnY, btnW, btnH);
-        }
     }
 
     // 发牌
@@ -229,6 +210,109 @@ class PokerGame extends GameInit {
         }, 0) // 暂时归零
     }
 
+    // 出牌展示
+    setDeal(dealList) {
+        this.deskCard = dealList;
+        const len = dealList.length;
+        let startX = this.canvasW / 2 - 52.5 - (len - 1) * 10;
+        this.positionX = startX;
+    }
+
+    // 地主增加牌
+    insertCard(landCard) {
+        if (landCard == null) {
+            return false;
+        }
+        this.deck = [];
+        landCard.map(c => {
+            for (let i = 0; i < this.pokerList.length; i++) {
+                if (c.point > this.pokerList[i].point) {
+                    this.pokerList.splice(i, 0, c);
+                    break;
+                }
+            }
+        });
+        // 创建新的卡牌队列
+        this.createPokerClass();
+    }
+
+    // 抢地主
+    robText(data,direction){
+        if(data==0){
+            this.text = "不抢";
+        }else{
+            this.text = "抢地主"
+        }
+        this.tPosition(direction);
+    }
+    // 改变牌数
+    changeCardNum(cardInfo, direction) {
+        if (cardInfo.length == 0) {
+            // 打印文字
+            this.text = '不出';
+            this.tPosition(direction);
+            return;
+        } else {
+            this.oTR = cardInfo.typeRank; // 把牌类型和大小给
+            this.deskCard = cardInfo.dealList;
+            this.pPosition(direction);
+        }
+    }
+
+    // 卡牌方位
+    pPosition(direction) {
+        switch (direction) {
+            case 'left':
+                this.left -= this.deskCard.length;
+                this.positionX = 200;
+                this.lw = -9999;
+                break;
+            case 'right':
+                this.right -= this.deskCard.length;
+                this.positionX = this.canvasW - 300 - 20 * (this.deskCard.length - 1);
+                this.rw = -9999;
+                break;
+            default:
+                break;
+        }
+    }
+
+    // 文字方向
+    tPosition(direction) {
+        switch (direction) {
+            case 'my':
+                this.mw = 382;
+                break;
+            case 'left':
+                this.lw = 170;
+                break;
+            case 'right':
+                this.rw = this.canvasW - 250;
+                break;
+            default:
+                break;
+        }
+    }
+
+    // 清理卡牌
+    clearCard() {
+        this.deskCard = [];
+        this.oTR = null;
+    }
+
+    // 清理文字
+    clearText(){
+        this.mw = -9999;
+    }
+
+    // 清桌面
+    clearDesk(){
+        this.mw=-9999;
+        this.lw=-9999;
+        this.rw = -9999;
+    }
+
+    // 绘图方法 start
     // 画图顺序
     drawFunc() {
         // 按顺序来
@@ -250,8 +334,18 @@ class PokerGame extends GameInit {
         // 7. 画桌面上的卡牌
         this.drawDeskCard();
     }
-
-    // 卡牌布局
+    // 3. 描绘按钮
+    drawBtn() {
+        if (this.isfocus == false) {
+            return;
+        }
+        let startX = this.canvasW / 2 - (this.button.length * this.btnW * 3 - this.btnW) / 4;
+        this.button.forEach((item, index) => {
+            this.ctx.drawImage(this.loadedRes[item.name],
+                startX + index * this.btnW * 1.5, this.btnY, this.btnW, this.btnH)
+        });
+    }
+    // 4. 画卡牌
     drawPoker(mlen, llen, rlen) {
         let startX = this.canvasW / 2 - 52.5 - (mlen - 1) * 10;
         let startL = this.canvasH / 2 + 52.5 + (llen - 1) * 5 - (this.canvasW - this.canvasH) / 2;
@@ -290,23 +384,18 @@ class PokerGame extends GameInit {
         this.ctx.rotate(-Math.PI / 2);
         this.ctx.translate(-this.canvasW, 0);
     }
-
-    // 出牌展示
-    setDeal(dealList) {
-        this.deskCard = dealList;
-        const len = dealList.length;
-        let startX = this.canvasW / 2 - 52.5 - (len - 1) * 10;
-        this.positionX = startX;
-        // for (let i = 0; i < len; i++) {
-        //     // 自己
-        //     this.ctx.drawImage(
-        //         this.loadedRes[dealList[i].name],
-        //         startX + i * 20,
-        //         this.deck[i].y - 250);
-        // }
+    // 5. 写文字
+    drawText() {
+        // 设置字体
+        // window.console.log(this.text);
+        this.ctx.font = "36px bold 宋体";
+        // 设置颜色
+        this.ctx.fillStyle = "#ff0";
+        this.ctx.fillText(this.text, this.mw, this.canvasH * 2 / 3)
+        this.ctx.fillText(this.text, this.lw, this.canvasH / 3);
+        this.ctx.fillText(this.text, this.rw, this.canvasH / 3);
     }
-
-    // 地主牌显示
+    // 6. 地主牌显示
     drawLandCard() {
         if (this.landCard == null) {
             return false;
@@ -316,81 +405,7 @@ class PokerGame extends GameInit {
                 this.canvasW / 2 - 72 + i * 20.5, 0);
         }
     }
-
-    // 地主增加牌
-    insertCard(landCard) {
-        if (landCard == null) {
-            return false;
-        }
-        this.deck = [];
-        landCard.map(c => {
-            for (let i = 0; i < this.pokerList.length; i++) {
-                if (c.point > this.pokerList[i].point) {
-                    this.pokerList.splice(i, 0, c);
-                    break;
-                }
-            }
-        });
-        // 创建新的卡牌队列
-        this.createPokerClass();
-    }
-
-    // 改变牌数
-    changeCardNum(cardInfo, direction) {
-        if(cardInfo.length==0){
-            // 打印文字
-            this.text = '不要';
-            this.tPosition(direction);
-            return;
-        }else{
-            this.oTR = cardInfo.typeRank; // 把牌类型和大小给
-            this.deskCard = cardInfo.dealList;
-            this.pPosition(direction);
-        } 
-    }
-
-    // 卡牌方位
-    pPosition(direction){
-        switch (direction) {
-            case 'left':
-                this.left -= this.deskCard.length;
-                this.positionX = 200;
-                break;
-            case 'right':
-                this.right -= this.deskCard.length;
-                this.positionX = this.canvasW - 300 - 20 * (this.deskCard.length - 1);
-                break;
-            default:
-                break;
-        }
-    }
-
-    // 文字方向
-    tPosition(direction){
-        switch (direction) {
-            case 'left':
-                this.lw = 170;
-                break;
-            case 'right':
-                this.rw = this.canvasW - 250;
-                break;
-            default:
-                break;
-        }
-    }
-    
-    // 打印文字
-    drawText() {
-        // 设置字体
-        // window.console.log(this.text);
-        this.ctx.font = "36px bold 宋体";
-        // 设置颜色
-        this.ctx.fillStyle = "#ff0";
-        this.ctx.fillText(this.text,this.lw, this.canvasH / 3);
-        this.ctx.fillText(this.text,this.rw, this.canvasH / 3);
-    }
-
-    // 画桌面上的卡牌
+    // 7. 画桌面上的卡牌
     drawDeskCard() {
         if (!this.deskCard) {
             return;
@@ -403,14 +418,7 @@ class PokerGame extends GameInit {
             );
         }
     }
-
-    // 清理桌面
-    clearDesk(){
-        this.deskCard = [];
-        this.lw=-500;
-        this.rw=-500;
-        this.oTR = null;
-    }
+    // 绘图方法 end
 }
 
 export default PokerGame;

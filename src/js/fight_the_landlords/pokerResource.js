@@ -3,8 +3,8 @@
 
 const PokerResource = {
     images: [
-        { name: "小王", point: 14, url: "/fight_the_landlords/1.jpg" },
-        { name: "大王", point: 15, url: "/fight_the_landlords/2.jpg" },
+        { name: "大王", point: 15, url: "/fight_the_landlords/1.jpg" },
+        { name: "小王", point: 14, url: "/fight_the_landlords/2.jpg" },
         { name: "黑桃3", point: 1, url: "/fight_the_landlords/3.jpg" },
         { name: "黑桃4", point: 2, url: "/fight_the_landlords/4.jpg" },
         { name: "黑桃5", point: 3, url: "/fight_the_landlords/5.jpg" },
@@ -65,7 +65,7 @@ const PokerResource = {
         // { name: "two", socre: 2, url: "/fight_the_landlords/ef.png" },
         // { name: "three", socre: 3, url: "/fight_the_landlords/sf.png" },
         { name: "pokerBack", url: "/fight_the_landlords/pokerback.png" },
-        { name: "pass", url: "/fight_the_landlords/buchu.png" },
+        { name: "不出", url: "/fight_the_landlords/buchu.png" },
         { name: "tip", url: "/fight_the_landlords/tishi.png" },
         { name: "play", url: "/fight_the_landlords/chupai.png" }
     ]
