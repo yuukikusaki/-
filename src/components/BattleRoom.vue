@@ -63,7 +63,7 @@ export default {
     },
     // 清理
     clear(data){
-      window.console.log('clear');
+      window.console.log(data);
       // 清桌面
       if(data=="card"){
         this.pokerGame.clearCard();
@@ -80,6 +80,7 @@ export default {
     // 胜利
     win(data){
       alert(data);
+      this.pokerGame.restart();
     },
     // 测试用
     test(data) {

@@ -140,8 +140,7 @@ class PokerGame extends GameInit {
         this.startBtn = null;
         this.isplay = false; // 游戏是否开始
         // 两边玩家
-        this.left = 17;
-        this.right = 17;
+
         this.landCard = null; // 地主牌
         this.positionX = null; // 横向坐标
         this.deskCard = null; // 桌面上的牌
@@ -206,6 +205,8 @@ class PokerGame extends GameInit {
                 this.dealAmine(++len);
             } else if (len == this.pokerList.length) {
                 this.drawBtn();
+                this.left = 17;
+                this.right = 17;
             }
         }, 0) // 暂时归零
     }
@@ -237,10 +238,10 @@ class PokerGame extends GameInit {
     }
 
     // 抢地主
-    robText(data,direction){
-        if(data==0){
+    robText(data, direction) {
+        if (data == 0) {
             this.text = "不抢";
-        }else{
+        } else {
             this.text = "抢地主"
         }
         this.tPosition(direction);
@@ -301,15 +302,33 @@ class PokerGame extends GameInit {
     }
 
     // 清理文字
-    clearText(){
+    clearText() {
         this.mw = -9999;
     }
 
     // 清桌面
-    clearDesk(){
-        this.mw=-9999;
-        this.lw=-9999;
+    clearDesk() {
+        this.mw = -9999;
+        this.lw = -9999;
         this.rw = -9999;
+    }
+
+    // 重置
+    restart() {
+        this.button = []; // 存储按钮
+        this.deck = []; // 牌组
+        this.pokerList = [];
+        this.mw = -9999;
+        this.lw = -9999;
+        this.rw = -9999;
+        this.left = 0;
+        this.right = 0;
+        this.landCard = null; // 地主牌
+        this.positionX = null; // 横向坐标
+        this.deskCard = null; // 桌面上的牌
+        this.text = '';
+        this.oTR = null;
+        this.setBgImage();
     }
 
     // 绘图方法 start
