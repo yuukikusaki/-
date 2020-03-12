@@ -1,7 +1,9 @@
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-
 Vue.use(ElementUI)
+
+// 导入全局样式
+import './assets/css/global.css'
 
 import store from '../store/index'
 import Vuex from 'vuex'
@@ -21,7 +23,7 @@ Vue.use(new VueSocketIO({
   connection:'http://localhost:3000',
 }));
 
-import router from './router/router'
+import router from './router'
 import VueRouter from 'vue-resource'
 Vue.use(VueRouter)
 Vue.http.options.root = 'http://localhost:3000';

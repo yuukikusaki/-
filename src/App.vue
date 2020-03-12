@@ -1,20 +1,20 @@
 <template>
   <div id="app">
     <!-- header start -->
-    <header>
+    <!-- <header> -->
       <!-- 页面选择 -->
-      <nav class="header-left">
+      <!-- <nav class="header-left">
         <span>
           <router-link to="/home" class="router el-icon-s-home">大厅</router-link>
         </span>
         <span>
           <router-link to class="router el-icon-tickets">对战记录</router-link>
         </span>
-      </nav>
+      </nav> -->
       <!-- 中间栏 -->
-      <nav class="header-center"></nav>
+      <!-- <nav class="header-center"></nav> -->
       <!-- 登录注册 -->
-      <nav class="header-right">
+      <!-- <nav class="header-right"> -->
         <!-- 未登录
         <div v-if="isLogin">
           <span>
@@ -28,7 +28,7 @@
           </span>
         </div> -->
         <!-- 已登录 -->
-        <div>
+        <!-- <div>
           <span>
             <img src="./assets/head.jpg" alt />
           </span>
@@ -40,7 +40,7 @@
           </span>
         </div>
       </nav>
-    </header>
+    </header> -->
     <!-- header end -->
 
     <!-- main start -->
@@ -63,42 +63,37 @@ export default {
 </script>
 
 <style lang="scss">
-html,
-body {
-  margin: 0;
-  padding: 0;
-}
 
-header {
-  background-color: #999;
-  height: 30px;
-  min-width: 800px;
-  padding: 10px 50px;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  span {
-    display: inline-block;
-    font-size: 18px;
-    margin-right: 12px;
-    cursor: pointer;
-    min-width: 80px;
-    vertical-align: middle;
-    img {
-      width: 36px;
-      border-radius: 50%;
-      vertical-align: middle;
-    }
-  }
-  .router {
-    color: #fff;
-    text-decoration: none;
-    font-style: normal;
-  }
-}
+// header {
+//   background-color: #999;
+//   height: 30px;
+//   min-width: 800px;
+//   padding: 10px 50px;
+//   display: flex;
+//   align-items: center;
+//   justify-content: space-around;
+//   span {
+//     display: inline-block;
+//     font-size: 18px;
+//     margin-right: 12px;
+//     cursor: pointer;
+//     min-width: 80px;
+//     vertical-align: middle;
+//     img {
+//       width: 36px;
+//       border-radius: 50%;
+//       vertical-align: middle;
+//     }
+//   }
+//   .router {
+//     color: #fff;
+//     text-decoration: none;
+//     font-style: normal;
+//   }
+// }
 
 main {
-  margin: 0 50px;
   min-width: 800px;
+  height: 100%;
 }
 </style>
