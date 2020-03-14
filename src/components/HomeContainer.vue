@@ -1,5 +1,9 @@
 <template>
   <div class="home-container">
+    <!-- 退出按钮 -->
+    <nav>
+      <el-button type="info" @click="logout">退出</el-button>
+    </nav>
     <!-- 游戏列表区 -->
     <aside class="game-list">
       <el-card class="box-card">
@@ -44,6 +48,11 @@ export default {
     this.getGameList();
   },
   methods: {
+    // 退出
+    logout(){
+      this.$cookies.remove("token");
+      this.$router.push("login")
+    },
     getGameList() {
       this.gameList = this.$store.getters.getGameList;
     },

@@ -1,20 +1,25 @@
-import ElementUI from 'element-ui'
+import ElementUI, { Message } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 Vue.use(ElementUI)
+Vue.prototype.$message = Message
 
 // 导入全局样式
 import './assets/css/global.css'
 
+// 导入 axios
+import axios from 'axios'
+axios.defaults.baseURL = 'http://localhost:3000';
+axios.defaults.withCredentials=true;
+Vue.prototype.$http = axios;
+
 import store from '../store/index'
 import Vuex from 'vuex'
-
-Vue.use(Vuex)
-
 import Vue from 'vue'
 import App from './App.vue'
 
 import VueCookies from 'vue-cookies'
-Vue.use(VueCookies)
+Vue.use(Vuex)
+Vue.use(VueCookies);
 
 // 引入 socket
 import VueSocketIO from 'vue-socket.io'
@@ -24,15 +29,14 @@ Vue.use(new VueSocketIO({
 }));
 
 import router from './router'
-import VueRouter from 'vue-resource'
-Vue.use(VueRouter)
-Vue.http.options.root = 'http://localhost:3000';
-Vue.http.options.emulateJSON = true;
-Vue.http.interceptors.push(function (request, next) {//拦截器
-  // 跨域携带cookie
-  request.credentials = true;
-  next()
-})
+
+// Vue.http.options.root = 'http://localhost:3000';
+// Vue.http.options.emulateJSON = true;
+// Vue.http.interceptors.push(function (request, next) {//拦截器
+//   // 跨域携带cookie
+//   request.credentials = true;
+//   next()
+// })
 
 Vue.config.productionTip = false
 
