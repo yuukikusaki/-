@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <aside class="info-container">个人信息区</aside>
-    <div class="lobby-container">
+  <div class="lobby-container">
+    <!-- <aside class="info-container">个人信息区</aside> -->
+    
       <!-- 游戏房间列表 -->
       <div class="game-room">
         <el-card :body-style="{ padding: '0px' }" v-for="(o, index) in roomList" :key="index">
@@ -34,7 +34,7 @@
           <el-button type="primary" @click="crtNewRoom()">确 定</el-button>
         </span>
       </el-dialog>
-    </div>
+   
   </div>
 </template>
 
@@ -58,7 +58,7 @@ export default {
     }
   },
   created() {
-    this.getGameId();
+    // this.getGameId();
     this.getGameInfo();
     this.getRooms();
   },
@@ -69,7 +69,7 @@ export default {
     },
     // 从 store 中获取游戏信息
     getGameInfo() {
-      this.gameInfo = this.$store.getters.getGameList[this.gameId - 1];
+      this.gameInfo = this.$store.getters.getGameList[1];
       window.console.log(this.gameInfo);
     },
     // 获取房间列表
@@ -108,18 +108,19 @@ export default {
 
 <style lang="scss" scoped>
 // 整体布局
-.info-container {
-  width: 180px;
-  height: 500px;
-  position: fixed;
-  top: 20%;
-  background-color: #ccc;
-}
+// .info-container {
+//   width: 180px;
+//   height: 500px;
+//   position: fixed;
+//   top: 20%;
+//   background-color: #ccc;
+// }
 .lobby-container {
-  background-color: skyblue;
-  height: 800px;
-  margin-left: 180px;
-  padding: 0 20px;
+  background-color: #eaedf1;
+  margin: 10px;
+  // height: 800px;
+  // margin-left: 180px;
+  // padding: 0 20px;
 }
 
 // 主体区域

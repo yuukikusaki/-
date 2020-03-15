@@ -69,7 +69,7 @@ export default {
           "api/login",
           this.loginForm
         );
-        if (res.status == -1) {
+        if (res.status !== 0) {
           return this.$message.error("登录失败");
         }
         this.$message.success("登录成功");

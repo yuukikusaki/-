@@ -1,6 +1,6 @@
 <template>
-  <!-- 头部区 -->
   <el-container class="home-container">
+    <!-- 头部区 -->
     <el-header>
       <div>
         <img src="../assets/logo.png" width="55px" height="55px" alt />
@@ -17,21 +17,23 @@
         <!-- 侧边栏菜单区 -->
         <el-menu background-color="#333744" text-color="#fff" active-text-color="#ffd04b">
           <!-- 一级菜单 -->
-          <el-submenu index="1">
+          <el-submenu :index="`${item.id}`" v-for="item in menulist" :key="item.id">
             <!-- 一级菜单模板区 -->
             <template slot="title">
               <!-- 图标 -->
               <i class="el-icon-location"></i>
               <!-- 文本 -->
-              <span>导航一</span>
+              <span>{{item.authName}}</span>
             </template>
             <!-- 二级菜单 -->
-            <el-menu-item index="1-4-1">
+            <el-menu-item
+              :index="`${subItem.id}`"
+              v-for="subItem in item.children"
+              :key="subItem.id"
+            >
               <template slot="title">
-                <!-- 图标 -->
                 <i class="el-icon-location"></i>
-                <!-- 文本 -->
-                <span>导航一</span>
+                <span>{{subItem.authName}}</span>
               </template>
             </el-menu-item>
           </el-submenu>
@@ -39,8 +41,9 @@
       </el-aside>
       <!-- 右侧内容主体区 -->
       <el-main>
+        <router-view></router-view>
         <!-- 游戏卡片区 -->
-          <div class="card-list">
+        <!-- <div class="card-list">
             <div class="game-card" v-for="(item,index) in gameList" :key="index">
               <img :src="item.img" />
               <div class="game-info">
@@ -52,7 +55,7 @@
                 >进入游戏</el-button>
               </div>
             </div>
-          </div>
+        </div>-->
       </el-main>
     </el-container>
   </el-container>
@@ -75,17 +78,30 @@
 export default {
   data() {
     return {
+      // 左侧菜单
+      menulist: [],
       gameList: []
     };
   },
   created() {
-    this.getGameList();
+    // this.getGameList();
+    this.getMenuList();
   },
   methods: {
     // 退出
     logout() {
       this.$cookies.remove("token");
       this.$router.push("login");
+    },
+    // 获取菜单
+    async getMenuList() {
+      // 判断 store 里面有没有
+      const { data: res } = await this.$http.get("user/menus");
+      if (res.meta.status !== 0) {
+        return this.$message.error("获取用户菜单失败");
+      }
+      this.menulist = res.data; // 需要存入 store
+      window.console.log(this.menulist);
     },
     getGameList() {
       this.gameList = this.$store.getters.getGameList;
@@ -125,6 +141,7 @@ export default {
 
 .el-main {
   background-color: #eaedf1;
+  padding: 0;
 }
 
 // 游戏列表区 start
