@@ -6,22 +6,33 @@
         <img src="../assets/logo.png" width="55px" height="55px" alt />
         <span>网络游戏大厅</span>
       </div>
-      <el-button type="info" @click="logout">退出</el-button>
+      <el-button type="info" @click="back">返回</el-button>
     </el-header>
     <!-- 主体区 -->
     <el-container>
       <!-- 侧边栏 -->
-      <el-aside width="200px">
+      <el-aside :width="isCollapse?'64px':'200px'">
+        <div class="toggle-button" @click="toggleCollapse">|||</div>
         <!-- 侧边栏用户信息区 -->
-        <div></div>
+        <div class="userinfo">
+          <img width="50px" height="50px" src="../assets/head.jpg">
+          <span>用户名</span>
+        </div>
         <!-- 侧边栏菜单区 -->
-        <el-menu background-color="#333744" text-color="#fff" active-text-color="#ffd04b">
+        <el-menu
+          background-color="#333744"
+          text-color="#fff"
+          active-text-color="#409eff"
+          unique-opened
+          :collapse="isCollapse"
+          :collapse-transition="false"
+        >
           <!-- 一级菜单 -->
           <el-submenu :index="`${item.id}`" v-for="item in menulist" :key="item.id">
             <!-- 一级菜单模板区 -->
             <template slot="title">
               <!-- 图标 -->
-              <i class="el-icon-location"></i>
+              <i :class="iconsObj[item.id]"></i>
               <!-- 文本 -->
               <span>{{item.authName}}</span>
             </template>
@@ -32,12 +43,14 @@
               :key="subItem.id"
             >
               <template slot="title">
-                <i class="el-icon-location"></i>
+                <i class="el-icon-menu"></i>
                 <span>{{subItem.authName}}</span>
               </template>
             </el-menu-item>
           </el-submenu>
         </el-menu>
+        <!-- 退出登录 -->
+        <el-button type="danger" @click="logout">退出登录</el-button>
       </el-aside>
       <!-- 右侧内容主体区 -->
       <el-main>
@@ -78,8 +91,13 @@
 export default {
   data() {
     return {
-      // 左侧菜单
-      menulist: [],
+      menulist: [], // 左侧菜单
+      iconsObj: {
+        "101": "el-icon-user",
+        "201": "el-icon-chat-dot-round",
+        "301": "el-icon-s-data"
+      },
+      isCollapse: false, // 是否折叠
       gameList: []
     };
   },
@@ -88,7 +106,11 @@ export default {
     this.getMenuList();
   },
   methods: {
-    // 退出
+    // 返回上一个页面
+    back(){
+      this.$router.go(-1);
+    },
+    // 退出登录
     logout() {
       this.$cookies.remove("token");
       this.$router.push("login");
@@ -97,12 +119,18 @@ export default {
     async getMenuList() {
       // 判断 store 里面有没有
       const { data: res } = await this.$http.get("user/menus");
+      window.console.log(res);
       if (res.meta.status !== 0) {
         return this.$message.error("获取用户菜单失败");
       }
       this.menulist = res.data; // 需要存入 store
       window.console.log(this.menulist);
     },
+    // 菜单折叠与展开
+    toggleCollapse() {
+      this.isCollapse = !this.isCollapse;
+    },
+
     getGameList() {
       this.gameList = this.$store.getters.getGameList;
     },
@@ -136,12 +164,40 @@ export default {
 }
 
 .el-aside {
+  display: flex;
+  flex-flow: column;
   background-color: #333744;
+  .userinfo{
+    margin: 50px 0 20px;
+    align-self: center;
+    display: flex;
+    flex-flow: column;
+    text-align: center;
+  }
+  .el-menu {
+    border-right: none;
+    span{
+      margin-left: 10px;
+    }
+  }
+  .el-button{
+    margin-top: 50px;
+    align-self: center;
+  }
 }
 
 .el-main {
   background-color: #eaedf1;
   padding: 0;
+}
+.toggle-button {
+  background-color: #4a5064;
+  text-align: center;
+  font-size: 10px;
+  line-height: 24px;
+  color: #fff;
+  letter-spacing: 0.2em;
+  cursor: pointer;
 }
 
 // 游戏列表区 start

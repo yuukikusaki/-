@@ -1,6 +1,5 @@
 <template>
   <div id="battle-contaioner">
-    <el-button @click="replay()">重新开始</el-button>
     <div style="width:800px;height:600px;margin:0 auto;">
       <canvas id="mycanvas" width="800" height="600"></canvas>
     </div>

@@ -20,9 +20,10 @@ const router = new Router({
             component: HomeContainer,
             children: [
                 { path: '/lobby', component: GameLobby },
+                { path: '/battle', component: BattleRoom }
             ]
         },
-        { path: '/battle', component: BattleRoom }
+        
     ]
 });
 
