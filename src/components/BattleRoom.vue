@@ -7,13 +7,18 @@
 </template>
 
 <script>
-import PokerGame from "../js/fight_the_landlords/pokerGame";
+// import {PokerGame} from "../js/fight_the_landlords/pokerGame";
+// import SceneManager from "../js/fight_the_landlords/SceneManager"
+import loadedRes from "../js/fight_the_landlords/LoadResource"
 
 export default {
   data() {
     return {
       room: null, // 房间信息
-      pokerGame: null // 游戏对象
+      canvas:null, // canvas
+      ctx:null, // canvas上下文
+      pokerGame: null, // 游戏对象
+      sceneManager:null // 场景管理器
     };
   },
   sockets: {
@@ -97,10 +102,14 @@ export default {
       this.room = this.$route.query;
     },
     setCanvas() {
-      this.pokerGame = new PokerGame({
-        canvasid: "#mycanvas", // 传入canvas
-        that: this // 传入 this，为了button能执行socket
-      });
+      // this.pokerGame = new PokerGame({
+      //   canvasid: "#mycanvas", // 传入canvas
+      //   that: this // 传入 this，为了button能执行socket
+      // });
+      // this.sceneManager = new SceneManager("#mycanvas",loadedRes);
+      this.canvas = document.querySelector("canvas");
+      this.ctx = this.canvas.getContext("2d");
+      loadedRes(this.canvas,this.ctx);
     },
     play() {
       this.pokerGame.isplay = true;

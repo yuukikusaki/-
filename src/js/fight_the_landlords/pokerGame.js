@@ -4,17 +4,21 @@ import { ScoreBtn, StartBtn, PassBtn, TipBtn, PlayBtn, PokerEvent } from './game
 // 初始化类
 class GameInit {
     constructor(canvasid, vm) {
-        // canvas 信息
+        // 保留区 start
         this.canvas = document.querySelector(canvasid);
         this.ctx = this.canvas.getContext("2d");
-        this.pokerResource = PokerResource;
-        this.pokerImage = this.pokerResource.images;
-        this.loadedRes = {}; // 加载完毕的资源
-        // 读取资源
-        // this.loadAllResource();
-        // 位置数据
         this.canvasW = this.canvas.width;
         this.canvasH = this.canvas.height;
+        this.loadedRes = {}; // 加载完毕的资源
+        // 保留区 end
+        // canvas 信息
+        
+        this.pokerResource = PokerResource;
+        this.pokerImage = this.pokerResource.images;
+        // 加载资源
+        this.loadAllResource();
+        // 位置数据
+        
         this.btnW = this.canvasW / 8;
         this.btnH = this.canvasH / 12;
         this.btnY = this.canvasH * 0.618;
@@ -23,7 +27,7 @@ class GameInit {
         this.point = { x: null, y: null };
         this.vm = vm; // vm实例
     }
-    // 读取资源
+    // 读取资源(保留)
     loadAllResource() {
         let alreadyDoneNumber = 0;
         for (let i = 0; i < this.pokerImage.length; i++) {
@@ -33,13 +37,14 @@ class GameInit {
                 alreadyDoneNumber++;
                 if (alreadyDoneNumber == this.pokerImage.length) {
                     window.console.log('图片加载完毕');
-                    this.init()
+                    // this.init()
+                    this.render()
                 }
             }
         }
     }
 
-    // 设置初始图片（改为页面初始化）
+    // 设置初始图片（改为页面初始化）(修改)
     setBgImage() {
         let canvasW = this.canvas.width;
         let canvasH = this.canvas.height;
@@ -328,6 +333,7 @@ class PokerGame extends GameInit {
         this.deskCard = null; // 桌面上的牌
         this.text = '';
         this.oTR = null;
+        this.isfocus = true;
         this.setBgImage();
     }
 
@@ -440,4 +446,4 @@ class PokerGame extends GameInit {
     // 绘图方法 end
 }
 
-export default PokerGame;
+export {GameInit,PokerGame} ;
