@@ -7,6 +7,7 @@ import HomeContainer from './components/HomeContainer.vue'
 import GameLobby from './components/GameLobby.vue'
 import BattleRoom from './components/BattleRoom.vue'
 import Login from './components/Login.vue'
+import Users from './components/user/Users.vue'
 
 
 
@@ -20,10 +21,11 @@ const router = new Router({
             component: HomeContainer,
             children: [
                 { path: '/lobby', component: GameLobby },
-                { path: '/battle', component: BattleRoom }
+                { path: '/battle', component: BattleRoom },
+                { path: '/admin/users', component: Users }
             ]
         },
-        
+
     ]
 });
 
