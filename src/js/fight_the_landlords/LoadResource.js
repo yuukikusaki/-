@@ -1,8 +1,7 @@
 // 初始化资源
 import PokerResource from './pokerResource'
-import SceneManager from './SceneManager'
 
-function loadedRes(canvas,ctx) {
+function loadAllResource(canvas,ctx,sceneManager) {
     const R={};
     let alreadyDoneNumber = 0;
     const pokerImage = PokerResource.images;
@@ -16,11 +15,11 @@ function loadedRes(canvas,ctx) {
             ctx.fillText(`正在加载第${alreadyDoneNumber}/${pokerImage.length}张图片,请稍后`,200,300)
             if (alreadyDoneNumber == pokerImage.length) {
                 window.console.log('图片加载完毕');
-                const sceneManager = new SceneManager(canvas,ctx,R);
+                sceneManager.loadedRes = R;
                 sceneManager.render()
             }
         }
     }
 }
 
-export default loadedRes;
+export default loadAllResource;

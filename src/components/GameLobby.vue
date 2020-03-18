@@ -80,7 +80,9 @@ export default {
     },
     // 更新房间列表
     flashRooms(roomList){
+      window.console.log('flash')
       this.roomList = roomList;
+      window.console.log(roomList)
     },
     // 创建新房间
     crtNewRoom() {

@@ -7,9 +7,8 @@
 </template>
 
 <script>
-// import {PokerGame} from "../js/fight_the_landlords/pokerGame";
 // import SceneManager from "../js/fight_the_landlords/SceneManager"
-import loadedRes from "../js/fight_the_landlords/LoadResource"
+import SceneManager from '../js/fight_the_landlords/SceneManager'
 
 export default {
   data() {
@@ -17,79 +16,80 @@ export default {
       room: null, // 房间信息
       canvas:null, // canvas
       ctx:null, // canvas上下文
-      pokerGame: null, // 游戏对象
-      sceneManager:null // 场景管理器
+      sceneManager:null, // 场景管理器
     };
   },
   sockets: {
-    // 地主
-    landlord(landCard){
-      window.console.log(landCard);
-      // 注意一下顺序，特别是地主牌显示
-      this.pokerGame.landCard = landCard;
-      this.play(); // 以后要整合进去
-      // 地主放入地主牌
-      this.pokerGame.insertCard(landCard);
-      this.pokerGame.drawFunc();
-      // this.pokerGame.insertCard();
-    },
-    // 农民
-    farmer(data){
-      this.pokerGame.landCard = data[0];
-      if(data[1]=='left'){
-        this.pokerGame.left += 3;
-      }else{
-        this.pokerGame.right += 3;
-      }
-      this.play();  // 需要整合
-      this.pokerGame.drawFunc();
-    },
-    // 发牌
-    deal(pokerList) {
+  //   // 地主
+  //   landlord(landCard){
+  //     window.console.log(landCard);
+  //     // 注意一下顺序，特别是地主牌显示
+  //     this.pokerGame.landCard = landCard;
+  //     this.play(); // 以后要整合进去
+  //     // 地主放入地主牌
+  //     this.pokerGame.insertCard(landCard);
+  //     this.pokerGame.drawFunc();
+  //     // this.pokerGame.insertCard();
+  //   },
+  //   // 农民
+  //   farmer(data){
+  //     this.pokerGame.landCard = data[0];
+  //     if(data[1]=='left'){
+  //       this.pokerGame.left += 3;
+  //     }else{
+  //       this.pokerGame.right += 3;
+  //     }
+  //     this.play();  // 需要整合
+  //     this.pokerGame.drawFunc();
+  //   },
+  //   // 发牌
+    start(pokerList) {
       window.console.log(pokerList);
-      this.pokerGame.dealCards(pokerList);
+      // 创建三个玩家类
+      this.sceneManager.sceneNumber = 2;
+      this.sceneManager.enter(pokerList)
     },
-    // 按钮事件
-    isfocus(flag) {
-      this.pokerGame.isfocus = flag;
-      this.pokerGame.drawFunc();
-      window.console.log(flag);
-    },
-    // 接收别人出的牌并打印出来
-    draw(data) {
-      // window.console.log(typeof data[0]);
-      if (typeof data[0] == "number") {
-        this.pokerGame.robText(data[0], data[1]);
-      } else {
-        this.pokerGame.changeCardNum( data[0],data[1]);
-        this.pokerGame.drawFunc();
-      }
-    },
-    // 清理
-    clear(data){
-      window.console.log(data);
-      // 清桌面
-      if(data=="card"){
-        this.pokerGame.clearCard();
-      }else if(data == "text"){
-        this.pokerGame.clearText();
-      }else if(data=="desk"){
-        this.pokerGame.clearDesk();
-      }
-        this.pokerGame.drawFunc();
-    },
-    nopass(flag){
-      this.pokerGame.button[0].reClick(flag);
-    },
-    // 胜利
-    win(data){
-      alert(data);
-      this.pokerGame.restart();
-    },
-    // 测试用
-    test(data) {
-      window.console.log(data);
-    }
+  //   // 按钮事件
+  //   isfocus(flag) {
+  //     this.pokerGame.isfocus = flag;
+  //     this.pokerGame.drawFunc();
+  //     window.console.log(flag);
+  //   },
+  //   // 接收别人出的牌并打印出来
+  //   draw(data) {
+  //     // window.console.log(typeof data[0]);
+  //     if (typeof data[0] == "number") {
+  //       this.pokerGame.robText(data[0], data[1]);
+  //     } else {
+  //       this.pokerGame.changeCardNum( data[0],data[1]);
+  //       this.pokerGame.drawFunc();
+  //     }
+  //   },
+  //   // 清理
+  //   clear(data){
+  //     window.console.log(data);
+  //     // 清桌面
+  //     if(data=="card"){
+  //       this.pokerGame.clearCard();
+  //     }else if(data == "text"){
+  //       this.pokerGame.clearText();
+  //     }else if(data=="desk"){
+  //       this.pokerGame.clearDesk();
+  //     }
+  //       this.pokerGame.drawFunc();
+  //   },
+  //   nopass(flag){
+  //     this.pokerGame.button[0].reClick(flag);
+  //   },
+  //   // 胜利
+  //   win(data){
+  //     alert(data);
+  //     this.pokerGame.restart();
+  //   },
+  //   // 测试用
+  //   test(data) {
+  //     window.console.log(data);
+  //   }
   },
   created() {
     this.sendRoom();
@@ -101,16 +101,14 @@ export default {
     sendRoom() {
       this.room = this.$route.query;
     },
+    // 初始化画布
     setCanvas() {
-      // this.pokerGame = new PokerGame({
-      //   canvasid: "#mycanvas", // 传入canvas
-      //   that: this // 传入 this，为了button能执行socket
-      // });
-      // this.sceneManager = new SceneManager("#mycanvas",loadedRes);
       this.canvas = document.querySelector("canvas");
       this.ctx = this.canvas.getContext("2d");
-      loadedRes(this.canvas,this.ctx);
-    },
+      // 创建场景管理器并进入
+      this.sceneManager = new SceneManager(this.canvas,this.ctx,this.$socket);
+      this.sceneManager.enter()
+},
     play() {
       this.pokerGame.isplay = true;
       this.pokerGame.setBtn();

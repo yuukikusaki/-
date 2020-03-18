@@ -1,5 +1,6 @@
 import PokerResource from './pokerResource'
-import { ScoreBtn, StartBtn, PassBtn, TipBtn, PlayBtn, PokerEvent } from './gameEvent'
+import  Poker from './Poker'
+import {ScoreBtn} from './Button'
 
 // 初始化类
 class GameInit {
@@ -12,13 +13,13 @@ class GameInit {
         this.loadedRes = {}; // 加载完毕的资源
         // 保留区 end
         // canvas 信息
-        
+
         this.pokerResource = PokerResource;
         this.pokerImage = this.pokerResource.images;
         // 加载资源
         this.loadAllResource();
         // 位置数据
-        
+
         this.btnW = this.canvasW / 8;
         this.btnH = this.canvasH / 12;
         this.btnY = this.canvasH * 0.618;
@@ -45,47 +46,47 @@ class GameInit {
     }
 
     // 设置初始图片（改为页面初始化）(修改)
-    setBgImage() {
-        let canvasW = this.canvas.width;
-        let canvasH = this.canvas.height;
-        let btnW = this.btnW;
-        let btnH = this.btnH;
-        let btnY = this.btnY;
-        // 设置背景图片
-        this.ctx.drawImage(this.loadedRes["bgImage"], 0, 0, canvasW, canvasH);
-        // 设置开始按钮
-        this.startBtn = new StartBtn("startBtn", this.vm);
-        this.startBtn.setPosition([canvasW / 2 - btnW / 2, btnY, btnW, btnH]);
-        this.ctx.drawImage(this.loadedRes["startBtn"], canvasW / 2 - btnW / 2, btnY, btnW, btnH);
-        this.settedRes.button = { y1: btnY, y2: btnY + btnH };
-        this.settedRes.poker = { y1: this.canvasH - 170, y2: this.canvasH };
-        this.button.push(this.startBtn);
-        // this.setBtnImage();
-    }
+    // setBgImage() {
+    //     let canvasW = this.canvas.width;
+    //     let canvasH = this.canvas.height;
+    //     let btnW = this.btnW;
+    //     let btnH = this.btnH;
+    //     let btnY = this.btnY;
+    //     // 设置背景图片
+    //     this.ctx.drawImage(this.loadedRes["bgImage"], 0, 0, canvasW, canvasH);
+    //     // 设置开始按钮
+    //     this.startBtn = new StartBtn("startBtn", this.vm);
+    //     this.startBtn.setPosition([canvasW / 2 - btnW / 2, btnY, btnW, btnH]);
+    //     this.ctx.drawImage(this.loadedRes["startBtn"], canvasW / 2 - btnW / 2, btnY, btnW, btnH);
+    //     this.settedRes.button = { y1: btnY, y2: btnY + btnH };
+    //     this.settedRes.poker = { y1: this.canvasH - 170, y2: this.canvasH };
+    //     this.button.push(this.startBtn);
+    //     // this.setBtnImage();
+    // }
 
     // 设置按钮
-    setBtn() {
-        // 设置分数按钮
-        if (!this.isplay) {
-            this.buqiang = new ScoreBtn("不抢", this.vm, this, 0);
-            this.qiang = new ScoreBtn("抢地主", this.vm, this, 1)
-            this.button = [this.buqiang, this.qiang];
-            let startX = this.canvasW / 2 - (this.button.length * this.btnW * 3 - this.btnW) / 4;
-            this.button.forEach((item, index) => {
-                item.setPosition([startX + index * this.btnW * 1.5, this.btnY, this.btnW, this.btnH]);
-            });
-        } else {
-            // 设置游戏按钮
-            this.pass = new PassBtn("不出", this.vm, this);
-            this.tip = new TipBtn("tip");
-            this.play = new PlayBtn("play", this.vm, this);
-            this.button = [this.pass, this.tip, this.play];
-            let startX = this.canvasW / 2 - (this.button.length * this.btnW * 3 - this.btnW) / 4;
-            this.button.forEach((item, index) => {
-                item.setPosition([startX + index * this.btnW * 1.5, this.btnY, this.btnW, this.btnH])
-            });
-        }
-    }
+    // setBtn() {
+    //     // 设置分数按钮
+    //     if (!this.isplay) {
+    //         this.buqiang = new ScoreBtn("不抢", this.vm, this, 0);
+    //         this.qiang = new ScoreBtn("抢地主", this.vm, this, 1)
+    //         this.button = [this.buqiang, this.qiang];
+    //         let startX = this.canvasW / 2 - (this.button.length * this.btnW * 3 - this.btnW) / 4;
+    //         this.button.forEach((item, index) => {
+    //             item.setPosition([startX + index * this.btnW * 1.5, this.btnY, this.btnW, this.btnH]);
+    //         });
+    //     } else {
+    //         // 设置游戏按钮
+    //         this.pass = new PassBtn("不出", this.vm, this);
+    //         this.tip = new TipBtn("tip");
+    //         this.play = new PlayBtn("play", this.vm, this);
+    //         this.button = [this.pass, this.tip, this.play];
+    //         let startX = this.canvasW / 2 - (this.button.length * this.btnW * 3 - this.btnW) / 4;
+    //         this.button.forEach((item, index) => {
+    //             item.setPosition([startX + index * this.btnW * 1.5, this.btnY, this.btnW, this.btnH])
+    //         });
+    //     }
+    // }
 
     // 添加点击事件
     addClickEvent() {
@@ -131,6 +132,7 @@ class GameInit {
     }
 }
 
+/*
 // 扑克牌游戏类
 class PokerGame extends GameInit {
     constructor(params) {
@@ -151,7 +153,7 @@ class PokerGame extends GameInit {
         this.deskCard = null; // 桌面上的牌
         this.text = '';
         this.oTR = null;
-        this.loadAllResource();
+        // this.loadAllResource();
     }
 
     // 初始化
@@ -445,5 +447,161 @@ class PokerGame extends GameInit {
     }
     // 绘图方法 end
 }
+*/
 
-export {GameInit,PokerGame} ;
+// const dealCards = function () {
+//     this.setBtn();
+//     // 这里是一个动画动作，应该放入setInterval中
+//     // 1. 清空画布
+//     this.ctx.clearRect(0, 0, this.canvasW, this.canvasH);
+//     // 2. 发牌动画和显示按钮
+//     // 2.1 先放背景图片
+//     this.ctx.drawImage(this.loadedRes["bgImage"], 0, 0, this.canvasW, this.canvasH);
+//     // 2.2 发牌动画，应该传入获得的牌组
+//     createPokerClass();
+//     dealAmine(1);
+// }
+// // 调用卡牌类
+// function createPokerClass() {
+//     let startX = this.canvasW / 2 - 52.5 - 16 * 10;
+//     for (let i = 0; i < this.pokerList.length; i++) {
+//         const poker = new PokerEvent(this.pokerList[i].name, this.pokerList[i].point);
+//         poker.setPosition([startX + i * 20, this.canvasH - 150, 20, 150]);
+//         this.deck.push(poker);
+//     }
+
+// }
+
+// // 动画
+// function dealAmine(len) {
+//     setTimeout(() => {
+//         this.drawPoker(len, len, len);
+//         if (len < this.pokerList.length) {
+//             this.dealAmine(++len);
+//         } else if (len == this.pokerList.length) {
+//             this.drawBtn();
+//             this.left = 17;
+//             this.right = 17;
+//         }
+//     }, 0) // 暂时归零
+// }
+
+class PokerGame {
+    constructor(canvas, ctx, loadedRes, sceneManager) {
+        this.canvas = canvas;
+        this.ctx = ctx;
+        this.loadedRes = loadedRes;
+        this.sceneManager = sceneManager;
+        this.pokerList = []; // 接收到的卡牌列表
+        this.mypoker = []; // 我的卡牌
+
+        // 
+        this.btnW = this.canvas.width / 8;
+        this.btnH = this.canvas.height / 12;
+        this.btnY = this.canvas.height * 0.618;
+    }
+
+    // 创建卡牌类
+    createPokerClass() {
+        let startX = this.canvas.width / 2 - 52.5 - 16 * 10;
+        for (let i = 0; i < this.pokerList.length; i++) {
+            const poker = new Poker(this.pokerList[i].name, this.pokerList[i].point);
+            poker.setPosition([startX + i * 20, this.canvas.height - 150, 20, 150]);
+            this.mypoker.push(poker);
+        }
+
+    }
+
+    // 按钮
+    setLordBtn() {
+        const buqiang = new ScoreBtn("不抢", 0);
+        window.console.log(buqiang)
+        const qiang = new ScoreBtn("抢地主", 1)
+        const buttonList = [buqiang, qiang];
+        const startX = this.canvas.width / 2 - (buttonList.length * this.btnW * 3 - this.btnW) / 4;
+        buttonList.forEach((item, index) => {
+            item.setPosition([startX + index * this.btnW * 1.5, this.btnY, this.btnW, this.btnH]);
+        });
+        return buttonList;
+    }
+
+    // 动画
+    dealAmine(num) {
+        setTimeout(() => {
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.ctx.drawImage(this.loadedRes["bgImage"], 0, 0, this.canvas.width, this.canvas.height);
+            this.renderMyPoker(num);
+            this.renderLeftPlayer(num);
+            this.renderRightPlayer(num);
+            if (num < 17) {
+                this.dealAmine(++num);
+            } else if (num == 17) {
+                this.sceneManager.render();
+                this.sceneManager.bindEvent()
+                // this.drawBtn();
+            }
+        }, 20) // 暂时归零
+    }
+
+    renderMyPoker(len) {
+        let startX = this.canvas.width / 2 - 52.5 - (len - 1) * 10;
+        for (let i = 0; i < len; i++) {
+            // 自己
+            this.ctx.drawImage(
+                this.loadedRes[this.mypoker[i].name],
+                startX + i * 20,
+                this.mypoker[i].y);
+            this.mypoker[i].changePosition(startX + i * 20);
+            if (i == this.mypoker.length - 1) {
+                this.mypoker[i].setLast(true);
+            }
+        }
+    }
+
+    // 渲染左边
+    renderLeftPlayer(num) {
+        let start = this.canvas.height / 2 + 52.5 + (num - 1) * 5 - (this.canvas.width - this.canvas.height) / 2;
+        // const start = this.canvas.height + 52.5 + (num - 1) * 5 - this.canvas.width / 2;
+        this.ctx.save();
+        this.ctx.translate(this.canvas.width, 0);
+        this.ctx.rotate(Math.PI / 2);
+        // 左边
+        for (let i = 0; i < num; i++) {
+            this.ctx.drawImage(
+                this.loadedRes["pokerBack"],
+                start - i * 10,
+                this.canvas.width - 150,
+            );
+        }
+        this.ctx.restore();
+    }
+
+    // 渲染右边
+    renderRightPlayer(num) {
+        const start = this.canvas.height / 2 - 52.5 - (num - 1) * 5;
+        this.ctx.save();
+        this.ctx.translate(this.canvas.width, 0);
+        this.ctx.rotate(Math.PI / 2);
+        // 右边
+        for (let i = 0; i < num; i++) {
+            this.ctx.drawImage(
+                this.loadedRes["pokerBack"],
+                start + i * 10,
+                0,
+            );
+        }
+        this.ctx.restore();
+    }
+
+    // 渲染抢地主按钮
+    renderLordBtn(buttonList) {
+        buttonList.forEach(item => {
+            this.ctx.drawImage(this.loadedRes[item.name],
+                item.x,item.y,item.w,item.h)
+        });
+    }
+
+}
+
+
+export { GameInit, PokerGame };
