@@ -98,7 +98,10 @@ export default {
     },
     // 加入房间
     joinRoom(index) {
-      this.$socket.emit('joinRoom',index);
+      this.$socket.emit('joinRoom',{
+        index, // 房间号
+        userid:this.$store.getters.getUserInfo.uid
+      });
       this.$router.push({
         path: "/battle",
         query: { gid: this.gameId, rid: index }

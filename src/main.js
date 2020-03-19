@@ -9,7 +9,12 @@ import './assets/css/global.css'
 // 导入 axios
 import axios from 'axios'
 axios.defaults.baseURL = 'http://localhost:3000';
-axios.defaults.withCredentials=true;
+axios.interceptors.request.use(config=>{
+  window.console.log(config)
+  config.headers.token = Vue.prototype.$cookies.get("token");
+  return config;
+})
+// axios.defaults.withCredentials=true;
 Vue.prototype.$http = axios;
 
 import store from '../store/index'

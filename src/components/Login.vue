@@ -62,6 +62,7 @@ export default {
         const res = await this.$http.get("api/test");
         window.console.log(res);
     },
+    // 登录
     login() {
       this.$refs.loginFormRef.validate(async valid => {
         if (!valid) return;

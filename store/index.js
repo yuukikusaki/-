@@ -1,8 +1,12 @@
 import Vuex from 'vuex'
+import axios from 'axios'
 
 const store = ()=>{
     return new Vuex.Store({
         state:{
+            // 用户信息
+            userinfo:{},
+
             // 游戏列表
             gameList:[
                 { id:1,name: "石头剪刀布",type:'双人', img: "http://localhost:3000/images/morra.jpg" },
@@ -16,16 +20,28 @@ const store = ()=>{
             // 单个游戏信息
 
             // 房间列表信息（用哈希表）
-            roomList:[
-                { roomID:1,roomName:'斗地主',roomPass:123},
-            ]
+            // roomList:[
+            //     { roomID:1,roomName:'斗地主',roomPass:123},
+            // ]
         },
         mutations:{
-            addNewRoom(state,roomInfo){
-                state.roomList.push(roomInfo);
+            getUserInfo(state,res){
+                state.userinfo = res;
+            }
+            
+        },
+        actions:{
+            // 获取用户信息
+            async getUserInfo(context){
+                const {data:res} = await axios.get('/user/userinfo');
+                context.commit('getUserInfo',res.data);
+                return res.data
             }
         },
         getters:{
+            getUserInfo(state){
+                return state.userinfo;
+            },
             getGameList(state){
                 return state.gameList;
             },

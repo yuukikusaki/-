@@ -47,7 +47,7 @@ export default {
       window.console.log(pokerList);
       // 创建三个玩家类
       this.sceneManager.sceneNumber = 2;
-      this.sceneManager.enter(pokerList)
+      this.sceneManager.enter(pokerList.sort((a,b)=>b.point-a.point));
     },
   //   // 按钮事件
   //   isfocus(flag) {

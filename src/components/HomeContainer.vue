@@ -16,7 +16,7 @@
         <!-- 侧边栏用户信息区 -->
         <div class="userinfo">
           <img width="50px" height="50px" src="../assets/head.jpg">
-          <span>用户名</span>
+          <span>{{userinfo.username}}</span>
         </div>
         <!-- 侧边栏菜单区 -->
         <el-menu
@@ -91,6 +91,7 @@
 export default {
   data() {
     return {
+      userinfo:{}, // 用户信息
       menulist: [], // 左侧菜单
       iconsObj: {
         "101": "el-icon-user",
@@ -103,6 +104,7 @@ export default {
   },
   created() {
     // this.getGameList();
+    this.getUserInfo();
     this.getMenuList();
   },
   methods: {
@@ -114,6 +116,11 @@ export default {
     logout() {
       this.$cookies.remove("token");
       this.$router.push("login");
+    },
+    // 获取用户信息并存入 store
+    async getUserInfo(){
+      await this.$store.dispatch('getUserInfo');
+      this.userinfo = this.$store.getters.getUserInfo;
     },
     // 获取菜单
     async getMenuList() {
@@ -173,6 +180,9 @@ export default {
     display: flex;
     flex-flow: column;
     text-align: center;
+    span{
+      margin-top: 10px;
+    }
   }
   .el-menu {
     border-right: none;

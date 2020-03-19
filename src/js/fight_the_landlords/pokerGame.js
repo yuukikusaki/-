@@ -449,43 +449,6 @@ class PokerGame extends GameInit {
 }
 */
 
-// const dealCards = function () {
-//     this.setBtn();
-//     // 这里是一个动画动作，应该放入setInterval中
-//     // 1. 清空画布
-//     this.ctx.clearRect(0, 0, this.canvasW, this.canvasH);
-//     // 2. 发牌动画和显示按钮
-//     // 2.1 先放背景图片
-//     this.ctx.drawImage(this.loadedRes["bgImage"], 0, 0, this.canvasW, this.canvasH);
-//     // 2.2 发牌动画，应该传入获得的牌组
-//     createPokerClass();
-//     dealAmine(1);
-// }
-// // 调用卡牌类
-// function createPokerClass() {
-//     let startX = this.canvasW / 2 - 52.5 - 16 * 10;
-//     for (let i = 0; i < this.pokerList.length; i++) {
-//         const poker = new PokerEvent(this.pokerList[i].name, this.pokerList[i].point);
-//         poker.setPosition([startX + i * 20, this.canvasH - 150, 20, 150]);
-//         this.deck.push(poker);
-//     }
-
-// }
-
-// // 动画
-// function dealAmine(len) {
-//     setTimeout(() => {
-//         this.drawPoker(len, len, len);
-//         if (len < this.pokerList.length) {
-//             this.dealAmine(++len);
-//         } else if (len == this.pokerList.length) {
-//             this.drawBtn();
-//             this.left = 17;
-//             this.right = 17;
-//         }
-//     }, 0) // 暂时归零
-// }
-
 class PokerGame {
     constructor(canvas, ctx, loadedRes, sceneManager) {
         this.canvas = canvas;
@@ -526,16 +489,16 @@ class PokerGame {
     }
 
     // 动画
-    dealAmine(num) {
+    dealAmine(len) {
         setTimeout(() => {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             this.ctx.drawImage(this.loadedRes["bgImage"], 0, 0, this.canvas.width, this.canvas.height);
-            this.renderMyPoker(num);
-            this.renderLeftPlayer(num);
-            this.renderRightPlayer(num);
-            if (num < 17) {
-                this.dealAmine(++num);
-            } else if (num == 17) {
+            this.renderMyPoker(len);
+            this.renderLeftPlayerPoker(len);
+            this.renderRightPlayerPoker(len);
+            if (len < 17) {
+                this.dealAmine(++len);
+            } else if (len == 17) {
                 this.sceneManager.render();
                 this.sceneManager.bindEvent()
                 // this.drawBtn();
@@ -543,6 +506,15 @@ class PokerGame {
         }, 20) // 暂时归零
     }
 
+    // 渲染卡牌 start
+    // 渲染三方卡牌
+    renderPoker(mlen,llen,rlen){
+        this.renderMyPoker(mlen);
+        this.renderLeftPlayerPoker(llen);
+        this.renderRightPlayerPoker(rlen);
+    }
+
+    // 渲染我的卡牌
     renderMyPoker(len) {
         let startX = this.canvas.width / 2 - 52.5 - (len - 1) * 10;
         for (let i = 0; i < len; i++) {
@@ -559,14 +531,13 @@ class PokerGame {
     }
 
     // 渲染左边
-    renderLeftPlayer(num) {
-        let start = this.canvas.height / 2 + 52.5 + (num - 1) * 5 - (this.canvas.width - this.canvas.height) / 2;
-        // const start = this.canvas.height + 52.5 + (num - 1) * 5 - this.canvas.width / 2;
+    renderLeftPlayerPoker(len) {
+        let start = this.canvas.height / 2 + 52.5 + (len - 1) * 5 - (this.canvas.width - this.canvas.height) / 2;
         this.ctx.save();
         this.ctx.translate(this.canvas.width, 0);
         this.ctx.rotate(Math.PI / 2);
         // 左边
-        for (let i = 0; i < num; i++) {
+        for (let i = 0; i < len; i++) {
             this.ctx.drawImage(
                 this.loadedRes["pokerBack"],
                 start - i * 10,
@@ -577,13 +548,13 @@ class PokerGame {
     }
 
     // 渲染右边
-    renderRightPlayer(num) {
-        const start = this.canvas.height / 2 - 52.5 - (num - 1) * 5;
+    renderRightPlayerPoker(len) {
+        const start = this.canvas.height / 2 - 52.5 - (len - 1) * 5;
         this.ctx.save();
         this.ctx.translate(this.canvas.width, 0);
         this.ctx.rotate(Math.PI / 2);
         // 右边
-        for (let i = 0; i < num; i++) {
+        for (let i = 0; i < len; i++) {
             this.ctx.drawImage(
                 this.loadedRes["pokerBack"],
                 start + i * 10,
@@ -592,6 +563,7 @@ class PokerGame {
         }
         this.ctx.restore();
     }
+    // 渲染卡牌 start
 
     // 渲染抢地主按钮
     renderLordBtn(buttonList) {
@@ -599,6 +571,23 @@ class PokerGame {
             this.ctx.drawImage(this.loadedRes[item.name],
                 item.x,item.y,item.w,item.h)
         });
+    }
+
+    // 渲染三方文字
+    renderText(my,left,right){
+        this.ctx.font = "36px bold 宋体";
+        // 设置颜色
+        this.ctx.fillStyle = "#ff0";
+        if(my.text){
+            this.ctx.fillText(my.text, my.textX, my.textY);
+        }
+        if(left.text){
+            this.ctx.fillText(left.text, left.textX, left.textY);
+        }
+        if(right.text){
+            this.ctx.fillText(right.text, right.textX, right.textY);
+        }
+        // this.ctx.fillText(this.text, this.mw, this.canvasH * 2 / 3)
     }
 
 }
