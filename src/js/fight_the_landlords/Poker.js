@@ -31,7 +31,7 @@ class Poker {
                 x1: this.x,
                 x2: this.x + 105,
             };
-            return positon
+            return positon;
         } else {
             positon = {
                 x1: this.x,

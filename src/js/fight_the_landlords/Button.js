@@ -50,30 +50,34 @@ class ScoreBtn extends Button {
 
 // 不出 按钮
 class PassBtn extends Button {
-    constructor(name, vm, that) {
-        super(name, vm, that);
-        this.canClick = false;
+    constructor(name) {
+        super(name);
+        this.canClick = false; // 是否可以不出
     }
 
     reClick(flag) {
         this.canClick = flag;
     }
-    onClick(deck) {
-        if (this.canClick) {
-            return;
-        }
-        deck.map(card => {
+    onClick(socket,userid,myPoker) {
+        // if (this.canClick) {
+        //     return;
+        // }
+        myPoker.map(card => {
             if (card.getChecked()) {
                 card.isChecked = false;
                 card.y += 20;
             }
         });
-        this.that.text = this.name
-        this.that.tPosition('my');
-        this.that.drawFunc();
+        // this.that.text = this.name
+        // this.that.tPosition('my');
+        // this.that.drawFunc();
         // socket
-        this.vm.$socket.emit('next', []);
-        this.that.rw = -9999; // 清右边
+        const dealinfo = {
+                userid,
+                data:{dealList:[],typeRank:0}
+        }
+        socket.emit('next', dealinfo);
+        // this.that.rw = -9999; // 清右边
     }
 }
 
@@ -84,31 +88,35 @@ class TipBtn extends Button {
 
 // 出牌 按钮
 class PlayBtn extends Button {
-    constructor(name, vm, that) {
-        super(name, vm, that);
+    constructor(name) {
+        super(name);
     }
-    onClick(deck) {
+    onClick(socket,userid,myPoker,pokerTypeRank) {
         // 先放入出牌列表
         let dealList = [];
-        deck.map(c => {
-            if (c.getChecked()) {
-                dealList.push(c);
+        myPoker.map(item => {
+            if (item.getChecked()) {
+                dealList.push(item);
             }
         });
-        let typeRank = candeal(dealList, this.that.oTR);
+        let typeRank = candeal(dealList, pokerTypeRank);
         if (typeRank == false) {
-            return;
+            return false;
         }
         // 删除牌组中的卡牌
-        this.that.deck = deck.filter(c => !c.getChecked());
-        this.that.setDeal(dealList);
-        this.that.drawFunc();
-        if (this.that.deck.length == 0) {
-            typeRank = 'win';
+        // myPoker = myPoker.filter(c => !c.getChecked());
+        // this.that.setDeal(dealList);
+        // this.that.drawFunc();
+        if (myPoker.length == 0) {
+            pokerTypeRank = 'win';
         }
-        const dealinfo = { typeRank, dealList };
-        this.vm.$socket.emit('next', dealinfo);
-        this.that.rw = -9999; // 清右边
+        const dealinfo = { 
+            userid,
+            data:{dealList,typeRank}
+         }
+        socket.emit('next', dealinfo);
+        window.console.log(myPoker)
+        // return myPoker;
     }
 
 }

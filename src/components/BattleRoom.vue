@@ -50,19 +50,20 @@ export default {
       this.sceneManager.enter(req.data.sort((a, b) => b.point - a.point));
     },
     // 按钮事件
-    isfocus(flag) {
-      // this.pokerGame.isfocus = flag;
-      this.sceneManager.press = flag;
-      this.sceneManager.render();
-      // this.pokerGame.drawFunc();
-      window.console.log(flag);
-    },
+    // isfocus(flag) {
+    //   // this.pokerGame.isfocus = flag;
+    //   this.sceneManager.press = flag;
+    //   this.sceneManager.render();
+    //   // this.pokerGame.drawFunc();
+    //   window.console.log(flag);
+    // },
     // 更新场景管理器（原来的draw）
     update(req) {
       if (typeof req.data == "number") {
         // 抢地主
         this.sceneManager.update(req);
-      } else if(typeof req.data == "string"){
+      } else if(typeof req.data == "object"){
+        this.sceneManager.update(req);
         // this.sceneManager.sc
         // this.pokerGame.changeCardNum( data[0],data[1]);
         // this.pokerGame.drawFunc();
@@ -76,14 +77,6 @@ export default {
       // 跳转到场景三
       this.sceneManager.sceneNumber = 3;
       this.sceneManager.enter(req);
-      // window.console.log(landCard);
-      // // 注意一下顺序，特别是地主牌显示
-      // this.pokerGame.landCard = landCard;
-      // this.play(); // 以后要整合进去
-      // // 地主放入地主牌
-      // this.pokerGame.insertCard(landCard);
-      // this.pokerGame.drawFunc();
-      // this.pokerGame.insertCard();
     }
     //   // 接收别人出的牌并打印出来
     //   draw(data) {
@@ -138,19 +131,19 @@ export default {
     setPlayerClass() {
       this.my = new My(
         this.canvas.width / 2,
-        this.canvas.height / 2 - 100,
+        this.canvas.height / 2 - 50,
         this.canvas.width / 2 - 18,
         (this.canvas.height * 2) / 3
       );
       this.leftPlayer = new LeftPlayer(
         200,
-        this.canvas.height / 2 - 150,
+        this.canvas.height / 2 - 120,
         170,
         this.canvas.height / 3
       );
       this.rightPlayer = new RightPlayer(
         this.canvas.width - 300,
-        this.canvas.height / 2 - 150,
+        this.canvas.height / 2 - 120,
         this.canvas.width - 250,
         this.canvas.height / 3
       );

@@ -2,18 +2,18 @@
 // 牌点数 3-大王 => 1-15
 
 // 是否可以出牌
-function candeal(dealList,o) {
+function candeal(dealList,pokerTypeRank) {
     const {type,rank} = cardType(dealList); // 自己的牌
     // 先判断是不是 err
     if(type == 'err'){ 
         return false; 
     }
-    if(o == null){
+    if(pokerTypeRank == null){
         return {type,rank};
     }
     // 别人的牌
-    const otype = o.type;
-    const orank = o.rank;
+    const otype = pokerTypeRank.type;
+    const orank = pokerTypeRank.rank;
     if(rank>50&&rank>orank){ // 我是炸弹（不用管别人是不是炸弹）
         return {type,rank};
     }else if(type==otype&&rank>orank){ // 普通牌型，首先相等，其次大小

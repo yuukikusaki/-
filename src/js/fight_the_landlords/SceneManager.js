@@ -19,7 +19,8 @@ class SceneManager {
         this.socket = socket;
         this.pokerGame = null;
         this.buttonList = []; // 按钮列表
-        this.press = true;
+        this.press = true; // 使用按钮
+        this.pokerTypeRank = null;
         // 玩家类
         this.my = null;
         this.leftPlayer = null;
@@ -43,8 +44,8 @@ class SceneManager {
                 break;
             case 2: // 抢地主
                 this.players.map(item => {
+                    // 把别人的选择加上去
                     if (item.userid == preUserID) {
-                        // 把别人的选择加上去
                         item.text = data == 1 ? '抢地主' : '不抢';
                     }
                     // 清空目前轮到的人的文字
@@ -58,10 +59,27 @@ class SceneManager {
                 }
                 break;
             case 3:
-                // 1. 轮到我，清空文本和出牌
+                // 1. 清空文本和出牌
+                this.players.map(item => {
+                    // 上一个人
+                if (item.userid == preUserID) {
+                        if(data.typeRank==0){
+                            item.text='不出';
+                            item.deskPoker=[];
+                        }else{
+                            item.deskPoker = data.dealList;
+                            this.pokerTypeRank = data.typeRank
+                        }
+                    }
+                    // 清空轮到的人
+                    if (item.userid == curUserID) {
+                        item.text = '';
+                        item.deskPoker = [];
+                    }
+                });
+                // 轮到我，则可以按下按钮
                 if (curUserID == this.my.userid) {
-                    this.my.text = '';
-                    // 还需要清空出牌
+                    this.press = true;
                 }
                 break;
             default:
@@ -102,6 +120,8 @@ class SceneManager {
                 this.pokerGame.renderPlayBtn(this.buttonList); // 渲染游戏按钮
                 // 渲染三方的文字
                 this.pokerGame.renderText(this.my, this.leftPlayer, this.rightPlayer);
+                // 渲染三方桌面上面的牌
+                this.pokerGame.renderDeskPoker(this.my, this.leftPlayer, this.rightPlayer);
                 break;
 
             default:
@@ -152,14 +172,11 @@ class SceneManager {
     // 添加监听
     bindEvent() {
         this.canvas.onclick = event => {
-            if (this.press == false) {
-                return;
-            }
             window.console.log(event);
             const mousex = event.layerX;
             const mousey = event.layerY;
             switch (this.sceneNumber) {
-                case 1:
+                case 1: // 准备开始按钮
                     if (mousex > this.canvas.width / 2 - 65 && mousex < this.canvas.width / 2 + 65 &&
                         mousey > this.canvas.height * 0.618 && mousey < this.canvas.height * 0.618 + 65) {
                         this.socket.emit('onready', this.my.userid);
@@ -167,14 +184,41 @@ class SceneManager {
                     break;
                 case 2:
                     // 添加抢地主事件
+                    if (this.press == false) {
+                        return;
+                    }
                     this.buttonList.map(item => {
-                        if (mousex > item.x && mousex < item.x + item.w && mousey > item.y && mousey < item.y + item.h) {
+                        if (mousex >= item.x && mousex <= item.x + item.w && mousey >= item.y && mousey <= item.y + item.h) {
                             item.onClick(this.socket, this.my.userid);
                             this.press = false;
                         }
                     });
                     break;
-
+                case 3: // 卡牌和游戏按钮
+                    // 按钮
+                    this.buttonList.map(item => {
+                        if (mousex >= item.x && mousex <= item.x + item.w && mousey >= item.y && mousey <= item.y + item.h && this.press == true) {
+                            const flag = item.onClick(this.socket, this.my.userid, this.pokerGame.mypoker, this.pokerTypeRank);
+                            if (flag == false) {
+                                return
+                            }
+                            this.pokerGame.mypoker = this.pokerGame.mypoker.filter(c => !c.getChecked());
+                            this.my.length = this.pokerGame.mypoker.length;
+                            // this.pokerGame.mypoker = myPoker;
+                            // this.my.length -= myPoker.length
+                            this.press = false;
+                            this.render();
+                        }
+                    });
+                    // 卡牌
+                    this.pokerGame.mypoker.map(item => {
+                        const { x1, x2 } = item.getPositionX();
+                        if (mousey >= item.y && mousey <= item.y + item.height && mousex >= x1 && mousex <= x2) {
+                            item.onClick();
+                            this.render()
+                        }
+                    });
+                    break;
                 default:
                     break;
             }

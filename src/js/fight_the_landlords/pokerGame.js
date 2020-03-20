@@ -491,9 +491,9 @@ class PokerGame {
 
     // 游戏按钮
     setPlayBtn() {
-        this.pass = new PassBtn("不出", this.vm, this);
+        this.pass = new PassBtn("不出");
         this.tip = new TipBtn("提示");
-        this.play = new PlayBtn("出牌", this.vm, this);
+        this.play = new PlayBtn("出牌");
         const buttonList = [this.pass, this.tip, this.play];
         const startX = this.canvas.width / 2 - (buttonList.length * this.btnW * 3 - this.btnW) / 4;
         buttonList.forEach((item, index) => {
@@ -527,16 +527,39 @@ class PokerGame {
         }
         this.landCard.map(item => {
             for (let i = 0; i < this.pokerList.length; i++) {
-                if (item.point > this.pokerList[i].point) {
+                if (item.point >= this.pokerList[i].point) {
                     this.pokerList.splice(i, 0, item);
                     break;
                 }
+            }
+            // 如果比最小的小
+            if(item.point<this.pokerList[this.pokerList.length-1].point){
+                this.pokerList.push(item);
             }
         });
         this.mypoker = [];
         // 创建新的卡牌队列
         this.createPokerClass();
     }
+
+
+    // 渲染按钮 start
+    // 渲染抢地主按钮
+    renderLordBtn(buttonList) {
+        buttonList.forEach(item => {
+            this.ctx.drawImage(this.loadedRes[item.name],
+                item.x, item.y, item.w, item.h)
+        });
+    }
+
+    // 渲染游戏按钮
+    renderPlayBtn(buttonList){
+        buttonList.forEach(item => {
+            this.ctx.drawImage(this.loadedRes[item.name],
+                item.x, item.y, item.w, item.h)
+        });
+    }
+    // 渲染按钮 end
 
     // 渲染卡牌 start
     // 渲染三方卡牌
@@ -606,23 +629,6 @@ class PokerGame {
                 this.canvas.width / 2 - 72 + i * 20.5, 0);
         }
     }
-    // 渲染卡牌 end
-
-    // 渲染抢地主按钮
-    renderLordBtn(buttonList) {
-        buttonList.forEach(item => {
-            this.ctx.drawImage(this.loadedRes[item.name],
-                item.x, item.y, item.w, item.h)
-        });
-    }
-
-    // 渲染游戏按钮
-    renderPlayBtn(buttonList){
-        buttonList.forEach(item => {
-            this.ctx.drawImage(this.loadedRes[item.name],
-                item.x, item.y, item.w, item.h)
-        });
-    }
 
     // 渲染三方文字
     renderText(my, left, right) {
@@ -641,6 +647,57 @@ class PokerGame {
         // this.ctx.fillText(this.text, this.mw, this.canvasH * 2 / 3)
     }
 
+    // 渲染桌面上的卡牌
+    renderDeskPoker(my,left,right){
+        this.renderMyDeskPoker(my);
+        this.renderLeftDeskPoker(left);
+        this.renderRightDeskPoker(right);
+    }
+
+    // 渲染我桌面上的卡牌
+    renderMyDeskPoker(my){
+        window.console.log(my.deskPoker)
+        if (my.deskPoker==false) {
+            return;
+        }
+        for (let i = 0; i < my.deskPoker.length; i++) {
+            this.ctx.drawImage(
+                this.loadedRes[my.deskPoker[i].name],
+                this.canvas.width / 2 - 52.5 - (my.deskPoker.length - 1) * 10 + i * 20,
+                my.deskY,
+            );
+        }
+    }
+
+    // 渲染左边桌面上的卡牌
+    renderLeftDeskPoker(left){
+        if (left.deskPoker==false) {
+            return;
+        }
+        for (let i = 0; i < left.deskPoker.length; i++) {
+            this.ctx.drawImage(
+                this.loadedRes[left.deskPoker[i].name],
+                180 + i * 20,
+                left.deskY,
+            );
+        }
+    }
+
+    // 渲染右边桌面上的卡牌
+    renderRightDeskPoker(right){
+        if (right.deskPoker==false) {
+            return;
+        }
+        for (let i = 0; i < right.deskPoker.length; i++) {
+            this.ctx.drawImage(
+                this.loadedRes[right.deskPoker[i].name],
+                this.canvas.width - 300 - 20 * (right.deskPoker.length - 1)+i * 20,
+                right.deskY,
+            );
+        }
+    }
+
+    // 渲染卡牌 end
     
 
 }
