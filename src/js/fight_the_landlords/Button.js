@@ -40,8 +40,8 @@ class ScoreBtn extends Button {
         super(name);
         this.score = score;
     }
-    onClick(socket) {
-        socket.emit('next', this.score);
+    onClick(socket,userid) {
+        socket.emit('next', {userid,data:this.score});
         // this.that.text = this.name
         // this.that.tPosition('my');
         // this.that.drawFunc();

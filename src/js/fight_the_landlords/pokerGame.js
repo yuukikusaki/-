@@ -1,6 +1,6 @@
 import PokerResource from './pokerResource'
-import  Poker from './Poker'
-import {ScoreBtn} from './Button'
+import Poker from './Poker'
+import { ScoreBtn, TipBtn, PassBtn, PlayBtn } from './Button'
 
 // 初始化类
 class GameInit {
@@ -457,6 +457,7 @@ class PokerGame {
         this.sceneManager = sceneManager;
         this.pokerList = []; // 接收到的卡牌列表
         this.mypoker = []; // 我的卡牌
+        this.landCard = []; // 地主牌
 
         // 
         this.btnW = this.canvas.width / 8;
@@ -475,7 +476,7 @@ class PokerGame {
 
     }
 
-    // 按钮
+    // 抢地主按钮
     setLordBtn() {
         const buqiang = new ScoreBtn("不抢", 0);
         window.console.log(buqiang)
@@ -484,6 +485,19 @@ class PokerGame {
         const startX = this.canvas.width / 2 - (buttonList.length * this.btnW * 3 - this.btnW) / 4;
         buttonList.forEach((item, index) => {
             item.setPosition([startX + index * this.btnW * 1.5, this.btnY, this.btnW, this.btnH]);
+        });
+        return buttonList;
+    }
+
+    // 游戏按钮
+    setPlayBtn() {
+        this.pass = new PassBtn("不出", this.vm, this);
+        this.tip = new TipBtn("提示");
+        this.play = new PlayBtn("出牌", this.vm, this);
+        const buttonList = [this.pass, this.tip, this.play];
+        const startX = this.canvas.width / 2 - (buttonList.length * this.btnW * 3 - this.btnW) / 4;
+        buttonList.forEach((item, index) => {
+            item.setPosition([startX + index * this.btnW * 1.5, this.btnY, this.btnW, this.btnH])
         });
         return buttonList;
     }
@@ -506,9 +520,27 @@ class PokerGame {
         }, 20) // 暂时归零
     }
 
+    // 地主增加牌
+    insertCard() {
+        if (this.landCard == false) {
+            return false;
+        }
+        this.landCard.map(item => {
+            for (let i = 0; i < this.pokerList.length; i++) {
+                if (item.point > this.pokerList[i].point) {
+                    this.pokerList.splice(i, 0, item);
+                    break;
+                }
+            }
+        });
+        this.mypoker = [];
+        // 创建新的卡牌队列
+        this.createPokerClass();
+    }
+
     // 渲染卡牌 start
     // 渲染三方卡牌
-    renderPoker(mlen,llen,rlen){
+    renderPoker(mlen, llen, rlen) {
         this.renderMyPoker(mlen);
         this.renderLeftPlayerPoker(llen);
         this.renderRightPlayerPoker(rlen);
@@ -563,32 +595,53 @@ class PokerGame {
         }
         this.ctx.restore();
     }
-    // 渲染卡牌 start
+
+    // 渲染地主牌
+    renderLandCard() {
+        if (this.landCard == false) {
+            return false;
+        }
+        for (let i = 0; i < 3; i++) {
+            this.ctx.drawImage(this.loadedRes[this.landCard[i].name],
+                this.canvas.width / 2 - 72 + i * 20.5, 0);
+        }
+    }
+    // 渲染卡牌 end
 
     // 渲染抢地主按钮
     renderLordBtn(buttonList) {
         buttonList.forEach(item => {
             this.ctx.drawImage(this.loadedRes[item.name],
-                item.x,item.y,item.w,item.h)
+                item.x, item.y, item.w, item.h)
+        });
+    }
+
+    // 渲染游戏按钮
+    renderPlayBtn(buttonList){
+        buttonList.forEach(item => {
+            this.ctx.drawImage(this.loadedRes[item.name],
+                item.x, item.y, item.w, item.h)
         });
     }
 
     // 渲染三方文字
-    renderText(my,left,right){
+    renderText(my, left, right) {
         this.ctx.font = "36px bold 宋体";
         // 设置颜色
         this.ctx.fillStyle = "#ff0";
-        if(my.text){
+        if (my.text) {
             this.ctx.fillText(my.text, my.textX, my.textY);
         }
-        if(left.text){
+        if (left.text) {
             this.ctx.fillText(left.text, left.textX, left.textY);
         }
-        if(right.text){
+        if (right.text) {
             this.ctx.fillText(right.text, right.textX, right.textY);
         }
         // this.ctx.fillText(this.text, this.mw, this.canvasH * 2 / 3)
     }
+
+    
 
 }
 

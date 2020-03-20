@@ -66,8 +66,8 @@ const PokerResource = {
         // { name: "three", socre: 3, url: "/fight_the_landlords/sf.png" },
         { name: "pokerBack", url: "/fight_the_landlords/pokerback.png" },
         { name: "不出", url: "/fight_the_landlords/buchu.png" },
-        { name: "tip", url: "/fight_the_landlords/tishi.png" },
-        { name: "play", url: "/fight_the_landlords/chupai.png" }
+        { name: "提示", url: "/fight_the_landlords/tishi.png" },
+        { name: "出牌", url: "/fight_the_landlords/chupai.png" }
     ]
 }
 
