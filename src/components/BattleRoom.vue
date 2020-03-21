@@ -9,7 +9,6 @@
 </template>
 
 <script>
-// import SceneManager from "../js/fight_the_landlords/SceneManager"
 import SceneManager from "../js/fight_the_landlords/SceneManager";
 import { My, LeftPlayer, RightPlayer } from "../js/fight_the_landlords/Player";
 
@@ -68,14 +67,6 @@ export default {
       this.sceneManager.sceneNumber = 3;
       this.sceneManager.enter(req);
     },
-    // 胜利
-    // win(data) {
-    //   alert(data);
-    //   // this.pokerGame.restart();
-    //   this.setCanvas();
-    //   this.setPlayerClass(); // 创建玩家类
-    //   // this.setPlayers()
-    // }
   },
   created() {
     this.getUserInfo(); // 获取用户信息
@@ -166,7 +157,7 @@ export default {
       this.sceneManager = new SceneManager(this.canvas, this.ctx, this.$socket);
       this.sceneManager.enter();
     },
-    // 离开房间
+    // 离开房间 明天要做的部分
     leaveRoom() {
       this.$socket.emit("leaveroom", this.userinfo);
     },
