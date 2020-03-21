@@ -10,8 +10,7 @@ class PokerGame {
         this.pokerList = []; // 接收到的卡牌列表
         this.mypoker = []; // 我的卡牌
         this.landCard = []; // 地主牌
-
-        // 
+        // 按钮大小和位置
         this.btnW = this.canvas.width / 8;
         this.btnH = this.canvas.height / 12;
         this.btnY = this.canvas.height * 0.618;
