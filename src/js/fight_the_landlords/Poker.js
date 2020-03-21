@@ -22,9 +22,6 @@ class Poker {
 
     // 获取图片 X 坐标
     getPositionX() {
-        // 最后一张是完整返回，给最后一张加个指针
-        // 别的都是自己的起始到下一个起始
-        // 因此返回自己的x就行
         let positon = null;
         if (this.isLast) {
             positon = {
@@ -64,9 +61,6 @@ class Poker {
             this.isChecked = true;
             this.y -= 20;
         }
-        // 1. 点击之后把数据返回给游戏主类
-        // 2. 游戏主类把这些信息发送给服务器
-        // 3. 如果是卡牌，则改变位置
     }
 }
 

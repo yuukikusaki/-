@@ -8,7 +8,7 @@ function candeal(dealList,pokerTypeRank) {
     if(type == 'err'){ 
         return false; 
     }
-    if(pokerTypeRank == null){
+    if(pokerTypeRank != true){
         return {type,rank};
     }
     // 别人的牌
@@ -28,7 +28,7 @@ function candeal(dealList,pokerTypeRank) {
 // 判断是不是连续
 function isseries(arr) {
     // 有大小王或者 2 就直接报错
-    if (arr.some(c => { c >= 13 })) {
+    if (arr.some(item =>  item >= 13 )) {
         return false;
     }
     if (arr[0] - arr[arr.length - 1] == arr.length - 1) {
@@ -83,7 +83,6 @@ function cardType(card) {
     let rank = 0; // 牌大小
     let list = card.map(c => { return c.point; }); // 卡牌大小列表
     let countList = count(list);
-    // window.console.log(countList)
     // 以 5 为界限分开来
     if (len <= 5) {
         if (len == 1) { // 单牌
