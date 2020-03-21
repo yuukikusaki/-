@@ -1,8 +1,10 @@
 <template>
   <div id="battle-contaioner">
-    <div style="width:800px;height:600px;margin:0 auto;">
+    <!-- <div style="width:800px;height:600px;margin:0 auto;"> -->
+      <div class="left"><span>{{leftUserInfo}}</span></div>
       <canvas id="mycanvas" width="800" height="600"></canvas>
-    </div>
+      <div class="right"><span>{{rightUserInfo}}</span></div>
+    <!-- </div> -->
   </div>
 </template>
 
@@ -15,6 +17,8 @@ export default {
   data() {
     return {
       userinfo: {}, // 用户信息
+      leftUserInfo:[],
+      rightUserInfo:[],
       my: {},
       leftPlayer: {}, // 左边玩家
       rightPlayer: {}, // 右边玩家
@@ -27,6 +31,7 @@ export default {
   sockets: {
     // 玩家加入游戏
     playerjoin(playerlist) {
+      window.console.log(playerlist);
       this.setPlayers(playerlist);
       this.sceneManager.setPlayers(this.my, this.leftPlayer, this.rightPlayer);
     },
@@ -64,13 +69,13 @@ export default {
       this.sceneManager.enter(req);
     },
     // 胜利
-    win(data) {
-      alert(data);
-      // this.pokerGame.restart();
-      this.setCanvas();
-      this.setPlayerClass(); // 创建玩家类
-      // this.setPlayers()
-    }
+    // win(data) {
+    //   alert(data);
+    //   // this.pokerGame.restart();
+    //   this.setCanvas();
+    //   this.setPlayerClass(); // 创建玩家类
+    //   // this.setPlayers()
+    // }
   },
   created() {
     this.getUserInfo(); // 获取用户信息
@@ -79,6 +84,10 @@ export default {
   mounted() {
     this.setCanvas();
     this.setPlayerClass(); // 创建玩家类
+  },
+  destroyed() {
+    // 退出时，无论怎么退出，肯定是销毁这个页面
+    this.leaveRoom();
   },
   methods: {
     // 获取用户信息
@@ -111,27 +120,34 @@ export default {
       playerlist.map((item, index) => {
         if (item.userid == this.userinfo.uid) {
           this.my.userid = item.userid;
+          // this.my.username = item.username;
           switch (index) {
             case 0:
+              this.leftUserInfo = playerlist[2];
               this.leftPlayer.userid = playerlist[2]
                 ? playerlist[2].userid
                 : null;
+              this.rightUserInfo = playerlist[1];
               this.rightPlayer.userid = playerlist[1]
                 ? playerlist[1].userid
                 : null;
               break;
             case 1:
+              this.leftUserInfo = playerlist[0];
               this.leftPlayer.userid = playerlist[0]
                 ? playerlist[0].userid
                 : null;
+              this.rightUserInfo = playerlist[2];
               this.rightPlayer.userid = playerlist[2]
                 ? playerlist[2].userid
                 : null;
               break;
             case 2:
+              this.leftUserInfo = playerlist[1];
               this.leftPlayer.userid = playerlist[1]
                 ? playerlist[1].userid
                 : null;
+              this.rightUserInfo = playerlist[0];
               this.rightPlayer.userid = playerlist[0]
                 ? playerlist[0].userid
                 : null;
@@ -150,16 +166,30 @@ export default {
       this.sceneManager = new SceneManager(this.canvas, this.ctx, this.$socket);
       this.sceneManager.enter();
     },
+    // 离开房间
+    leaveRoom() {
+      this.$socket.emit("leaveroom", this.userinfo);
+    },
 
-    
     sendRoom() {
       this.room = this.$route.query;
-    },
+    }
   }
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+#battle-contaioner{
+  display: flex;
+  .left{
+    width:50px;
+    flex-grow:1;
+  }
+  .right{
+    width:50px;
+    flex-grow:1;
+  }
+}
 canvas {
   background-color: #ccc;
   margin: 0 auto;

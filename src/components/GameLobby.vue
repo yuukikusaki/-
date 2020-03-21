@@ -100,7 +100,8 @@ export default {
     joinRoom(index) {
       this.$socket.emit('joinRoom',{
         index, // 房间号
-        userid:this.$store.getters.getUserInfo.uid
+        userid:this.$store.getters.getUserInfo.uid,
+        username:this.$store.getters.getUserInfo.username
       });
       this.$router.push({
         path: "/battle",

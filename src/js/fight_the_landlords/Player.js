@@ -9,6 +9,7 @@ class Player {
         this.textY = textY; // 文字起始的 y 坐标
         this.length = 17; // 卡牌数量
         this.userid = null; // 玩家id
+        this.username = null; // 玩家名称
     }
 
     // 重置数据
