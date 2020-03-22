@@ -4,7 +4,7 @@
     
       <!-- 游戏房间列表 -->
       <div class="game-room">
-        <el-card :body-style="{ padding: '0px' }" v-for="(o, index) in roomList" :key="index">
+        <el-card :body-style="{ padding: '0px' }" v-for=" room in roomList" :key="room.roomID">
           <div class="game-info">
             <div class="game-img">
               <img :src="gameInfo.img" />
@@ -13,7 +13,7 @@
               <span>房间人数</span>
               <div class="bottom clearfix">
                 <el-button type="primary" round 
-                @click="joinRoom(index)">进入房间</el-button>
+                @click="joinRoom(room.roomID)">进入房间</el-button>
               </div>
             </div>
           </div>
@@ -46,7 +46,8 @@ export default {
       gameId: null,
       gameInfo: {}, // 游戏信息
       roomPass: null, // 房间密码
-      roomList: [] // 房间列表
+      roomList: [], // 房间列表
+      realLength:0, // 真实房间长度
     };
   },
   sockets:{
@@ -81,18 +82,21 @@ export default {
     // 更新房间列表
     flashRooms(roomList){
       window.console.log('flash')
-      this.roomList = roomList;
+      this.realLength = roomList.length;
+      this.roomList = roomList.filter(item=>item);
       window.console.log(roomList)
     },
     // 创建新房间
     crtNewRoom() {
+      const roomID = this.realLength;
       const newRoom = {
+        roomID,
         name : this.gameInfo.name,
         pass : this.roomPass
       };
       // 应该是向服务器发送消息
       this.$socket.emit("crtRoom", newRoom);
-      this.joinRoom(this.roomList.length);
+      this.joinRoom(roomID);
       this.dialogVisible = false;
       // this.joinRoom(newRoom.id);
     },

@@ -34,6 +34,16 @@ export default {
       this.setPlayers(playerlist);
       this.sceneManager.setPlayers(this.my, this.leftPlayer, this.rightPlayer);
     },
+    // 退出房间
+    exit(playerlist){
+          this.setCanvas();
+          this.setPlayers(playerlist);
+this.sceneManager.setPlayers(
+            this.my,
+            this.leftPlayer,
+            this.rightPlayer
+          );
+    },
     // 发牌
     start(req) {
       // 创建三个玩家类
@@ -109,6 +119,9 @@ export default {
     // 设置玩家
     setPlayers(playerlist) {
       playerlist.map((item, index) => {
+        if(!item){
+          return;
+        }
         if (item.userid == this.userinfo.uid) {
           this.my.userid = item.userid;
           // this.my.username = item.username;
@@ -159,7 +172,7 @@ export default {
     },
     // 离开房间 明天要做的部分
     leaveRoom() {
-      this.$socket.emit("leaveroom", this.userinfo);
+      this.$socket.emit("leave", this.userinfo);
     },
 
     sendRoom() {
