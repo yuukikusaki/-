@@ -18,3 +18,7 @@ html,body,#app{
     margin-top: 15px;
     font-size: 12px;
 }
+
+.avatar{
+    border-radius: 50%;
+}

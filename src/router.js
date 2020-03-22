@@ -8,6 +8,7 @@ import GameLobby from './components/GameLobby.vue'
 import BattleRoom from './components/BattleRoom.vue'
 import Login from './components/Login.vue'
 import Users from './components/user/Users.vue'
+import Home from './components/account/Home.vue'
 
 
 
@@ -22,6 +23,7 @@ const router = new Router({
             children: [
                 { path: '/lobby', component: GameLobby },
                 { path: '/battle', component: BattleRoom },
+                { path: '/account/home', component: Home },
                 { path: '/admin/users', component: Users }
             ]
         },
