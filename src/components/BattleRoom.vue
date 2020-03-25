@@ -1,9 +1,13 @@
 <template>
   <div id="battle-contaioner">
     <!-- <div style="width:800px;height:600px;margin:0 auto;"> -->
-      <div class="left"><span>{{leftUserInfo}}</span></div>
-      <canvas id="mycanvas" width="800" height="600"></canvas>
-      <div class="right"><span>{{rightUserInfo}}</span></div>
+    <div class="left">
+      <span>{{leftUserInfo}}</span>
+    </div>
+    <canvas id="mycanvas" width="800" height="600"></canvas>
+    <div class="right">
+      <span>{{rightUserInfo}}</span>
+    </div>
     <!-- </div> -->
   </div>
 </template>
@@ -16,8 +20,8 @@ export default {
   data() {
     return {
       userinfo: {}, // 用户信息
-      leftUserInfo:[],
-      rightUserInfo:[],
+      leftUserInfo: [],
+      rightUserInfo: [],
       my: {},
       leftPlayer: {}, // 左边玩家
       rightPlayer: {}, // 右边玩家
@@ -35,14 +39,10 @@ export default {
       this.sceneManager.setPlayers(this.my, this.leftPlayer, this.rightPlayer);
     },
     // 退出房间
-    exit(playerlist){
-          this.setCanvas();
-          this.setPlayers(playerlist);
-this.sceneManager.setPlayers(
-            this.my,
-            this.leftPlayer,
-            this.rightPlayer
-          );
+    exit(playerlist) {
+      this.setCanvas();
+      this.setPlayers(playerlist);
+      this.sceneManager.setPlayers(this.my, this.leftPlayer, this.rightPlayer);
     },
     // 发牌
     start(req) {
@@ -76,7 +76,7 @@ this.sceneManager.setPlayers(
       // 跳转到场景三
       this.sceneManager.sceneNumber = 3;
       this.sceneManager.enter(req);
-    },
+    }
   },
   created() {
     this.getUserInfo(); // 获取用户信息
@@ -119,7 +119,7 @@ this.sceneManager.setPlayers(
     // 设置玩家
     setPlayers(playerlist) {
       playerlist.map((item, index) => {
-        if(!item){
+        if (!item) {
           return;
         }
         if (item.userid == this.userinfo.userid) {
@@ -183,15 +183,15 @@ this.sceneManager.setPlayers(
 </script>
 
 <style lang="scss" scoped>
-#battle-contaioner{
+#battle-contaioner {
   display: flex;
-  .left{
-    width:50px;
-    flex-grow:1;
+  .left {
+    width: 50px;
+    flex-grow: 1;
   }
-  .right{
-    width:50px;
-    flex-grow:1;
+  .right {
+    width: 50px;
+    flex-grow: 1;
   }
 }
 canvas {
