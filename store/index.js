@@ -5,7 +5,7 @@ const store = ()=>{
     return new Vuex.Store({
         state:{
             // 用户信息
-            userinfo:{},
+            userinfo:null,
 
             // 游戏列表
             gameList:[
@@ -25,8 +25,10 @@ const store = ()=>{
             // ]
         },
         mutations:{
-            getUserInfo(state,res){
+            setUserInfo(state,res){
                 state.userinfo = res;
+                // session
+                window.sessionStorage.setItem("userinfo",JSON.stringify(res));
             }
             
         },
@@ -34,12 +36,15 @@ const store = ()=>{
             // 获取用户信息
             async getUserInfo(context){
                 const {data:res} = await axios.get('/user/userinfo');
-                context.commit('getUserInfo',res.data);
+                context.commit('setUserInfo',res.data);
                 return res.data
             }
         },
         getters:{
             getUserInfo(state){
+                if(state.userinfo==null){
+                    state.userinfo = JSON.parse(window.sessionStorage.getItem("userinfo"));
+                }
                 return state.userinfo;
             },
             getGameList(state){

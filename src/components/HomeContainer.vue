@@ -6,7 +6,7 @@
         <img src="../assets/logo.png" width="55px" height="55px" alt />
         <span>网络游戏大厅</span>
       </div>
-      <el-button type="info" @click="back">返回</el-button>
+      <el-button type="info" @click="back">返回大厅</el-button>
     </el-header>
     <!-- 主体区 -->
     <el-container>
@@ -15,8 +15,8 @@
         <div class="toggle-button" @click="toggleCollapse">|||</div>
         <!-- 侧边栏用户信息区 -->
         <div class="userinfo">
-          <img width="50px" height="50px" src="../assets/head.jpg">
-          <span>{{userinfo.username}}</span>
+          <img width="50px" height="50px" src="../assets/head.jpg" />
+          <span style="font-size:18px">{{userinfo.username}}</span>
         </div>
         <!-- 侧边栏菜单区 -->
         <el-menu
@@ -57,7 +57,7 @@
       </el-aside>
       <!-- 右侧内容主体区 -->
       <el-main>
-        <router-view></router-view>
+        <router-view :activePath="activePath" @changeActivePath="saveNavState"></router-view>
         <!-- 游戏卡片区 -->
         <!-- <div class="card-list">
             <div class="game-card" v-for="(item,index) in gameList" :key="index">
@@ -94,7 +94,7 @@
 export default {
   data() {
     return {
-      userinfo:{}, // 用户信息
+      userinfo: {}, // 用户信息
       menulist: [], // 左侧菜单
       iconsObj: {
         "101": "el-icon-user",
@@ -102,7 +102,7 @@ export default {
         "301": "el-icon-s-data"
       },
       isCollapse: false, // 是否折叠
-      activePath:'', // 被激活的链接地址
+      activePath: "", // 被激活的链接地址
       gameList: []
     };
   },
@@ -110,13 +110,13 @@ export default {
     // this.getGameList();
     this.getUserInfo();
     this.getMenuList();
-    this.activePath = window.sessionStorage.getItem('activePath');
+    this.activePath = window.sessionStorage.getItem("activePath");
   },
   methods: {
-    // 返回上一个页面
-    back(){
-      this.$router.go(-1);
-      this.activePath = '';
+    // 返回大厅
+    back() {
+      this.$router.push("/lobby");
+      this.activePath = "";
     },
     // 退出登录
     logout() {
@@ -124,8 +124,8 @@ export default {
       this.$router.push("login");
     },
     // 获取用户信息并存入 store
-    async getUserInfo(){
-      await this.$store.dispatch('getUserInfo');
+    async getUserInfo() {
+      await this.$store.dispatch("getUserInfo");
       this.userinfo = this.$store.getters.getUserInfo;
     },
     // 获取菜单
@@ -144,8 +144,8 @@ export default {
       this.isCollapse = !this.isCollapse;
     },
     // 保存链接激活状态
-    saveNavState(activePath){
-      window.sessionStorage.setItem('activePath',activePath);
+    saveNavState(activePath) {
+      window.sessionStorage.setItem("activePath", activePath);
       this.activePath = activePath;
     },
 
@@ -185,32 +185,29 @@ export default {
   display: flex;
   flex-flow: column;
   background-color: #333744;
-  .userinfo{
+  .userinfo {
     margin: 50px 0 20px;
     align-self: center;
     display: flex;
     flex-flow: column;
     text-align: center;
-    span{
+    span {
       margin-top: 10px;
     }
   }
   .el-menu {
     border-right: none;
-    span{
+    span {
       margin-left: 10px;
     }
   }
-  .el-button{
+  .el-button {
     margin-top: 50px;
     align-self: center;
   }
 }
 
-.el-main {
-  background-color: #eaedf1;
-  padding: 0;
-}
+// 侧边按钮
 .toggle-button {
   background-color: #4a5064;
   text-align: center;
@@ -219,6 +216,14 @@ export default {
   color: #fff;
   letter-spacing: 0.2em;
   cursor: pointer;
+}
+
+// 主体区
+.el-main {
+  border: 1px solid #e1e2e5;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.14);
+  margin: 20px 20px 0;
 }
 
 // 游戏列表区 start

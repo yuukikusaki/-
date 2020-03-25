@@ -3,6 +3,12 @@ html,body,#app{
     height: 100%;
     margin: 0;
     padding: 0;
+    font:12px/1.5 Microsoft YaHei,tahoma,\\5B8B\4F53,sans-serif;
+    font-family: "宋体"
+}
+
+span{
+    display: inline-block;
 }
 
 .el-breadcrumb{

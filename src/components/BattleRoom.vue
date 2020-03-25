@@ -122,7 +122,7 @@ this.sceneManager.setPlayers(
         if(!item){
           return;
         }
-        if (item.userid == this.userinfo.uid) {
+        if (item.userid == this.userinfo.userid) {
           this.my.userid = item.userid;
           // this.my.username = item.username;
           switch (index) {
