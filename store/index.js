@@ -35,7 +35,7 @@ const store = ()=>{
         actions:{
             // 获取用户信息
             async getUserInfo(context){
-                const {data:res} = await axios.get('/user/userinfo');
+                const {data:res} = await axios.get('user/userinfo');
                 context.commit('setUserInfo',res.data);
                 return res.data
             }
