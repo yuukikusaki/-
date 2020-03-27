@@ -2,11 +2,21 @@
   <div id="battle-contaioner">
     <!-- <div style="width:800px;height:600px;margin:0 auto;"> -->
     <div class="left">
-      <span>{{leftUserInfo}}</span>
+      <div v-if="leftUserInfo" class="users">
+        <img :src="leftUserInfo.avatar" alt />
+        <div class="userinfo">
+          <span>{{leftUserInfo.username}}</span>
+        </div>
+      </div>
     </div>
     <canvas id="mycanvas" width="800" height="600"></canvas>
     <div class="right">
-      <span>{{rightUserInfo}}</span>
+      <div v-if="rightUserInfo" class="users">
+        <img :src="rightUserInfo.avatar" alt />
+        <div class="userinfo">
+          <span>{{rightUserInfo.username}}</span>
+        </div>
+      </div>
     </div>
     <!-- </div> -->
   </div>
@@ -20,8 +30,8 @@ export default {
   data() {
     return {
       userinfo: {}, // 用户信息
-      leftUserInfo: [],
-      rightUserInfo: [],
+      leftUserInfo: null,
+      rightUserInfo: null,
       my: {},
       leftPlayer: {}, // 左边玩家
       rightPlayer: {}, // 右边玩家
@@ -58,8 +68,9 @@ export default {
         this.sceneManager.update(req);
       } else if (typeof req.data == "object") {
         this.sceneManager.update(req);
+        window.console.log(req)
         if (req.data.typeRank == "win") {
-          alert(`${req.preUserID} win`);
+          alert(req.winner);
           this.setCanvas();
           this.sceneManager.setPlayers(
             this.my,
@@ -185,13 +196,27 @@ export default {
 <style lang="scss" scoped>
 #battle-contaioner {
   display: flex;
-  .left {
-    width: 50px;
-    flex-grow: 1;
-  }
+  .left,
   .right {
     width: 50px;
     flex-grow: 1;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    .users{
+      margin-top: 100px;
+      .userinfo{
+        margin-top:8px;
+        display: flex;
+        justify-content: center;
+        font-size: 18px;
+        font-weight: 700;
+      }
+    }
+  }
+  img {
+    width: 120px;
+    height: 120px;
   }
 }
 canvas {

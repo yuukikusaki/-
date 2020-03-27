@@ -116,10 +116,11 @@ export default {
       this.$socket.emit("joinRoom", {
         index, // 房间号
         userid: this.$store.getters.getUserInfo.userid,
-        username: this.$store.getters.getUserInfo.username
+        username: this.$store.getters.getUserInfo.username,
+        avatar:this.$store.getters.getUserInfo.avatar
       });
       this.$router.push({
-        path: "/battle",
+        path: "/ftl",
         query: {  rid: index }
       });
     }

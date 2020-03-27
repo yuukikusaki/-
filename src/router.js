@@ -5,7 +5,7 @@ Vue.use(Router)
 
 import HomeContainer from './components/HomeContainer.vue'
 import GameLobby from './components/GameLobby.vue'
-import BattleRoom from './components/BattleRoom.vue'
+import FtlRoom from './components/FtlRoom.vue'
 import Login from './components/Login.vue'
 import Users from './components/user/Users.vue'
 import Home from './components/account/Home.vue'
@@ -24,7 +24,7 @@ const router = new Router({
             component: HomeContainer,
             children: [
                 { path: '/lobby', component: GameLobby },
-                { path: '/battle', component: BattleRoom },
+                { path: '/ftl', component: FtlRoom },
                 { path: '/account/home', component: Home },
                 { path: '/account/record', component: Record },
                 { path: '/account/setting', component: Setting },
