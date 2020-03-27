@@ -1,40 +1,50 @@
 <template>
   <div class="lobby-container">
     <!-- <aside class="info-container">个人信息区</aside> -->
-    
-      <!-- 游戏房间列表 -->
-      <div class="game-room">
-        <el-card :body-style="{ padding: '0px' }" v-for=" room in roomList" :key="room.roomID">
-          <div class="game-info">
-            <div class="game-img">
-              <img :src="gameInfo.img" />
-            </div>
-            <div class="game-join">
-              <span>房间人数</span>
-              <div class="bottom clearfix">
-                <el-button type="primary" round 
-                @click="joinRoom(room.roomID)">进入房间</el-button>
+    <h2 style="margin:0">游戏大厅</h2>
+    <!-- 游戏房间列表 -->
+    <div class="game-room">
+      <el-card :body-style="{ padding: '0px' }" v-for=" room in roomList" :key="room.roomID">
+        <div class="game-info">
+          <div class="game-img">
+            <img :src="gameList[room.gid].img" />
+          </div>
+          <div class="game-join">
+            <div>
+              <span>房间人数</span><span>{{room.pNum}}/{{room.limit}}</span>
               </div>
+            
+            <div class="bottom clearfix">
+              <el-button type="primary" round @click="joinRoom(room.rid)">进入房间</el-button>
             </div>
           </div>
-        </el-card>
-      </div>
-      <!-- 创建房间 -->
-      <el-button type="primary" id="create-room" @click="dialogVisible = true">创建房间</el-button>
-      <!-- 弹窗区 -->
-      <el-dialog title="创建房间" :visible.sync="dialogVisible" width="30%">
-        <p>游戏名称：{{gameInfo.name}}</p>
-        <div class="setPass">
-          <span>房间密码：</span>
-          <el-input placeholder="请输入密码" v-model="roomPass" show-password maxlength="6"></el-input>
         </div>
-        <!-- 关闭区 -->
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="dialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="crtNewRoom()">确 定</el-button>
-        </span>
-      </el-dialog>
-   
+      </el-card>
+    </div>
+    <!-- 创建房间 -->
+    <el-button type="primary" id="create-room" @click="dialogVisible = true">创建房间</el-button>
+    <!-- 弹窗区 -->
+    <el-dialog title="创建房间" :visible.sync="dialogVisible" width="30%">
+      <!-- <p>游戏名称：{{gameInfo.name}}</p> -->
+      <el-form label-width="80px">
+        <!-- 选择游戏类型 -->
+        <el-form-item label="游戏房间">
+          <el-select v-model="newRoom.rtype" placeholder="请选择">
+            <el-option
+              v-for="item in gameList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.type"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <!-- 按钮区 -->
+        <el-form-item class="dialog-footer">
+            <el-button @click="dialogVisible = false">取 消</el-button>
+            <el-button type="primary" @click="crtNewRoom()">确 定</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -43,73 +53,74 @@ export default {
   data() {
     return {
       dialogVisible: false, // 是否打开弹窗
-      gameId: null,
-      gameInfo: {}, // 游戏信息
-      roomPass: null, // 房间密码
+      // gameId: null,
+      gameList:[], // 游戏列表
+      newRoom: {
+        // 创建的新房间信息
+        rid: null,
+        rtype: 3,
+        rpass: null
+      },
+      // roomPass: null, // 房间密码
       roomList: [], // 房间列表
-      realLength:0, // 真实房间长度
+      realLength: 0 // 真实房间长度
     };
   },
-  sockets:{
+  sockets: {
     connect() {
       window.console.log("连接成功");
     },
-    rooms(roomList){
+    rooms(roomList) {
       this.flashRooms(roomList);
     }
   },
   created() {
     // this.getGameId();
-    this.getGameInfo();
-    this.getRooms();
+    this.getGameList(); // 获取游戏列表
+    this.getRooms(); // 获取游戏房间
   },
   methods: {
     // 获取游戏id
-    getGameId() {
-      this.gameId = this.$route.query.id;
-    },
-    // 从 store 中获取游戏信息
-    getGameInfo() {
-      this.gameInfo = this.$store.getters.getGameList[1];
-      window.console.log(this.gameInfo);
+    // getGameId() {
+    //   this.gameId = this.$route.query.id;
+    // },
+    // 从 store 中获取游戏列表
+    getGameList() {
+      this.gameList = this.$store.getters.getGameList;
+      window.console.log(this.gameList);
     },
     // 获取房间列表
     getRooms() {
-      this.$socket.emit('flashroom');
+      this.$socket.emit("flashroom");
       // 改为 socket 获取列表
       // this.roomList = this.$store.getters.getRoomList;
     },
     // 更新房间列表
-    flashRooms(roomList){
-      window.console.log('flash')
+    flashRooms(roomList) {
+      window.console.log("flash");
       this.realLength = roomList.length;
-      this.roomList = roomList.filter(item=>item);
-      window.console.log(roomList)
+      this.roomList = roomList.filter(item => item);
+      window.console.log(roomList);
     },
     // 创建新房间
     crtNewRoom() {
-      const roomID = this.realLength;
-      const newRoom = {
-        roomID,
-        name : this.gameInfo.name,
-        pass : this.roomPass
-      };
+      this.newRoom.rid = this.realLength;
+      window.console.log(this.newRoom)
       // 应该是向服务器发送消息
-      this.$socket.emit("crtRoom", newRoom);
-      this.joinRoom(roomID);
+      this.$socket.emit("crtroom", this.newRoom);
       this.dialogVisible = false;
-      // this.joinRoom(newRoom.id);
+      this.joinRoom(this.newRoom.rid); // 加入房间
     },
     // 加入房间
     joinRoom(index) {
-      this.$socket.emit('joinRoom',{
+      this.$socket.emit("joinRoom", {
         index, // 房间号
-        userid:this.$store.getters.getUserInfo.userid,
-        username:this.$store.getters.getUserInfo.username
+        userid: this.$store.getters.getUserInfo.userid,
+        username: this.$store.getters.getUserInfo.username
       });
       this.$router.push({
         path: "/battle",
-        query: { gid: this.gameId, rid: index }
+        query: {  rid: index }
       });
     }
   }
@@ -126,13 +137,16 @@ export default {
 //   background-color: #ccc;
 // }
 .lobby-container {
-  background-color: #eaedf1;
-  margin: 10px;
+  background-color: rgb(161, 180, 241);
+  height: 100%;
   // height: 800px;
   // margin-left: 180px;
   // padding: 0 20px;
 }
-
+.game-room {
+  margin-top: 10px;
+  padding: 0 20px;
+}
 // 主体区域
 .el-card {
   margin-bottom: 10px;
@@ -165,7 +179,11 @@ export default {
   bottom: 20px;
   right: 70px;
 }
-.el-input {
-  width: 70%;
+.dialog-footer{
+  display: flex;
+  justify-content: flex-end;
 }
+// .el-input {
+//   width: 70%;
+// }
 </style>

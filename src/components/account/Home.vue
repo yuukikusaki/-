@@ -1,5 +1,5 @@
 <template>
-  <div class="account-home">
+  <div class="account-home" style="margin:20px">
     <!-- 用户介绍区 -->
     <el-row style="height:160px" class="home-info">
       <!-- 头像 -->

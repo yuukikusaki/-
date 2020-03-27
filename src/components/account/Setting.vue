@@ -1,5 +1,5 @@
 <template>
-  <div class="account-setting">
+  <div class="account-setting" style="margin:20px">
     <h2>修改头像</h2>
     <!-- 头像区 -->
     <el-upload

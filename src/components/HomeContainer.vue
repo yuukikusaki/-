@@ -201,6 +201,7 @@ export default {
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.14);
   margin: 20px 20px 0;
+  padding: 0;
 }
 
 // 游戏列表区 start
