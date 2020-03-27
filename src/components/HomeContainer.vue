@@ -15,7 +15,7 @@
         <div class="toggle-button" @click="toggleCollapse">|||</div>
         <!-- 侧边栏用户信息区 -->
         <div class="userinfo">
-          <img width="50px" height="50px" src="../assets/head.jpg" />
+          <img width="50px" height="50px" :src="userinfo.avatar" />
           <span style="font-size:18px">{{userinfo.username}}</span>
         </div>
         <!-- 侧边栏菜单区 -->
@@ -57,37 +57,10 @@
       </el-aside>
       <!-- 右侧内容主体区 -->
       <el-main>
-        <router-view :activePath="activePath" @changeActivePath="saveNavState"></router-view>
-        <!-- 游戏卡片区 -->
-        <!-- <div class="card-list">
-            <div class="game-card" v-for="(item,index) in gameList" :key="index">
-              <img :src="item.img" />
-              <div class="game-info">
-                <span>{{item.name}}</span>
-                <el-button
-                  type="danger"
-                  size="small"
-                  @click="$router.push({path:'/lobby',query:{id:item.id}})"
-                >进入游戏</el-button>
-              </div>
-            </div>
-        </div>-->
+        <router-view :activePath="activePath" :sideAvatar="userinfo.avatar" @changeActivePath="saveNavState" @changeAvatar="changeAvatar"></router-view>
       </el-main>
     </el-container>
   </el-container>
-  <!-- 游戏列表区 -->
-  <!-- <aside class="game-list">
-      <el-card class="box-card">
-        <div slot="header" class="clearfix">
-          <span>游戏列表</span>
-        </div>
-        <div v-for="(item,index) in gameList" :key="index++" class="text item">
-          <span>{{index}}</span>
-          <span>{{item.name}}</span>
-          <span>{{item.type}}</span>
-        </div>
-      </el-card>
-  </aside>-->
 </template>
 
 <script>
@@ -147,6 +120,10 @@ export default {
     saveNavState(activePath) {
       window.sessionStorage.setItem("activePath", activePath);
       this.activePath = activePath;
+    },
+    // 改变侧边栏头像
+    changeAvatar(avatar){
+      this.userinfo.avatar = avatar;
     },
 
     getGameList() {

@@ -4,7 +4,7 @@
     <el-row style="height:160px" class="home-info">
       <!-- 头像 -->
       <el-col :span="3">
-        <img src="../../assets/head.jpg" alt class="avatar" />
+        <img :src="userinfo.avatar" alt class="avatar" />
       </el-col>
       <!-- 左边基础信息区 -->
       <el-col class="base-msg" :span="4">
