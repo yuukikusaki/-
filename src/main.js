@@ -35,6 +35,12 @@ Vue.use(new VueSocketIO({
 
 import router from './router'
 
+// 引入时间过滤器
+import moment from 'moment'
+Vue.filter('dateFormat', function (dateStr,pattern = "YYYY-MM-DD HH:mm:ss") {
+  return moment(dateStr).format(pattern);
+});
+
 // Vue.http.options.root = 'http://localhost:3000';
 // Vue.http.options.emulateJSON = true;
 // Vue.http.interceptors.push(function (request, next) {//拦截器
