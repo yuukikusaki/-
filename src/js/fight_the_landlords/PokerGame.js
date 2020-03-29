@@ -42,7 +42,7 @@ class PokerGame {
     // 游戏按钮
     setPlayBtn(nopass) {
         const buttonList = []
-        if(nopass === false){
+        if (nopass === false) {
             this.pass = new PassBtn("不出");
             buttonList.push(this.pass);
         }
@@ -89,7 +89,7 @@ class PokerGame {
                 }
             }
             // 如果比最小的小
-            if(item.point<this.pokerList[this.pokerList.length-1].point){
+            if (item.point < this.pokerList[this.pokerList.length - 1].point) {
                 this.pokerList.push(item);
             }
         });
@@ -100,6 +100,15 @@ class PokerGame {
 
 
     // 渲染按钮 start
+    // 渲染准备按钮
+    renderReadyBtn(my) {
+        if (my==null || my.text == "") {
+            this.ctx.drawImage(this.loadedRes["ready"], this.canvas.width / 2 - 65, this.canvas.height * 0.618, 130, 65);
+        } else {
+            this.ctx.drawImage(this.loadedRes["cancel"], this.canvas.width / 2 - 65, this.canvas.height * 0.618, 130, 65);
+        }
+    }
+
     // 渲染抢地主按钮
     renderLordBtn(buttonList) {
         buttonList.forEach(item => {
@@ -109,7 +118,7 @@ class PokerGame {
     }
 
     // 渲染游戏按钮
-    renderPlayBtn(buttonList){
+    renderPlayBtn(buttonList) {
         buttonList.forEach(item => {
             this.ctx.drawImage(this.loadedRes[item.name],
                 item.x, item.y, item.w, item.h)
@@ -187,32 +196,38 @@ class PokerGame {
     }
 
     // 渲染三方文字
-    renderText(my, left, right) {
+    renderText(my, left, right, sn) {
         this.ctx.font = "36px bold 宋体";
         // 设置颜色
         this.ctx.fillStyle = "#ff0";
-        if (my.text) {
+        if (my == null) return;
+        if (sn === 1) {
+            this.ctx.fillText(left.text, 50, left.textY);
+            this.ctx.fillText(right.text, this.canvas.width-100, right.textY);
+            return
+        }
+        if (my != null && my.text) {
             this.ctx.fillText(my.text, my.textX, my.textY);
         }
-        if (left.text) {
+        if (left != null && left.text) {
             this.ctx.fillText(left.text, left.textX, left.textY);
         }
-        if (right.text) {
+        if (right != null && right.text) {
             this.ctx.fillText(right.text, right.textX, right.textY);
         }
         // this.ctx.fillText(this.text, this.mw, this.canvasH * 2 / 3)
     }
 
     // 渲染桌面上的卡牌
-    renderDeskPoker(my,left,right){
+    renderDeskPoker(my, left, right) {
         this.renderMyDeskPoker(my);
         this.renderLeftDeskPoker(left);
         this.renderRightDeskPoker(right);
     }
 
     // 渲染我桌面上的卡牌
-    renderMyDeskPoker(my){
-        if (my.deskPoker==false) {
+    renderMyDeskPoker(my) {
+        if (my.deskPoker == false) {
             return;
         }
         for (let i = 0; i < my.deskPoker.length; i++) {
@@ -225,8 +240,8 @@ class PokerGame {
     }
 
     // 渲染左边桌面上的卡牌
-    renderLeftDeskPoker(left){
-        if (left.deskPoker==false) {
+    renderLeftDeskPoker(left) {
+        if (left.deskPoker == false) {
             return;
         }
         for (let i = 0; i < left.deskPoker.length; i++) {
@@ -239,21 +254,21 @@ class PokerGame {
     }
 
     // 渲染右边桌面上的卡牌
-    renderRightDeskPoker(right){
-        if (right.deskPoker==false) {
+    renderRightDeskPoker(right) {
+        if (right.deskPoker == false) {
             return;
         }
         for (let i = 0; i < right.deskPoker.length; i++) {
             this.ctx.drawImage(
                 this.loadedRes[right.deskPoker[i].name],
-                this.canvas.width - 300 - 20 * (right.deskPoker.length - 1)+i * 20,
+                this.canvas.width - 300 - 20 * (right.deskPoker.length - 1) + i * 20,
                 right.deskY,
             );
         }
     }
 
     // 渲染卡牌 end
-    
+
 
 }
 

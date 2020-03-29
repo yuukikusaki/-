@@ -3,7 +3,9 @@
     <!-- <div style="width:800px;height:600px;margin:0 auto;"> -->
     <div class="left">
       <div v-if="leftUserInfo" class="users">
+        <!-- 头像 -->
         <img :src="leftUserInfo.avatar" alt />
+        <!-- 信息 -->
         <div class="userinfo">
           <span>{{leftUserInfo.username}}</span>
         </div>
@@ -18,7 +20,6 @@
         </div>
       </div>
     </div>
-    <!-- </div> -->
   </div>
 </template>
 
@@ -44,7 +45,6 @@ export default {
   sockets: {
     // 玩家加入游戏
     playerjoin(playerlist) {
-      window.console.log(playerlist);
       this.setPlayers(playerlist);
       this.sceneManager.setPlayers(this.my, this.leftPlayer, this.rightPlayer);
     },
@@ -54,12 +54,17 @@ export default {
       this.setPlayers(playerlist);
       this.sceneManager.setPlayers(this.my, this.leftPlayer, this.rightPlayer);
     },
+    // 准备
+    ready(readyID){
+      window.console.log(readyID);
+      this.sceneManager.update(readyID);
+    },
     // 发牌
     start(req) {
       // 创建三个玩家类
-      this.sceneManager.update(req);
+      // this.sceneManager.update();
       this.sceneManager.sceneNumber = 2;
-      this.sceneManager.enter(req.data.sort((a, b) => b.point - a.point));
+      this.sceneManager.enter(req,req.data.sort((a, b) => b.point - a.point));
     },
     // 更新场景管理器（原来的draw）
     update(req) {

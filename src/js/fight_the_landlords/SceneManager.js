@@ -20,8 +20,8 @@ class SceneManager {
         this.buttonList = []; // 按钮列表
         this.press = true; // 使用按钮
         this.pokerTypeRank = {
-            type:null,
-            rank:0
+            type: null,
+            rank: 0
         }; // 卡牌大小
         this.nopass = false; // 是否可以选择不出
         // 玩家类
@@ -38,9 +38,11 @@ class SceneManager {
         const { preUserID, curUserID, data } = req;
         switch (this.sceneNumber) {
             case 1:
-                if (this.my.userid != curUserID) {
-                    this.press = false;
-                }
+                this.players.map(item => {
+                    if (item.userid === req) {
+                        item.text = item.text === "" ? "准备" : "";
+                    }
+                });
                 break;
             case 2: // 抢地主
                 this.players.map(item => {
@@ -102,9 +104,14 @@ class SceneManager {
         switch (this.sceneNumber) {
             case 1: // 等待开始
                 // 1. 创建 pokergame
-                this.pokerGame = new PokerGame(this.canvas, this.ctx, this.loadedRes, this);
+                if (this.pokerGame == null) {
+                    this.pokerGame = new PokerGame(this.canvas, this.ctx, this.loadedRes, this);
+                }
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
                 this.ctx.drawImage(this.loadedRes["bgImage"], 0, 0, this.canvas.width, this.canvas.height);
-                this.ctx.drawImage(this.loadedRes["startBtn"], this.canvas.width / 2 - 65, this.canvas.height * 0.618, 130, 65);
+                this.pokerGame.renderReadyBtn(this.my);
+                // this.ctx.drawImage(this.loadedRes["ready"], this.canvas.width / 2 - 65, this.canvas.height * 0.618, 130, 65);
+                this.pokerGame.renderText(this.my, this.leftPlayer, this.rightPlayer, 1);
                 break;
             case 2: // 抢地主
                 this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -146,7 +153,12 @@ class SceneManager {
                 break;
             case 2:
                 // 发牌动画
-                this.pokerGame.pokerList = req; // 传入牌组
+                // window.console.log("这里", req)
+                this.players.map(item => { item.text = ""; });
+                if (this.my.userid != req.curUserID) {
+                    this.press = false;
+                }
+                this.pokerGame.pokerList = req.data; // 传入牌组
                 this.pokerGame.createPokerClass(); // 创建卡牌类
                 this.pokerGame.dealAmine(1, this);
                 break;
@@ -240,7 +252,7 @@ class SceneManager {
         this.leftPlayer = leftPlayer;
         this.rightPlayer = rightPlayer;
         this.players = [this.my, this.leftPlayer, this.rightPlayer];
-        this.players.forEach(item=>{
+        this.players.forEach(item => {
             item.reset();
         })
     }
