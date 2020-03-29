@@ -91,15 +91,18 @@ export default {
   },
   created() {
     this.getUserInfo(); // 获取用户信息
-    this.sendRoom();
+    // this.sendRoom();
   },
   mounted() {
     this.setCanvas();
     this.setPlayerClass(); // 创建玩家类
+    window.addEventListener('beforeunload',e=>this.leaveRoom(e)); // 刷新或销毁的情况下
+  },
+  beforeDestroy(){
+    this.leaveRoom(); // 退出时离开房间
   },
   destroyed() {
-    // 退出时，无论怎么退出，肯定是销毁这个页面
-    this.leaveRoom();
+    window.removeEventListener('beforeunload',this.leaveRoom);
   },
   methods: {
     // 获取用户信息
@@ -182,13 +185,17 @@ export default {
       this.sceneManager.enter();
     },
     // 离开房间 明天要做的部分
-    leaveRoom() {
+    leaveRoom(e) {
       this.$socket.emit("leave", this.userinfo);
+      if(e){
+        e.returnValue = "确定要关闭页面吗"
+      }
+      return;
     },
 
-    sendRoom() {
-      this.room = this.$route.query;
-    }
+    // sendRoom() {
+    //   this.room = this.$route.query;
+    // }
   }
 };
 </script>
