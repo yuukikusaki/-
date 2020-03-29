@@ -5,7 +5,7 @@ Vue.use(Router)
 
 import HomeContainer from './components/HomeContainer.vue'
 import GameLobby from './components/GameLobby.vue'
-import FtlRoom from './components/FtlRoom.vue'
+import FtlRoom from './components/battle/FtlRoom.vue'
 import Login from './components/Login.vue'
 import Users from './components/user/Users.vue'
 import Home from './components/account/Home.vue'

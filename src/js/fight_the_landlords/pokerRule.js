@@ -2,23 +2,23 @@
 // 牌点数 3-大王 => 1-15
 
 // 是否可以出牌
-function candeal(dealList,pokerTypeRank) {
-    const {type,rank} = cardType(dealList); // 自己的牌
+function candeal(dealList, pokerTypeRank) {
+    const { type, rank } = cardType(dealList); // 自己的牌
     // 先判断是不是 err
-    if(type == 'err'){ 
-        return false; 
+    if (type == 'err') {
+        return false;
     }
-    if(pokerTypeRank != true){
-        return {type,rank};
+    if (!pokerTypeRank.rank) {
+        return { type, rank };
     }
     // 别人的牌
     const otype = pokerTypeRank.type;
     const orank = pokerTypeRank.rank;
-    if(rank>50&&rank>orank){ // 我是炸弹（不用管别人是不是炸弹）
-        return {type,rank};
-    }else if(type==otype&&rank>orank){ // 普通牌型，首先相等，其次大小
-        return {type,rank};
-    }else{
+    if (rank > 50 && rank > orank) { // 我是炸弹（不用管别人是不是炸弹）
+        return { type, rank };
+    } else if (type == otype && rank > orank) { // 普通牌型，首先相等，其次大小
+        return { type, rank };
+    } else {
         return false;
     }
 }
@@ -28,7 +28,7 @@ function candeal(dealList,pokerTypeRank) {
 // 判断是不是连续
 function isseries(arr) {
     // 有大小王或者 2 就直接报错
-    if (arr.some(item =>  item >= 13 )) {
+    if (arr.some(item => item >= 13)) {
         return false;
     }
     if (arr[0] - arr[arr.length - 1] == arr.length - 1) {
@@ -160,8 +160,8 @@ function cardType(card) {
             type = 'err';
         }
     }
-    return {type,rank};
+    return { type, rank };
 }
 // 牌型判断 end
 
-export  {candeal};
+export { candeal };

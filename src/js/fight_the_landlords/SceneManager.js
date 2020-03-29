@@ -19,7 +19,10 @@ class SceneManager {
         this.pokerGame = null;
         this.buttonList = []; // 按钮列表
         this.press = true; // 使用按钮
-        this.pokerTypeRank = null; // 卡牌大小
+        this.pokerTypeRank = {
+            type:null,
+            rank:0
+        }; // 卡牌大小
         this.nopass = false; // 是否可以选择不出
         // 玩家类
         this.my = null;

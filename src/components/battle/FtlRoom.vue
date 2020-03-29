@@ -23,8 +23,8 @@
 </template>
 
 <script>
-import SceneManager from "../js/fight_the_landlords/SceneManager";
-import { My, LeftPlayer, RightPlayer } from "../js/fight_the_landlords/Player";
+import SceneManager from "../../js/fight_the_landlords/SceneManager";
+import { My, LeftPlayer, RightPlayer } from "../../js/fight_the_landlords/Player";
 
 export default {
   data() {

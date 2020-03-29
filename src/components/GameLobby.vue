@@ -1,10 +1,9 @@
 <template>
   <div class="lobby-container">
-    <!-- <aside class="info-container">个人信息区</aside> -->
     <h2 style="margin:0">游戏大厅</h2>
     <!-- 游戏房间列表 -->
     <div class="game-room">
-      <el-card :body-style="{ padding: '0px' }" v-for=" room in roomList" :key="room.roomID">
+      <el-card :body-style="{ padding: '0px' }" v-for=" room in roomList" :key="room.rid">
         <div class="game-info">
           <div class="game-img">
             <img :src="gameList[room.gid].img" />
@@ -15,7 +14,7 @@
               </div>
             
             <div class="bottom clearfix">
-              <el-button type="primary" round @click="joinRoom(room.rid)">进入房间</el-button>
+              <el-button type="primary" round @click="joinRoom(room.rid,gameList[room.gid].path)">进入房间</el-button>
             </div>
           </div>
         </div>
@@ -29,19 +28,19 @@
       <el-form label-width="80px">
         <!-- 选择游戏类型 -->
         <el-form-item label="游戏房间">
-          <el-select v-model="newRoom.rtype" placeholder="请选择">
+          <el-select v-model="newRoom.gid" placeholder="请选择">
             <el-option
               v-for="item in gameList"
               :key="item.id"
               :label="item.name"
-              :value="item.type"
+              :value="item.id"
             ></el-option>
           </el-select>
         </el-form-item>
         <!-- 按钮区 -->
         <el-form-item class="dialog-footer">
             <el-button @click="dialogVisible = false">取 消</el-button>
-            <el-button type="primary" @click="crtNewRoom()">确 定</el-button>
+            <el-button type="primary" @click="crtNewRoom(newRoom.gid)">确 定</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -58,7 +57,7 @@ export default {
       newRoom: {
         // 创建的新房间信息
         rid: null,
-        rtype: 3,
+        gid: 1,
         rpass: null
       },
       // roomPass: null, // 房间密码
@@ -103,16 +102,16 @@ export default {
       window.console.log(roomList);
     },
     // 创建新房间
-    crtNewRoom() {
+    crtNewRoom(gid) {
       this.newRoom.rid = this.realLength;
       window.console.log(this.newRoom)
       // 应该是向服务器发送消息
       this.$socket.emit("crtroom", this.newRoom);
       this.dialogVisible = false;
-      this.joinRoom(this.newRoom.rid); // 加入房间
+      this.joinRoom(this.newRoom.rid,this.gameList[gid].path); // 加入房间
     },
     // 加入房间
-    joinRoom(index) {
+    joinRoom(index,path) {
       this.$socket.emit("joinRoom", {
         index, // 房间号
         userid: this.$store.getters.getUserInfo.userid,
@@ -120,7 +119,7 @@ export default {
         avatar:this.$store.getters.getUserInfo.avatar
       });
       this.$router.push({
-        path: "/ftl",
+        path,
         query: {  rid: index }
       });
     }
