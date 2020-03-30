@@ -3,6 +3,7 @@ node_modules
 /dist
 package-lock.json
 public/fight_the_landlords
+.VSCodeCounter
 
 # local env files
 .env.local
