@@ -30,15 +30,36 @@ export default class MorraGame{
 
     // 选项图片
     renderSelects(){
-        // let startY = (this.canvas.height-3*this.imgH-2*50)/2;
-        // this.ctx.drawImage(this.loadedRes["shears"],50,startY,this.imgW,this.imgH);
-        // startY += this.imgH+50;
-        // this.ctx.drawImage(this.loadedRes["stone"],50,startY,this.imgW,this.imgH);
-        // startY += this.imgH+50;
-        // this.ctx.drawImage(this.loadedRes["hand"],50,startY,this.imgW,this.imgH);
         this.selects.map(item=>{
             window.console.log(item)
             this.ctx.drawImage(this.loadedRes[item.name],item.x,item.y,item.w,item.h);
         });
+    }
+
+    // 展示选择
+    renderChoose(my,oth){
+        if(my!==""){
+            this.ctx.drawImage(this.loadedRes[my],this.canvas.width/2-2*this.imgW,
+                (this.canvas.height-this.imgH)/2,this.imgW,this.imgH);    
+        }
+        if(oth!==""){
+            this.ctx.drawImage(this.loadedRes[oth],this.canvas.width/2+this.imgW,
+                (this.canvas.height-this.imgH)/2,this.imgW,this.imgH);    
+        }
+    }
+
+    // 渲染结果
+    renderText(text){
+        this.ctx.font = "36px bold 宋体";
+        // 设置颜色
+        this.ctx.fillStyle = "#ff0";
+        this.ctx.fillText(text, this.canvas.width/2-18, 50);
+    }
+
+    // 渲染重新开始按钮
+    renderRestart(){
+        this.ctx.drawImage(this.loadedRes["restart"],
+        this.canvas.width/2-this.imgW/2,this.canvas.height/2-this.imgH/2,
+        this.imgW,this.imgH);
     }
 }

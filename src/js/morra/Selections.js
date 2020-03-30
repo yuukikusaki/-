@@ -21,13 +21,13 @@ class Selections{
     }
 
     // 获取位置
-    getPositionX() {
-        let positon = {
-            x1: this.x,
-            x2: this.x + this.w,
-        };
-        return positon;
-    }
+    // getPositionX() {
+    //     let positon = {
+    //         x1: this.x,
+    //         x2: this.x + this.w,
+    //     };
+    //     return positon;
+    // }
 
     onClick(socket){
         socket.emit("select",this.name);

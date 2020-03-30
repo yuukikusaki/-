@@ -35,8 +35,8 @@ export default {
       myUserInfo: {}, // 左边边玩家，我自己
       rightUserInfo: {}, // 右边，对手
       isready: false, // 是否准备
-      rightReady:"未准备", // 右边是否准备
-      isstart:false, // 是否开始 
+      rightReady: "未准备", // 右边是否准备
+      isstart: false // 是否开始
     };
   },
   created() {
@@ -78,6 +78,12 @@ export default {
     onready() {
       this.$socket.emit("onready");
     },
+    // 重置
+    reset() {
+      this.isready = false;
+      this.rightReady = "未准备";
+      this.isstart = false;
+    },
     // 离开房间
     leaveRoom(e) {
       this.$socket.emit("leave", this.userinfo);
@@ -95,21 +101,54 @@ export default {
       this.setPlayers(playerlist);
       //   this.sceneManager.setPlayers();
     },
+    // 离开房间
+    exit(){
+      this.reset();
+      this.rightUserInfo = {};
+      this.sceneManager.init();
+      this.sceneManager.render();
+    },
     // 准备
     ready(readyID) {
       window.console.log(readyID);
       if (readyID === this.myUserInfo.userid) {
         this.isready = !this.isready;
-      }else if(readyID === this.rightUserInfo.userid){
-        this.rightReady=this.rightReady === "准备"?"未准备":"准备"
+      } else if (readyID === this.rightUserInfo.userid) {
+        this.rightReady = this.rightReady === "准备" ? "未准备" : "准备";
       }
     },
     // 开始游戏
-    start(){
+    start() {
       window.console.log("start");
       this.isstart = true;
       this.sceneManager.sceneNumber = 2;
       this.sceneManager.enter();
+    },
+    // 玩家选择
+    choose(req) {
+      if (this.myUserInfo.userid === req) {
+        this.sceneManager.update("my");
+      } else if (this.rightUserInfo.userid === req) {
+        this.sceneManager.update("oth");
+      } else {
+        return this.$message.error("连接出错!!!");
+      }
+    },
+    // 结束
+    end(req) {
+      this.sceneManager.sceneNumber = 3;
+      req.data.map(item => {
+        if (item.userid === this.rightUserInfo.userid) {
+          if (item.userid === req.result) {
+            this.sceneManager.enter({ name: item.choose, res: "失败" });
+          }else if(req.result===0){
+            this.sceneManager.enter({ name: item.choose, res: "平局" });
+          }else{
+            this.sceneManager.enter({ name: item.choose, res: "胜利" });
+          }
+        }
+      });
+      this.reset();
     }
   }
 };

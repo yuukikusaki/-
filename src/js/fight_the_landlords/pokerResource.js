@@ -59,6 +59,7 @@ const PokerResource = {
         { name: "方块2", point: 13, url: "/fight_the_landlords/54.jpg" },
         { name: "bgImage", url: "/fight_the_landlords/bg1.png" },
         { name: "ready", url: "/fight_the_landlords/ready.png" },
+        { name:"restart",url:"/fight_the_landlords/restart.png"},
         { name:"cancel",url:"/fight_the_landlords/cancel.png"},
         { name: "不抢", data: 0, url: "/fight_the_landlords/buqiang.png" },
         { name: "抢地主",data:1, url:"/fight_the_landlords/qiangdizhu.png"},

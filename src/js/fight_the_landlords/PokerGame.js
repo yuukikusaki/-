@@ -269,6 +269,20 @@ class PokerGame {
 
     // 渲染卡牌 end
 
+    // 渲染结果页
+    // renderResult(text){
+    //     this.ctx.font = "36px bold 宋体";
+    //     // 设置颜色
+    //     this.ctx.fillStyle = "#ff0";
+    //     this.ctx.fillText(text, this.canvas.width/2-18, 50);
+    // }
+
+    renderRestart(){
+        this.ctx.drawImage(this.loadedRes["restart"],
+        this.canvas.width/2-this.btnW/2,this.canvas.height/3,
+        this.btnW,this.btnW);
+    }
+
 
 }
 

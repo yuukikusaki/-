@@ -13,23 +13,42 @@ class SceneManager {
     constructor(canvas, ctx, socket) {
         this.canvas = canvas,
             this.ctx = ctx;
-        this.sceneNumber = 1;
+        // this.sceneNumber = 1;
         this.loadedRes = null;
         this.socket = socket;
-        this.pokerGame = null;
+        // this.pokerGame = null;
+        // this.buttonList = []; // 按钮列表
+        // this.press = true; // 使用按钮
+        // this.pokerTypeRank = {
+        //     type: null,
+        //     rank: 0
+        // }; // 卡牌大小
+        // this.nopass = false; // 是否可以选择不出
+        // // 玩家类
+        this.my = null;
+        this.leftPlayer = null;
+        this.rightPlayer = null;
+        // this.result = "";
+        this.players = [];
+        this.init();
+        this.bindEvent(); // 添加监听
+    }
+
+    // 初始化
+    init() {
+        this.sceneNumber = 1;
         this.buttonList = []; // 按钮列表
+        this.pokerGame = null;
         this.press = true; // 使用按钮
         this.pokerTypeRank = {
             type: null,
             rank: 0
         }; // 卡牌大小
         this.nopass = false; // 是否可以选择不出
-        // 玩家类
-        this.my = null;
-        this.leftPlayer = null;
-        this.rightPlayer = null;
-        this.players = [];
-        this.bindEvent(); // 添加监听
+        this.players.map(item=>item.reset());
+        // this.result = "";
+        // this.players = [];
+        
     }
 
     // 场景内动作
@@ -78,7 +97,7 @@ class SceneManager {
 
                     }
                     // 清空轮到的人
-                    if (item.userid == curUserID) {
+                    if (item.userid == curUserID && data.typeRank !== "win") {
                         item.text = '';
                         item.deskPoker = [];
                     }
@@ -138,7 +157,11 @@ class SceneManager {
                 // 渲染三方桌面上面的牌
                 this.pokerGame.renderDeskPoker(this.my, this.leftPlayer, this.rightPlayer);
                 break;
-
+            case 4: // 结束
+                // 只加结果不清屏
+                // this.pokerGame.renderResult(this.result);
+                this.pokerGame.renderRestart();
+                break;
             default:
                 break;
         }
@@ -183,6 +206,10 @@ class SceneManager {
                 } else {
                     this.press = false;
                 }
+                this.render();
+                break;
+            case 4:
+                // this.result = req;
                 this.render();
                 break;
             default:
@@ -237,6 +264,13 @@ class SceneManager {
                             this.render()
                         }
                     });
+                    break;
+                case 4:
+                    if (mousex >= this.canvas.width / 2 - this.pokerGame.btnW / 2 && mousex <= this.canvas.width / 2 + this.pokerGame.btnW / 2
+                        && mousey >= this.canvas.height / 3 && mousey <= this.canvas.height / 3 + this.pokerGame.btnW) {
+                        this.init();
+                        this.render()
+                    }
                     break;
                 default:
                     break;

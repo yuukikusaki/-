@@ -75,8 +75,12 @@ export default {
         this.sceneManager.update(req);
         window.console.log(req)
         if (req.data.typeRank == "win") {
-          alert(req.winner);
-          this.setCanvas();
+          window.console.log(this.sceneManager.sceneNumber)
+          this.sceneManager.sceneNumber = 4;
+          this.$message.success(req.winner);
+          this.sceneManager.enter(req.winner);
+        //   alert(req.winner);
+        //   this.setCanvas();
           this.sceneManager.setPlayers(
             this.my,
             this.leftPlayer,
@@ -96,7 +100,6 @@ export default {
   },
   created() {
     this.getUserInfo(); // 获取用户信息
-    // this.sendRoom();
   },
   mounted() {
     this.setCanvas();
@@ -197,10 +200,6 @@ export default {
       }
       return;
     },
-
-    // sendRoom() {
-    //   this.room = this.$route.query;
-    // }
   }
 };
 </script>
