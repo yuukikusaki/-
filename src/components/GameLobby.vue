@@ -57,7 +57,7 @@ export default {
       newRoom: {
         // 创建的新房间信息
         rid: null,
-        gid: 1,
+        gid: 0,
         rpass: null
       },
       // roomPass: null, // 房间密码

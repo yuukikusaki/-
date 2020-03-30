@@ -8,6 +8,8 @@
           <span>{{myUserInfo.username}}</span>
         </div>
       </div>
+      <el-button v-if="isready" type="danger" @click="onready()" :disabled="isstart">取消</el-button>
+      <el-button v-else type="success" @click="onready()">准备</el-button>
     </div>
     <!-- 中间 canvas -->
     <canvas id="mycanvas" width="800" height="600"></canvas>
@@ -19,6 +21,7 @@
           <span>{{rightUserInfo.username}}</span>
         </div>
       </div>
+      <span>{{rightReady}}</span>
     </div>
   </div>
 </template>
@@ -30,7 +33,10 @@ export default {
   data() {
     return {
       myUserInfo: {}, // 左边边玩家，我自己
-      rightUserInfo: {} // 右边，对手
+      rightUserInfo: {}, // 右边，对手
+      isready: false, // 是否准备
+      rightReady:"未准备", // 右边是否准备
+      isstart:false, // 是否开始 
     };
   },
   created() {
@@ -56,6 +62,7 @@ export default {
       this.canvas = document.querySelector("canvas");
       this.ctx = this.canvas.getContext("2d");
       this.sceneManager = new SceneManager(this.canvas, this.ctx, this.$socket);
+      this.sceneManager.enter();
     },
     // 初始化玩家信息
     setPlayers(playerlist) {
@@ -66,6 +73,10 @@ export default {
           this.rightUserInfo = item;
         }
       });
+    },
+    // 准备按钮
+    onready() {
+      this.$socket.emit("onready");
     },
     // 离开房间
     leaveRoom(e) {
@@ -83,6 +94,22 @@ export default {
       window.console.log(playerlist);
       this.setPlayers(playerlist);
       //   this.sceneManager.setPlayers();
+    },
+    // 准备
+    ready(readyID) {
+      window.console.log(readyID);
+      if (readyID === this.myUserInfo.userid) {
+        this.isready = !this.isready;
+      }else if(readyID === this.rightUserInfo.userid){
+        this.rightReady=this.rightReady === "准备"?"未准备":"准备"
+      }
+    },
+    // 开始游戏
+    start(){
+      window.console.log("start");
+      this.isstart = true;
+      this.sceneManager.sceneNumber = 2;
+      this.sceneManager.enter();
     }
   }
 };

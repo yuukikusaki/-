@@ -10,7 +10,7 @@ class Button {
         this.h = null;
     }
 
-    // 设置图片位置
+    // 设置位置
     setPosition(positon) {
         this.x = positon[0];
         this.y = positon[1];
@@ -18,7 +18,7 @@ class Button {
         this.h = positon[3];
     }
 
-    // 获取图片位置
+    // 获取位置
     getPositionX() {
         let positon = {
             x1: this.x,
