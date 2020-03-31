@@ -1,44 +1,62 @@
 <template>
   <div class="account-home" style="margin:20px">
     <!-- 用户介绍区 -->
-    <el-row style="height:160px" class="home-info">
-      <!-- 头像 -->
-      <el-col :span="3">
-        <img :src="userinfo.avatar" alt class="avatar" />
-      </el-col>
-      <!-- 左边基础信息区 -->
-      <el-col class="base-msg" :span="4">
-        <!-- 顶部信息 -->
-        <div class="top-msg">
-          <span class="name-msg" :class="{admin:isAdmin}">{{userinfo.username}}</span>
-          <span class="role-admin-msg" v-if="isAdmin">{{userinfo.role_name}}</span>
-          <span class="role-msg" v-else>{{userinfo.role_name}}</span>
-        </div>
-        <!-- 底部 -->
-        <div class="bottom-msg">
-          <div class="item-uid">
-            <span style="background-color:rgba(41, 226, 226, 0.72);padding:2px 4px;">UID</span>
-            <span style="margin-left:8px">{{userinfo.userid}}</span>
+    <div>
+      <h1>基本信息</h1>
+      <el-row style="height:160px" class="home-info">
+        <!-- 头像 -->
+        <el-col :span="3">
+          <img :src="userinfo.avatar" alt class="avatar" />
+        </el-col>
+        <!-- 左边基础信息区 -->
+        <el-col class="base-msg" :span="4">
+          <!-- 顶部信息 -->
+          <div class="top-msg">
+            <span class="name-msg" :class="{admin:isAdmin}">{{userinfo.username}}</span>
+            <span class="role-admin-msg" v-if="isAdmin">{{userinfo.role_name}}</span>
+            <span class="role-msg" v-else>{{userinfo.role_name}}</span>
           </div>
-        </div>
-      </el-col>
-      <!-- 右边经验条 -->
-      <el-col class="level-msg" :span="13">
-        <el-progress :text-inside="true" :stroke-width="26" :percentage="70" status="warning"></el-progress>
-        <span>lv1</span>
-      </el-col>
-      <!-- 跳转战绩和修改信息 -->
-      <el-col class="jump" :span="4">
-        <el-button type="primary" @click="jump('/account/record')">查看战绩</el-button>
-        <el-button type="info" @click="jump('/account/setting')">修改资料</el-button>
-      </el-col>
-    </el-row>
+          <!-- 底部 -->
+          <div class="bottom-msg">
+            <div class="item-uid">
+              <span style="background-color:rgba(41, 226, 226, 0.72);padding:2px 4px;">UID</span>
+              <span style="margin-left:8px">{{userinfo.userid}}</span>
+            </div>
+          </div>
+        </el-col>
+        <!-- 右边经验条 -->
+        <el-col class="level-msg" :span="13">
+          <el-progress :text-inside="true" :stroke-width="26" :percentage="70" status="warning"></el-progress>
+          <span>lv1</span>
+        </el-col>
+        <!-- 跳转战绩和修改信息 -->
+        <el-col class="jump" :span="4">
+          <el-button type="primary" @click="jump('/account/record')">查看战绩</el-button>
+          <el-button type="info" @click="jump('/account/setting')">修改资料</el-button>
+        </el-col>
+      </el-row>
+    </div>
+
     <!-- 游玩信息区 -->
     <div style="height:300px" class="game-info">
-      <h1>这里放个人游戏情报</h1>
-      <h1>等战绩做好了再加</h1>
-      <h1>经验条那种也是</h1>
+      <h1>游戏记录</h1>
+      <el-table
+      :data="records"
+        border
+        stripe
+      >
+        <el-table-column type="index"></el-table-column>
+        <el-table-column label="游戏名" prop="name"></el-table-column>
+        <el-table-column label="类型" prop="type"></el-table-column>
+        <el-table-column label="对局次数" prop="times"></el-table-column>
+        <el-table-column label="胜利次数" prop="win"></el-table-column>
+        <el-table-column label="胜率" prop="rate"></el-table-column>
+        <!-- <el-table-column label="角色" prop="role_name"></el-table-column> -->
+      </el-table>
     </div>
+    <h1>这里放个人游戏情报</h1>
+    <h1>等战绩做好了再加</h1>
+    <h1>经验条那种也是</h1>
   </div>
 </template>
 
@@ -48,11 +66,13 @@ export default {
   data() {
     return {
       userinfo: {}, // 用户信息
-      isAdmin: false //  是否是管理员
+      isAdmin: false, //  是否是管理员
+      records:[], // 游戏记录
     };
   },
   mounted() {
     this.getUserInfo(); // 获取用户信息
+    this.getRecords(); // 获取游戏记录
   },
   methods: {
     getUserInfo() {
@@ -66,6 +86,22 @@ export default {
     jump(path) {
       this.$router.push(path);
       this.$emit("changeActivePath", path);
+    },
+    // 获取游戏记录
+    async getRecords(){
+      const { data: res } = await this.$http.get(
+        `user/records?userid=${this.userinfo.userid}`
+      );
+      if (res.status !== 0) return this.$message.error(res.message);
+      this.records = res.data;
+      const gamelist = this.$store.getters.getGameList;
+      this.records.map((item,index)=>{
+        item.name = gamelist[index].name;
+        item.type = gamelist[index].type;
+        item.rate = (item.win/item.times).toFixed(2);
+      });
+        window.console.log(this.records);
+
     }
   }
 };
