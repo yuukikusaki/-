@@ -45,10 +45,10 @@ class SceneManager {
             rank: 0
         }; // 卡牌大小
         this.nopass = false; // 是否可以选择不出
-        this.players.map(item=>item.reset());
+        this.players.map(item => item.reset());
         // this.result = "";
         // this.players = [];
-        
+
     }
 
     // 场景内动作
@@ -226,6 +226,9 @@ class SceneManager {
                 case 1: // 准备开始按钮
                     if (mousex > this.canvas.width / 2 - 65 && mousex < this.canvas.width / 2 + 65 &&
                         mousey > this.canvas.height * 0.618 && mousey < this.canvas.height * 0.618 + 65) {
+                        if (this.leftPlayer.userid === null || this.rightPlayer.userid === null) {
+                            return;
+                        }
                         this.socket.emit('onready', this.my.userid);
                     }
                     break;

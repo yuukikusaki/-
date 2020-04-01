@@ -76,6 +76,10 @@ export default {
     },
     // 准备按钮
     onready() {
+      if(!this.rightUserInfo.userid){
+        return;
+      }
+      this.sceneManager.init();
       this.$socket.emit("onready");
     },
     // 重置
@@ -101,7 +105,7 @@ export default {
       this.setPlayers(playerlist);
       //   this.sceneManager.setPlayers();
     },
-    // 离开房间
+    // 对手离开房间
     exit(){
       this.reset();
       this.rightUserInfo = {};
