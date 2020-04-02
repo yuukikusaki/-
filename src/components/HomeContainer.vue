@@ -57,7 +57,12 @@
       </el-aside>
       <!-- 右侧内容主体区 -->
       <el-main>
-        <router-view :activePath="activePath" :sideAvatar="userinfo.avatar" @changeActivePath="saveNavState" @changeAvatar="changeAvatar"></router-view>
+        <router-view
+          :activePath="activePath"
+          :sideAvatar="userinfo.avatar"
+          @changeActivePath="saveNavState"
+          @changeAvatar="changeAvatar"
+        ></router-view>
       </el-main>
     </el-container>
   </el-container>
@@ -82,7 +87,6 @@ export default {
   created() {
     // this.getGameList();
     this.getUserInfo();
-    this.getMenuList();
     this.activePath = window.sessionStorage.getItem("activePath");
   },
   methods: {
@@ -100,11 +104,15 @@ export default {
     async getUserInfo() {
       await this.$store.dispatch("getUserInfo");
       this.userinfo = this.$store.getters.getUserInfo;
+      this.getMenuList();
     },
     // 获取菜单
     async getMenuList() {
       // 判断 store 里面有没有
-      const { data: res } = await this.$http.get("user/menus");
+      window.console.log("userinfo", this.userinfo);
+      const { data: res } = await this.$http.get(
+        `user/menus?userid=${this.userinfo.userid}`
+      );
       window.console.log(res);
       if (res.meta.status !== 0) {
         return this.$message.error("获取用户菜单失败");
@@ -122,7 +130,7 @@ export default {
       this.activePath = activePath;
     },
     // 改变侧边栏头像
-    changeAvatar(avatar){
+    changeAvatar(avatar) {
       this.userinfo.avatar = avatar;
     },
 
