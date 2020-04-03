@@ -36,9 +36,10 @@
         </el-col>
       </el-row>
     </div>
+ <el-divider></el-divider>
 
     <!-- 游玩信息区 -->
-    <div style="height:300px" class="game-info">
+    <div class="game-info">
       <h1>游戏记录</h1>
       <el-table
       :data="records"
@@ -54,9 +55,11 @@
         <!-- <el-table-column label="角色" prop="role_name"></el-table-column> -->
       </el-table>
     </div>
-    <h1>这里放个人游戏情报</h1>
-    <h1>等战绩做好了再加</h1>
-    <h1>经验条那种也是</h1>
+ <el-divider></el-divider>
+    <!-- 退出登录 -->
+    <div>
+      <el-button type="danger" @click="logout">退出登录</el-button>
+    </div>
   </div>
 </template>
 
@@ -81,6 +84,11 @@ export default {
         this.isAdmin = true;
       }
       window.console.log(this.userinfo);
+    },
+    // 退出登录
+    logout() {
+      this.$cookies.remove("token");
+      this.$router.push("login");
     },
     // 跳转
     jump(path) {
@@ -112,7 +120,6 @@ export default {
 .home-info {
   display: flex;
   align-items: center;
-  border-bottom: 1px solid #e5e9ef;
   margin-bottom: 30px;
   padding-bottom: 10px;
   // 头像
@@ -189,5 +196,9 @@ export default {
       margin-left: 0;
     }
   }
+}
+.game-info{
+  margin-bottom: 30px;
+  padding-bottom: 10px;
 }
 </style>

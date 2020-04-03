@@ -52,8 +52,7 @@
             </el-menu-item>
           </el-submenu>
         </el-menu>
-        <!-- 退出登录 -->
-        <el-button type="danger" @click="logout">退出登录</el-button>
+        
       </el-aside>
       <!-- 右侧内容主体区 -->
       <el-main>
@@ -85,7 +84,6 @@ export default {
     };
   },
   created() {
-    // this.getGameList();
     this.getUserInfo();
     this.activePath = window.sessionStorage.getItem("activePath");
   },
@@ -94,11 +92,6 @@ export default {
     back() {
       this.$router.push("/lobby");
       this.activePath = "";
-    },
-    // 退出登录
-    logout() {
-      this.$cookies.remove("token");
-      this.$router.push("login");
     },
     // 获取用户信息并存入 store
     async getUserInfo() {
@@ -118,7 +111,6 @@ export default {
         return this.$message.error("获取用户菜单失败");
       }
       this.menulist = res.data; // 需要存入 store
-      window.console.log(this.menulist);
     },
     // 菜单折叠与展开
     toggleCollapse() {
@@ -133,13 +125,6 @@ export default {
     changeAvatar(avatar) {
       this.userinfo.avatar = avatar;
     },
-
-    getGameList() {
-      this.gameList = this.$store.getters.getGameList;
-    },
-    test() {
-      this.$http.get("users/test");
-    }
   }
 };
 </script>

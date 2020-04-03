@@ -5,8 +5,8 @@
       <h2>石头剪刀布战绩</h2>
       <el-table
         :data="morraRecordList.slice((morraPage.currentPage-1)*morraPage.pageSize,morraPage.currentPage*morraPage.pageSize)"
+        :row-class-name="tableRowClassName"
         border
-        stripe
       >
         <el-table-column type="index" :index="morraIndex"></el-table-column>
         <el-table-column label="日期">
@@ -31,7 +31,7 @@
       <el-table
         :data="ftlRecordList.slice((ftlPage.currentPage-1)*ftlPage.pageSize,ftlPage.currentPage*ftlPage.pageSize)"
         border
-        stripe
+        :row-class-name="tableRowClassName"
       >
         <el-table-column type="index" :index="ftlIndex"></el-table-column>
         <el-table-column label="日期">
@@ -116,14 +116,27 @@ export default {
       index =
         index + 1 + (this.ftlPage.currentPage - 1) * this.ftlPage.pageSize;
       return index;
+    },
+    tableRowClassName({ row }) {
+      if (row.result === "胜利") {
+        return "success-row";
+      } else if (row.result === "失败") {
+        return "fail-row";
+      } else if (row.result === "平局") {
+        return "draw-row";
+      } else {
+        return "";
+      }
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.el-pagination{
+.el-pagination {
   display: flex;
   justify-content: center;
 }
+
+@import url("../../assets/css/style.scss");
 </style>
