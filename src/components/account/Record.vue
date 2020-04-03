@@ -54,6 +54,7 @@
 </template>
 
 <script>
+import "../../assets/css/style.scss";
 export default {
   data() {
     return {
@@ -137,6 +138,4 @@ export default {
   display: flex;
   justify-content: center;
 }
-
-@import url("../../assets/css/style.scss");
 </style>
