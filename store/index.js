@@ -9,8 +9,8 @@ const store = ()=>{
 
             // 游戏列表
             gameList:[
-                { id:0,name: "石头剪刀布",type:'双人',path:'/morra', img: "http://localhost:3000/images/morra.jpg" },
-                { id:1,name: "斗地主",type:'三人',path:'/ftl',img: "http://localhost:3000/images/doudizhu.png" },
+                { id:0,name: "石头剪刀布",type:'双人',path:'/morra', img: "http://192.168.0.104:3000/images/morra.jpg" },
+                { id:1,name: "斗地主",type:'三人',path:'/ftl',img: "http://192.168.0.104:3000/images/doudizhu.png" },
                 // { id:3,name: "斗地主",type:'三人',img: "http://localhost:3000/images/doudizhu.png" },
                 // { id:4,name: "斗地主",type:'三人',img: "http://localhost:3000/images/doudizhu.png" },
                 // { id:5,name: "斗地主",type:'三人',img: "http://localhost:3000/images/doudizhu.png" },
