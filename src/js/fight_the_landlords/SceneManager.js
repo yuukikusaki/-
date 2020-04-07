@@ -149,6 +149,8 @@ class SceneManager {
                 this.pokerGame.renderPoker(this.my.length, this.leftPlayer.length, this.rightPlayer.length);
                 // 渲染地主牌
                 this.pokerGame.renderLandCard();
+                // 渲染地主头像
+                this.pokerGame.renderLandlordHead();
                 // 渲染按钮
                 this.buttonList = this.press ? this.pokerGame.setPlayBtn(this.nopass) : []; // 是否设置游戏按钮
                 this.pokerGame.renderPlayBtn(this.buttonList); // 渲染游戏按钮
@@ -191,10 +193,12 @@ class SceneManager {
                 this.pokerGame.landCard = req.data;
                 // this.pokerGame.update();
                 // 2. 先把地主的文字清除，并加上三张牌
-                this.players.map(item => {
+                this.players.map((item,index) => {
                     if (item.userid == req.curUserID) {
                         item.text = '';
                         item.length += 3;
+                        // 设置地主图标
+                        this.pokerGame.setLandlordHead(index);
                     }
                 });
                 // 3. 自己是地主

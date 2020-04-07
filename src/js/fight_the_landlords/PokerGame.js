@@ -14,6 +14,7 @@ class PokerGame {
         this.btnW = this.canvas.width / 8;
         this.btnH = this.canvas.height / 12;
         this.btnY = this.canvas.height * 0.618;
+        this.head = {x:null,y:null}
     }
 
     // 创建卡牌类
@@ -102,7 +103,7 @@ class PokerGame {
     // 渲染按钮 start
     // 渲染准备按钮
     renderReadyBtn(my) {
-        if (my==null || my.text == "") {
+        if (my == null || my.text == "") {
             this.ctx.drawImage(this.loadedRes["ready"], this.canvas.width / 2 - 65, this.canvas.height * 0.618, 130, 65);
         } else {
             this.ctx.drawImage(this.loadedRes["cancel"], this.canvas.width / 2 - 65, this.canvas.height * 0.618, 130, 65);
@@ -123,6 +124,13 @@ class PokerGame {
             this.ctx.drawImage(this.loadedRes[item.name],
                 item.x, item.y, item.w, item.h)
         });
+    }
+
+    // 渲染重置按钮
+    renderRestart() {
+        this.ctx.drawImage(this.loadedRes["restart"],
+            this.canvas.width / 2 - this.btnW / 2, this.canvas.height / 3,
+            this.btnW, this.btnW);
     }
     // 渲染按钮 end
 
@@ -203,7 +211,7 @@ class PokerGame {
         if (my == null) return;
         if (sn === 1) {
             this.ctx.fillText(left.text, 50, left.textY);
-            this.ctx.fillText(right.text, this.canvas.width-100, right.textY);
+            this.ctx.fillText(right.text, this.canvas.width - 100, right.textY);
             return
         }
         if (my != null && my.text) {
@@ -269,19 +277,31 @@ class PokerGame {
 
     // 渲染卡牌 end
 
-    // 渲染结果页
-    // renderResult(text){
-    //     this.ctx.font = "36px bold 宋体";
-    //     // 设置颜色
-    //     this.ctx.fillStyle = "#ff0";
-    //     this.ctx.fillText(text, this.canvas.width/2-18, 50);
-    // }
-
-    renderRestart(){
-        this.ctx.drawImage(this.loadedRes["restart"],
-        this.canvas.width/2-this.btnW/2,this.canvas.height/3,
-        this.btnW,this.btnW);
+    // 设置地主头像
+    setLandlordHead(index){
+        switch (index) {
+            case 0:
+                this.head.x = 120;
+                this.head.y = this.canvas.height-150;
+                break;
+            case 1:
+                this.head.x = 120;
+                this.head.y = 120;
+                break;
+            case 2:
+                this.head.x = this.canvas.width-150;
+                this.head.y = 120;
+                break;
+            default:
+                break;
+        }
     }
+
+    // 渲染地主头像
+    renderLandlordHead(){
+        this.ctx.drawImage(this.loadedRes["地主"],this.head.x,this.head.y,30,30);
+    }
+
 
 
 }
