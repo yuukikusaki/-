@@ -3,7 +3,7 @@
     <!-- 用户介绍区 -->
     <div>
       <h1>基本信息</h1>
-      <el-row style="height:160px" class="home-info">
+      <el-row style="min-height:160px" class="home-info">
         <!-- 头像 -->
         <el-col :span="3">
           <img :src="userinfo.avatar" alt class="avatar" />
@@ -30,22 +30,18 @@
           <span>lv1</span>
         </el-col>
         <!-- 跳转战绩和修改信息 -->
-        <el-col class="jump" :span="4">
+        <el-col class="jump hidden-md-and-down" :span="4">
           <el-button type="primary" @click="jump('/account/record')">查看战绩</el-button>
           <el-button type="info" @click="jump('/account/setting')">修改资料</el-button>
         </el-col>
       </el-row>
     </div>
- <el-divider></el-divider>
+    <el-divider></el-divider>
 
     <!-- 游玩信息区 -->
     <div class="game-info">
       <h1>游戏记录</h1>
-      <el-table
-      :data="records"
-        border
-        stripe
-      >
+      <el-table :data="records" border stripe>
         <el-table-column type="index"></el-table-column>
         <el-table-column label="游戏名" prop="name"></el-table-column>
         <el-table-column label="类型" prop="type"></el-table-column>
@@ -55,7 +51,7 @@
         <!-- <el-table-column label="角色" prop="role_name"></el-table-column> -->
       </el-table>
     </div>
- <el-divider></el-divider>
+    <el-divider></el-divider>
     <!-- 退出登录 -->
     <div>
       <el-button type="danger" @click="logout">退出登录</el-button>
@@ -64,13 +60,14 @@
 </template>
 
 <script>
+import "element-ui/lib/theme-chalk/display.css";
 export default {
   props: ["activePath"],
   data() {
     return {
       userinfo: {}, // 用户信息
       isAdmin: false, //  是否是管理员
-      records:[], // 游戏记录
+      records: [] // 游戏记录
     };
   },
   mounted() {
@@ -96,29 +93,56 @@ export default {
       this.$emit("changeActivePath", path);
     },
     // 获取游戏记录
-    async getRecords(){
+    async getRecords() {
       const { data: res } = await this.$http.get(
         `user/records?userid=${this.userinfo.userid}`
       );
       if (res.status !== 0) return this.$message.error(res.message);
       this.records = res.data;
       const gamelist = this.$store.getters.getGameList;
-      this.records.map((item,index)=>{
+      this.records.map((item, index) => {
         item.name = gamelist[index].name;
         item.type = gamelist[index].type;
-        item.rate = (item.win/item.times).toFixed(2);
+        item.rate = (item.win / item.times).toFixed(2);
       });
-        window.console.log(this.records);
-
+      window.console.log(this.records);
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
+@media screen and (max-width: 800px) {
+  /*当屏幕尺寸小于800px时，应用下面的CSS样式*/
+  .el-col-3,
+  .el-col-4 {
+    width: 25rem;
+  }
+  .el-col-13 {
+    width: 100%;
+  }
+  .base-msg {
+    display: flex;
+    align-items: center;
+    margin: 8px 0;
+    .bottom-msg {
+      margin-left: 8px;
+    }
+  }
+}
+@media screen and (min-width: 801px) {
+  .base-msg {
+    display: flex;
+    flex-flow: column;
+    .bottom-msg {
+      margin-top: 8px;
+    }
+  }
+}
 // 顶部信息区
 .home-info {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   margin-bottom: 30px;
   padding-bottom: 10px;
@@ -127,10 +151,7 @@ export default {
     width: 100px;
     height: 100px;
   }
-  .base-msg {
-    display: flex;
-    flex-flow: column;
-  }
+
   // 顶部信息区
   .top-msg {
     // 名字
@@ -162,7 +183,6 @@ export default {
   }
   // 底部信息区
   .bottom-msg {
-    margin-top: 8px;
     font-size: 16px;
     display: flex;
     justify-content: space-between;
@@ -197,7 +217,7 @@ export default {
     }
   }
 }
-.game-info{
+.game-info {
   margin-bottom: 30px;
   padding-bottom: 10px;
 }

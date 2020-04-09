@@ -52,7 +52,6 @@
             </el-menu-item>
           </el-submenu>
         </el-menu>
-        
       </el-aside>
       <!-- 右侧内容主体区 -->
       <el-main>
@@ -78,7 +77,7 @@ export default {
         "201": "el-icon-chat-dot-round",
         "301": "el-icon-s-data"
       },
-      isCollapse: false, // 是否折叠
+      isCollapse: true, // 是否折叠
       activePath: "", // 被激活的链接地址
       gameList: []
     };
@@ -114,6 +113,15 @@ export default {
     },
     // 菜单折叠与展开
     toggleCollapse() {
+      // 移动端禁止展开
+      if (
+        navigator.userAgent.match(
+          /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian)/i
+        )
+      ) {
+        return;
+      }
+      // if(Navigator.users)
       this.isCollapse = !this.isCollapse;
     },
     // 保存链接激活状态
@@ -124,7 +132,7 @@ export default {
     // 改变侧边栏头像
     changeAvatar(avatar) {
       this.userinfo.avatar = avatar;
-    },
+    }
   }
 };
 </script>
@@ -196,36 +204,6 @@ export default {
   margin: 20px 20px 0;
   padding: 0;
 }
-
-// 游戏列表区 start
-// .game-list {
-//   width: 180px;
-//   position: fixed;
-//   top: 50%;
-//   transform: translateY(-50%);
-// }
-// .item {
-//   margin-bottom: 18px;
-// }
-
-// .clearfix:before,
-// .clearfix:after {
-//   display: table;
-//   content: "";
-// }
-// .clearfix:after {
-//   clear: both;
-// }
-// .text {
-//   display: flex;
-//   justify-content: space-between;
-// }
-// 游戏列表区 end
-
-// 游戏卡片区 start
-// .game-container {
-//   margin-left: 180px;
-// }
 .card-list {
   display: flex;
   flex-wrap: wrap;
