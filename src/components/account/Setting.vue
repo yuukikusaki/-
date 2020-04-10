@@ -1,5 +1,5 @@
 <template>
-  <div class="account-setting" style="margin:20px">
+  <div class="account-setting" style="margin:10px">
     <h2>修改头像</h2>
     <!-- 头像区 -->
     <el-upload
@@ -29,7 +29,13 @@
       </el-form-item>
       <!-- 个性签名 -->
       <el-form-item label="个性签名:" prop="sign">
-        <el-input type="textarea" :rows="2" placeholder="设置您的签名- ( ゜- ゜)つロ" v-model="userForm.sign"></el-input>
+        <el-input
+          resize="none"
+          type="textarea"
+          :rows="3"
+          placeholder="设置您的签名- ( ゜- ゜)つロ"
+          v-model="userForm.sign"
+        ></el-input>
       </el-form-item>
       <!-- 性别 -->
       <el-form-item label="性别:">
@@ -164,15 +170,15 @@ export default {
       form.append("userid", this.userForm.userid);
       const { data: res } = await this.$http.post("user/avatar", form, {
         headers: {
-          "Content-type": "mulipart/form-data",
+          "Content-type": "mulipart/form-data"
         }
       });
-      window.console.log('res',res);
+      window.console.log("res", res);
       if (res.status !== 0) return this.$message.error(res.message);
       this.$message.success(res.message);
       await this.$store.dispatch("getUserInfo");
       this.getUserInfo();
-      this.$emit("changeAvatar",this.avatarUrl);
+      this.$emit("changeAvatar", this.avatarUrl);
       // 刷新页面？
       // this.$router.go(0);
     },
@@ -231,5 +237,16 @@ export default {
   width: 178px;
   height: 178px;
   display: block;
+}
+.el-input {
+  width: 200px;
+}
+.el-textarea {
+  width: 618px;
+}
+@media screen and(max-width:800px) {
+  .el-textarea {
+    width: 200px;
+  }
 }
 </style>

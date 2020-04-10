@@ -197,11 +197,20 @@ export default {
 }
 
 // 主体区
+@media screen and(max-width: 800px){
+  .el-main{
+  margin: 0;
+  }
+}
+@media screen and(min-width: 801px){
+  .el-main{
+  margin: 20px 20px 0;
+  }
+}
 .el-main {
   border: 1px solid #e1e2e5;
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.14);
-  margin: 20px 20px 0;
   padding: 0;
 }
 .card-list {

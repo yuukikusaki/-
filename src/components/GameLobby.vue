@@ -23,7 +23,7 @@
     <!-- 创建房间 -->
     <el-button type="primary" id="create-room" @click="dialogVisible = true">创建房间</el-button>
     <!-- 弹窗区 -->
-    <el-dialog title="创建房间" :visible.sync="dialogVisible" width="30%">
+    <el-dialog title="创建房间" :visible.sync="dialogVisible" width="350px">
       <!-- <p>游戏名称：{{gameInfo.name}}</p> -->
       <el-form label-width="80px">
         <!-- 选择游戏类型 -->
