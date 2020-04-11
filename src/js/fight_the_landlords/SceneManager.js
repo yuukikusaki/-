@@ -224,8 +224,8 @@ class SceneManager {
     // 添加监听
     bindEvent() {
         this.canvas.onclick = event => {
-            const mousex = event.layerX;
-            const mousey = event.layerY;
+            const mousex = event.offsetX;
+            const mousey = event.offsetY;
             switch (this.sceneNumber) {
                 case 1: // 准备开始按钮
                     if (mousex > this.canvas.width / 2 - 65 && mousex < this.canvas.width / 2 + 65 &&

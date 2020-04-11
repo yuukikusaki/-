@@ -13,7 +13,7 @@ class SceneManager {
     }
 
     // 初始化
-    init(){
+    init() {
         this.sceneNumber = 1;
         this.myChoose = "";
         this.temp = "";
@@ -24,15 +24,15 @@ class SceneManager {
     update(req) {
         switch (this.sceneNumber) {
             case 2:
-                if(req==="my"){
+                if (req === "my") {
                     this.myChoose = this.temp;
                 }
-                if(req==="oth"){
+                if (req === "oth") {
                     this.othChoose = "back"
                 }
                 break;
             case 3:
-               this.init();
+                this.init();
                 break;
             default:
                 break;
@@ -77,39 +77,39 @@ class SceneManager {
                 break;
             case 2:
                 this.morraGame.setSelects(); // 设置三个选项
+                this.render();
                 break;
             case 3:
                 this.myChoose = this.temp;
                 this.othChoose = req.name;
                 this.text = req.res;
+                this.render();
                 break;
             default:
                 break;
         }
-        this.render();
     }
 
     bindEvent() {
         this.canvas.onclick = event => {
-            const mousex = event.layerX;
-            const mousey = event.layerY;
+            const mousex = event.offsetX;
+            const mousey = event.offsetY;
             switch (this.sceneNumber) {
                 case 2:
                     this.morraGame.selects.map(item => {
-                        window.console.log(item)
                         if (mousex >= 50 && mousex <= 50 + item.w
                             && mousey >= item.y && mousey <= item.y + item.h
-                            &&this.myChoose === "") {
-                                item.onClick(this.socket);
-                                this.temp = item.name;
+                            && this.myChoose === "") {
+                            item.onClick(this.socket);
+                            this.temp = item.name;
                         }
                     });
                     break;
                 case 3:
-                    if(mousex>=this.canvas.width/2-this.morraGame.imgW/2&&mousex<=this.canvas.width/2+this.morraGame.imgW/2
-                        && mousey>=this.canvas.height/2-this.morraGame.imgH/2&&mousey<=this.canvas.height/2+this.morraGame.imgH/2){
-                            this.update();
-                        }
+                    if (mousex >= this.canvas.width / 2 - this.morraGame.imgW / 2 && mousex <= this.canvas.width / 2 + this.morraGame.imgW / 2
+                        && mousey >= this.canvas.height / 2 - this.morraGame.imgH / 2 && mousey <= this.canvas.height / 2 + this.morraGame.imgH / 2) {
+                        this.update();
+                    }
                     break;
                 default:
                     break;

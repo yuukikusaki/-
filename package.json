@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
+    "be-full": "0.0.3",
     "core-js": "^3.3.2",
     "element-ui": "^2.13.0",
     "moment": "^2.24.0",

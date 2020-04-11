@@ -542,3 +542,23 @@ ps:侧边栏可以让头像区`v-if`,按钮移位
 
 ## 4/10 移动端适配2
 除了游戏画面，别的基本上没多大问题了
+
+## 4/11 移动端适配3（废案，游戏画面不适配）
+```js
+if (
+        navigator.userAgent.match(
+          /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian)/i
+        )
+      ) {
+    // beFull(document.getElementById("battle-contaioner"));
+
+        this.canvas.width = document.documentElement.clientWidth - 164;
+        this.canvas.height = document.documentElement.clientHeight;
+      }
+```
+
+## 4/11 edge适配
+```js
+const mousex = event.offsetX;
+const mousey = event.offsetY;
+```
