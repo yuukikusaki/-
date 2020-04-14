@@ -10,11 +10,16 @@
           </div>
           <div class="game-join">
             <div>
-              <span>房间人数</span><span>{{room.pNum}}/{{room.limit}}</span>
-              </div>
-            
+              <span>房间人数</span>
+              <span>{{room.pNum}}/{{room.limit}}</span>
+            </div>
             <div class="bottom clearfix">
-              <el-button type="primary" round @click="joinRoom(room.rid,gameList[room.gid].path)">进入房间</el-button>
+              <el-button
+                :disabled="room.pNum===room.limit"
+                type="primary"
+                round
+                @click="joinRoom(room,gameList[room.gid].path)"
+              >进入房间</el-button>
             </div>
           </div>
         </div>
@@ -29,18 +34,13 @@
         <!-- 选择游戏类型 -->
         <el-form-item label="游戏房间">
           <el-select v-model="newRoom.gid" placeholder="请选择">
-            <el-option
-              v-for="item in gameList"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
+            <el-option v-for="item in gameList" :key="item.id" :label="item.name" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
         <!-- 按钮区 -->
         <el-form-item class="dialog-footer">
-            <el-button @click="dialogVisible = false">取 消</el-button>
-            <el-button type="primary" @click="crtNewRoom(newRoom.gid)">确 定</el-button>
+          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="crtNewRoom(newRoom.gid)">确 定</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -53,7 +53,7 @@ export default {
     return {
       dialogVisible: false, // 是否打开弹窗
       // gameId: null,
-      gameList:[], // 游戏列表
+      gameList: [], // 游戏列表
       newRoom: {
         // 创建的新房间信息
         rid: null,
@@ -104,23 +104,26 @@ export default {
     // 创建新房间
     crtNewRoom(gid) {
       this.newRoom.rid = this.realLength;
-      window.console.log(this.newRoom)
+      window.console.log(this.newRoom);
       // 应该是向服务器发送消息
       this.$socket.emit("crtroom", this.newRoom);
       this.dialogVisible = false;
-      this.joinRoom(this.newRoom.rid,this.gameList[gid].path); // 加入房间
+      this.joinRoom(this.newRoom, this.gameList[gid].path); // 加入房间
     },
     // 加入房间
-    joinRoom(index,path) {
+    joinRoom(room, path) {
+      if (room.pNum && room.pNum === room.limit) {
+        return;
+      }
       this.$socket.emit("joinRoom", {
-        index, // 房间号
+        index: room.rid, // 房间号
         userid: this.$store.getters.getUserInfo.userid,
         username: this.$store.getters.getUserInfo.username,
-        avatar:this.$store.getters.getUserInfo.avatar
+        avatar: this.$store.getters.getUserInfo.avatar
       });
       this.$router.push({
         path,
-        query: {  rid: index }
+        query: { rid: room.rid }
       });
     }
   }
@@ -179,7 +182,7 @@ export default {
   bottom: 20px;
   right: 70px;
 }
-.dialog-footer{
+.dialog-footer {
   display: flex;
   justify-content: flex-end;
 }

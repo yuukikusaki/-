@@ -562,3 +562,5 @@ if (
 const mousex = event.offsetX;
 const mousey = event.offsetY;
 ```
+
+## 414 房间人满时禁止进入
