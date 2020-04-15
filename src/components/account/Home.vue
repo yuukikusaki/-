@@ -26,8 +26,8 @@
         </el-col>
         <!-- 右边经验条 -->
         <el-col class="level-msg" :span="13">
-          <el-progress :text-inside="true" :stroke-width="26" :percentage="70" status="warning"></el-progress>
-          <span>lv1</span>
+          <el-progress :text-inside="true" :stroke-width="26" :percentage="exp*100" status="warning"></el-progress>
+          <span>lv{{level}}</span>
         </el-col>
         <!-- 跳转战绩和修改信息 -->
         <el-col class="jump hidden-md-and-down" :span="4">
@@ -66,21 +66,68 @@ export default {
   data() {
     return {
       userinfo: {}, // 用户信息
+      exp:0, // 经验条
+      level:1, // 等级
       isAdmin: false, //  是否是管理员
       records: [] // 游戏记录
     };
   },
-  mounted() {
+  created() {
     this.getUserInfo(); // 获取用户信息
     this.getRecords(); // 获取游戏记录
   },
   methods: {
-    getUserInfo() {
+    async getUserInfo() {
+      await this.$store.dispatch("getUserInfo");
       this.userinfo = this.$store.getters.getUserInfo;
       if (/管理员/.test(this.userinfo.role_name)) {
         this.isAdmin = true;
       }
-      window.console.log(this.userinfo);
+      // this.exp = 
+      this.level = this.setLevel(this.userinfo.exp);
+      this.setExp(this.userinfo.exp);
+      window.console.log('exp',this.exp);
+    },
+    // 设置等级
+    setLevel(exp){
+      if(exp<100){
+        return 1;
+      }else if(exp>=100&&exp<300){
+        return 2;
+      }else if(exp>=300&&exp<600){
+        return 3;
+      }else if(exp>=600&&exp<1000){
+        return 4;
+      }else if(exp>=1000&&exp<1500){
+        return 5;
+      }else{
+        return 6;
+      }
+    },
+    // 设置经验百分比
+    setExp(exp){
+      switch (this.level) {
+        case 1:
+          this.exp = (exp/100).toFixed(2);
+          break;
+        case 2:
+          this.exp = (exp/300).toFixed(2);
+          break;
+        case 3:
+          this.exp = (exp/600).toFixed(2);
+          break;
+        case 4:
+          this.exp = (exp/1000).toFixed(2);
+          break;
+        case 5:
+          this.exp = (exp/1500).toFixed(2);
+          break;
+        case 6:
+          this.exp = (exp/1500).toFixed(2);
+          break;
+        default:
+          break;
+      }
     },
     // 退出登录
     logout() {
