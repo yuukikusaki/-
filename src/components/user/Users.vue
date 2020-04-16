@@ -58,6 +58,24 @@
         :total="userlist.length"
       ></el-pagination>
     </el-card>
+
+    <!-- 发送系统消息 -->
+    <el-button type="text" @click="systemMsg = true">发送系统消息</el-button>
+
+    <el-dialog title="系统消息" :visible.sync="systemMsg" width="500px">
+      <el-form :model="msgForm">
+        <el-form-item label="标题" label-width="60px">
+          <el-input v-model="msgForm.title" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="内容" label-width="60px">
+          <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="msgForm.content"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="systemMsg = false">取 消</el-button>
+        <el-button type="primary" @click="systemMsg = false;sendMsg()">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -71,7 +89,12 @@ export default {
         pagenum: 1, // 当前页数
         pagesize: 10 // 当前每页显示的数据
       },
-      userlist: [] // 用户列表
+      userlist: [], // 用户列表
+      systemMsg: false,
+      msgForm: {
+        title: "",
+        content: ""
+      }
     };
   },
   created() {
@@ -81,33 +104,46 @@ export default {
     //   获取用户列表
     async getUserList() {
       const { data: res } = await this.$http.post("admin/users", {
-        params: this.queryInfo
+        parmas: this.queryInfo
       });
-      if (res.status != 0) {
-        return this.$message.error(res.$message);
+      if (res.status !== 0) {
+        return this.$message.error(res.message);
       }
       res.users.map(item => (item.state = item.state == 1 ? true : false));
       this.userlist = res.users;
     },
 
     // 监听pagesize改变
-    handleSizeChange(newSize){
-      window.console.log(newSize)
+    handleSizeChange(newSize) {
+      window.console.log(newSize);
       this.queryInfo.pagesize = newSize;
       this.getUserList();
     },
 
     // 监听页码值
-    handleCurrentChange(newPage){
-      window.console.log(newPage)
+    handleCurrentChange(newPage) {
+      window.console.log(newPage);
       this.queryInfo.pagenum = newPage;
+    },
+
+    // 发送系统消息
+    async sendMsg() {
+      const { data: res } = await this.$http.post("admin/msg", {
+        parmas: this.msgForm
+      });
+      if (res.status !== 0) {
+        return this.$message.error(res.message);
+      }
+      this.$message.success(res.message);
+      this.msgForm.title = "";
+      this.msgForm.content = "";
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.el-pagination{
+.el-pagination {
   margin-top: 15px;
 }
 </style>

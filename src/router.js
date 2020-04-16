@@ -6,10 +6,11 @@ Vue.use(Router)
 import HomeContainer from './components/HomeContainer.vue'
 import GameLobby from './components/GameLobby.vue'
 import Login from './components/Login.vue'
-import Users from './components/user/Users.vue'
 import Home from './components/account/Home.vue'
 import Record from './components/account/Record.vue'
 import Setting from './components/account/Setting.vue'
+import System from './components/message/System.vue'
+import Users from './components/user/Users.vue'
 import FtlRoom from './components/battle/FtlRoom.vue'
 import MorraRoom from './components/battle/MorraRoom.vue'
 
@@ -28,6 +29,7 @@ const router = new Router({
                 { path: '/account/home', component: Home },
                 { path: '/account/record', component: Record },
                 { path: '/account/setting', component: Setting },
+                { path: '/msg/system', component: System },
                 { path: '/admin/users', component: Users },
                 { path: '/ftl', component: FtlRoom },
                 { path: '/morra', component: MorraRoom }
