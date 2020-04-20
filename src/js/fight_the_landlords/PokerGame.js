@@ -14,7 +14,7 @@ class PokerGame {
         this.btnW = this.canvas.width / 8;
         this.btnH = this.canvas.height / 12;
         this.btnY = this.canvas.height * 0.618;
-        this.head = {x:null,y:null}
+        this.head = { x: null, y: null }
     }
 
     // 创建卡牌类
@@ -137,9 +137,9 @@ class PokerGame {
     // 渲染卡牌 start
     // 渲染三方卡牌
     renderPoker(mlen, llen, rlen) {
+        this.renderMyPoker(mlen);
         this.renderLeftPlayerPoker(llen);
         this.renderRightPlayerPoker(rlen);
-        this.renderMyPoker(mlen);
     }
 
     // 渲染我的卡牌
@@ -228,8 +228,8 @@ class PokerGame {
 
     // 渲染桌面上的卡牌
     renderDeskPoker(my, left, right) {
-        this.renderMyDeskPoker(my);
         this.renderLeftDeskPoker(left);
+        this.renderMyDeskPoker(my);
         this.renderRightDeskPoker(right);
     }
 
@@ -278,18 +278,18 @@ class PokerGame {
     // 渲染卡牌 end
 
     // 设置地主头像
-    setLandlordHead(index){
+    setLandlordHead(index) {
         switch (index) {
             case 0:
                 this.head.x = 120;
-                this.head.y = this.canvas.height-150;
+                this.head.y = this.canvas.height - 150;
                 break;
             case 1:
                 this.head.x = 120;
                 this.head.y = 120;
                 break;
             case 2:
-                this.head.x = this.canvas.width-150;
+                this.head.x = this.canvas.width - 150;
                 this.head.y = 120;
                 break;
             default:
@@ -298,8 +298,8 @@ class PokerGame {
     }
 
     // 渲染地主头像
-    renderLandlordHead(){
-        this.ctx.drawImage(this.loadedRes["地主"],this.head.x,this.head.y,30,30);
+    renderLandlordHead() {
+        this.ctx.drawImage(this.loadedRes["地主"], this.head.x, this.head.y, 30, 30);
     }
 
 
