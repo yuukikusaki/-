@@ -160,6 +160,7 @@ export default {
 
 <style lang="scss" scoped>
 #battle-contaioner {
+  background: linear-gradient(to bottom, #616c8a 0%,#657090 23%,#6C799B 50%,#737fa5 70%,#7783a9 100%);
   display: flex;
   .left,
   .right {

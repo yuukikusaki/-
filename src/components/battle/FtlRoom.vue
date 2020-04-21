@@ -207,6 +207,7 @@ export default {
 <style lang="scss" scoped>
 #battle-contaioner {
   display: flex;
+  background-color:#51719E;
   .left,
   .right {
     width: 50px;
