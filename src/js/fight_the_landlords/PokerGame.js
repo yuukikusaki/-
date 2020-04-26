@@ -14,7 +14,10 @@ class PokerGame {
         this.btnW = this.canvas.width / 8;
         this.btnH = this.canvas.height / 12;
         this.btnY = this.canvas.height * 0.618;
-        this.head = { x: null, y: null }
+        // 桌面上卡牌大小
+        this.deskW = 84;
+        this.deskH = 120;
+        this.head = { x: null, y: null }; // 头像
     }
 
     // 创建卡牌类
@@ -160,7 +163,7 @@ class PokerGame {
 
     // 渲染左边
     renderLeftPlayerPoker(len) {
-        let start = this.canvas.height / 2 + 52.5 + (len - 1) * 5 - (this.canvas.width - this.canvas.height) / 2;
+        const start = this.canvas.height / 2 + 52.5 + (len - 1) * 5 - (this.canvas.width - this.canvas.height) / 2;
         this.ctx.save();
         this.ctx.translate(this.canvas.width, 0);
         this.ctx.rotate(Math.PI / 2);
@@ -241,8 +244,8 @@ class PokerGame {
         for (let i = 0; i < my.deskPoker.length; i++) {
             this.ctx.drawImage(
                 this.loadedRes[my.deskPoker[i].name],
-                this.canvas.width / 2 - 52.5 - (my.deskPoker.length - 1) * 10 + i * 20,
-                my.deskY,
+                this.canvas.width / 2 - this.deskW/2 - (my.deskPoker.length - 1) * 7.5 + i * 15,my.deskY,
+                this.deskW,this.deskH
             );
         }
     }
@@ -254,9 +257,8 @@ class PokerGame {
         }
         for (let i = 0; i < left.deskPoker.length; i++) {
             this.ctx.drawImage(
-                this.loadedRes[left.deskPoker[i].name],
-                180 + i * 20,
-                left.deskY,
+                this.loadedRes[left.deskPoker[i].name],180 + i * 15,left.deskY,
+                this.deskW,this.deskH
             );
         }
     }
@@ -269,8 +271,8 @@ class PokerGame {
         for (let i = 0; i < right.deskPoker.length; i++) {
             this.ctx.drawImage(
                 this.loadedRes[right.deskPoker[i].name],
-                this.canvas.width - 300 - 20 * (right.deskPoker.length - 1) + i * 20,
-                right.deskY,
+                right.deskX - 15 * (right.deskPoker.length - 1) + i * 15,right.deskY,
+                this.deskW,this.deskH
             );
         }
     }

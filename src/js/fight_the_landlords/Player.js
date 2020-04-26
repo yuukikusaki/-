@@ -24,12 +24,7 @@ class Player {
 class My extends Player {
     constructor(deskX, deskY, textX, textY) {
         super(deskX, deskY, textX, textY)
-        // this.myPokerList = null; // 我的牌组
     }
-
-    // resetX(){
-    //     this.deskX =  52.5 - (this.deskPoker.length - 1) * 10;
-    // }
 }
 
 // 左边玩家
@@ -45,10 +40,6 @@ class RightPlayer extends Player {
         super(deskX, deskY, textX, textY)
     }
 
-    // 右边需要重设卡牌的 x
-    // resetX(){
-    //     this.deskX =  20 * (this.deskPoker.length - 1);
-    // }
 }
 
 export { My, LeftPlayer, RightPlayer }

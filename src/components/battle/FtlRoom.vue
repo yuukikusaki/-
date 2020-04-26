@@ -74,13 +74,11 @@ export default {
       } else if (typeof req.data == "object") {
         this.sceneManager.update(req);
         window.console.log(req)
-        if (req.data.typeRank == "win") {
+        if (req.data.typeRank == "win") { // 决出胜负
           window.console.log(this.sceneManager.sceneNumber)
           this.sceneManager.sceneNumber = 4;
           this.$message.success(req.winner);
           this.sceneManager.enter(req.winner);
-        //   alert(req.winner);
-        //   this.setCanvas();
           this.sceneManager.setPlayers(
             this.my,
             this.leftPlayer,
@@ -121,9 +119,9 @@ export default {
     setPlayerClass() {
       this.my = new My(
         this.canvas.width / 2,
-        this.canvas.height / 2 - 50,
+        this.canvas.height / 2,
         this.canvas.width / 2 - 18,
-        (this.canvas.height * 2) / 3
+        this.canvas.height * 2 / 3
       );
       this.leftPlayer = new LeftPlayer(
         200,
@@ -132,7 +130,7 @@ export default {
         this.canvas.height / 3
       );
       this.rightPlayer = new RightPlayer(
-        this.canvas.width - 300,
+        this.canvas.width - 260,
         this.canvas.height / 2 - 120,
         this.canvas.width - 250,
         this.canvas.height / 3
