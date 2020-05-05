@@ -578,3 +578,5 @@ const mousey = event.offsetY;
 
 ## 5/5 修改1
 改了一些css样式
+## 5/5 修改2
+socket断连问题

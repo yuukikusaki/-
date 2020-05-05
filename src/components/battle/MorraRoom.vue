@@ -44,7 +44,6 @@ export default {
   },
   mounted() {
     this.setCanvas();
-    window.addEventListener("beforeunload", e => this.leaveRoom(e)); // 刷新或销毁的情况下
   },
   beforeDestroy() {
     this.leaveRoom(); // 退出时离开房间
@@ -89,13 +88,9 @@ export default {
       this.isstart = false;
     },
     // 离开房间
-    leaveRoom(e) {
+    leaveRoom() {
       this.$socket.emit("leave", this.userinfo);
-      if (e) {
-        e.returnValue = "确定要关闭页面吗";
-      }
-      return;
-    }
+    },
   },
   sockets: {
     // 玩家加入游戏
