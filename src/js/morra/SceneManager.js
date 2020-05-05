@@ -63,7 +63,7 @@ class SceneManager {
                 this.morraGame.renderSelects();
                 this.morraGame.renderChoose(this.myChoose, this.othChoose);
                 this.morraGame.renderText(this.text); // 结果
-                this.morraGame.renderRestart(); // 重新开始按钮
+                // this.morraGame.renderRestart(); // 重新开始按钮
                 break;
             default:
                 break;

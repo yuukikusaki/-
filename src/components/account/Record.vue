@@ -83,13 +83,12 @@ export default {
       const { data: res } = await this.$http.get(
         `user/morrarecord?userid=${this.userid}`
       );
-      if (res.status !== 0) return this.$message.error(res.message);
+      if (res.status !== 0) return;
       this.morraRecordList = res.data;
     },
-    // 改变斗地主战绩页数
+    // 改变猜拳战绩页数
     changeMorraPage(val) {
       this.morraPage.currentPage = val;
-      this.morraPage.curr;
     },
     // 斗地主页表
     morraIndex(index) {
@@ -104,13 +103,12 @@ export default {
       const { data: res } = await this.$http.get(
         `user/ftlrecord?userid=${this.userid}`
       );
-      if (res.status !== 0) return this.$message.error(res.message);
+      if (res.status !== 0) return;
       this.ftlRecordList = res.data;
     },
     // 改变斗地主战绩页数
     changeFtlPage(val) {
       this.ftlPage.currentPage = val;
-      this.ftlPage.curr;
     },
     // 斗地主页表
     ftlIndex(index) {

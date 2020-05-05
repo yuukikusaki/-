@@ -86,8 +86,8 @@ export default {
       loginBox: true,
       // 登录表单的数据绑定对象
       loginForm: {
-        username: "kusaki",
-        password: "123",
+        username: "",
+        password: "",
         autologin: false // 是否自动登录
       },
       // 注册表单的数据绑定对象

@@ -9,20 +9,9 @@ const store = ()=>{
 
             // 游戏列表
             gameList:[
-                { id:0,name: "石头剪刀布",type:'双人',path:'/morra', img: "http://192.168.0.105:3000/images/morra.jpg" },
-                { id:1,name: "斗地主",type:'三人',path:'/ftl',img: "http://192.168.0.105:3000/images/doudizhu.png" },
-                // { id:3,name: "斗地主",type:'三人',img: "http://localhost:3000/images/doudizhu.png" },
-                // { id:4,name: "斗地主",type:'三人',img: "http://localhost:3000/images/doudizhu.png" },
-                // { id:5,name: "斗地主",type:'三人',img: "http://localhost:3000/images/doudizhu.png" },
-                // { id:6,name: "斗地主",type:'三人',img: "http://localhost:3000/images/doudizhu.png" },               
+                { id:0,name: "石头剪刀布",type:'双人',path:'/morra', img: "http://119.23.248.175:3000/images/morra.jpg" },
+                { id:1,name: "斗地主",type:'三人',path:'/ftl',img: "http://119.23.248.175:3000/images/doudizhu.png" },             
               ],
-            
-            // 单个游戏信息
-
-            // 房间列表信息（用哈希表）
-            // roomList:[
-            //     { roomID:1,roomName:'斗地主',roomPass:123},
-            // ]
         },
         mutations:{
             setUserInfo(state,res){

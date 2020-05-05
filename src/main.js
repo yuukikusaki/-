@@ -8,7 +8,7 @@ import './assets/css/global.css'
 
 // 导入 axios
 import axios from 'axios'
-axios.defaults.baseURL = 'http://192.168.0.105:3000';
+axios.defaults.baseURL = 'http://119.23.248.175:3000';
 axios.interceptors.request.use(config=>{
   window.console.log(config)
   config.headers.token = Vue.prototype.$cookies.get("token");
@@ -30,14 +30,14 @@ Vue.use(VueCookies);
 import VueSocketIO from 'vue-socket.io'
 Vue.use(new VueSocketIO({
   debug:true,
-  connection:'http://192.168.0.105:3000',
+  connection:'http://119.23.248.175:3000',
 }));
 
 import router from './router'
 
 // 引入时间过滤器
 import moment from 'moment'
-Vue.filter('dateFormat', function (dateStr,pattern = "YYYY-MM-DD HH:mm:ss") {
+Vue.filter('dateFormat', (dateStr,pattern = "YYYY-MM-DD HH:mm:ss") =>{
   return moment(dateStr).format(pattern);
 });
 

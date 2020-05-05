@@ -48,8 +48,8 @@
         <el-date-picker
           v-model="userForm.birthday"
           type="date"
-          :placeholder="userForm.birthday?userForm.birthday:'选择日期'"
-          value-format="yyyy-MM-dd"
+          placeholder="选择日期"
+          
         ></el-date-picker>
       </el-form-item>
       <!-- 邮箱 -->
@@ -186,6 +186,7 @@ export default {
     onSubmit() {
       this.$refs.userFormRef.validate(async vaild => {
         if (!vaild) return;
+        this.userForm.birthday = this.$root.$options.filters.dateFormat(this.userForm.birthday);
         const { data: res } = await this.$http.post(
           "user/setting",
           this.userForm

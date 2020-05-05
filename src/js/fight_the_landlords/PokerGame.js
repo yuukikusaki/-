@@ -1,5 +1,5 @@
 import Poker from './Poker'
-import { ScoreBtn, TipBtn, PassBtn, PlayBtn } from './Button'
+import { ScoreBtn, PassBtn, PlayBtn } from './Button'
 
 class PokerGame {
     constructor(canvas, ctx, loadedRes, sceneManager) {
@@ -50,8 +50,8 @@ class PokerGame {
             this.pass = new PassBtn("不出");
             buttonList.push(this.pass);
         }
-        this.tip = new TipBtn("提示");
-        buttonList.push(this.tip);
+        // this.tip = new TipBtn("提示");
+        // buttonList.push(this.tip);
         this.play = new PlayBtn("出牌");
         buttonList.push(this.play);
         // buttonList = [this.pass, this.tip, this.play];

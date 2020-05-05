@@ -6,7 +6,7 @@
         <img src="../assets/logo.png" width="55px" height="55px" alt />
         <span>网络游戏大厅</span>
       </div>
-      <el-button type="info" @click="back">返回大厅</el-button>
+      <el-button type="info" @click="back">游戏大厅</el-button>
     </el-header>
     <!-- 主体区 -->
     <el-container>
@@ -169,6 +169,9 @@ export default {
     display: flex;
     flex-flow: column;
     text-align: center;
+    img{
+      border-radius: 50%;
+    }
     span {
       margin-top: 10px;
     }

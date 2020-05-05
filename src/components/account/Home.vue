@@ -74,7 +74,6 @@ export default {
   },
   created() {
     this.getUserInfo(); // 获取用户信息
-    this.getRecords(); // 获取游戏记录
   },
   methods: {
     async getUserInfo() {
@@ -86,7 +85,7 @@ export default {
       // this.exp = 
       this.level = this.setLevel(this.userinfo.exp);
       this.setExp(this.userinfo.exp);
-      window.console.log('exp',this.exp);
+      this.getRecords(); // 获取游戏记录
     },
     // 设置等级
     setLevel(exp){
@@ -141,6 +140,7 @@ export default {
     },
     // 获取游戏记录
     async getRecords() {
+      window.console.log('records',this.userinfo.userid);
       const { data: res } = await this.$http.get(
         `user/records?userid=${this.userinfo.userid}`
       );
@@ -150,9 +150,8 @@ export default {
       this.records.map((item, index) => {
         item.name = gamelist[index].name;
         item.type = gamelist[index].type;
-        item.rate = (item.win / item.times).toFixed(2);
+        item.rate = item.times?(item.win / item.times).toFixed(2):0;
       });
-      window.console.log(this.records);
     }
   }
 };

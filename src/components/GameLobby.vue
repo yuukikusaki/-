@@ -1,6 +1,6 @@
 <template>
   <div class="lobby-container">
-    <h2 style="margin:0">游戏大厅</h2>
+    <!-- <h2 style="margin:0">游戏大厅</h2> -->
     <!-- 游戏房间列表 -->
     <div class="game-room">
       <el-card :body-style="{ padding: '0px' }" v-for=" room in roomList" :key="room.rid">
@@ -131,23 +131,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// 整体布局
-// .info-container {
-//   width: 180px;
-//   height: 500px;
-//   position: fixed;
-//   top: 20%;
-//   background-color: #ccc;
-// }
 .lobby-container {
   background-color: rgb(161, 180, 241);
   height: 100%;
-  // height: 800px;
-  // margin-left: 180px;
-  // padding: 0 20px;
 }
 .game-room {
-  margin-top: 10px;
+  // margin-top: 10px;
   padding: 0 20px;
 }
 // 主体区域
