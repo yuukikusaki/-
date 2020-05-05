@@ -9,9 +9,9 @@
             <img :src="gameList[room.gid].img" />
           </div>
           <div class="game-join">
-            <div>
+            <div class="room-info">
               <span>房间人数</span>
-              <span>{{room.pNum}}/{{room.limit}}</span>
+              <span style="margin-left:8px">{{room.pNum}}/{{room.limit}}</span>
             </div>
             <div class="bottom clearfix">
               <el-button
@@ -138,10 +138,11 @@ export default {
 .game-room {
   // margin-top: 10px;
   padding: 0 20px;
+  overflow: hidden;
 }
 // 主体区域
 .el-card {
-  margin-bottom: 10px;
+  margin-top: 10px;
 }
 .el-button {
   font-size: 16px;
@@ -163,6 +164,11 @@ export default {
   }
   .game-join {
     align-self: center;
+    .room-info {
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
   }
 }
 // 创建房间

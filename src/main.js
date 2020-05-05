@@ -29,7 +29,7 @@ Vue.use(VueCookies);
 // 引入 socket
 import VueSocketIO from 'vue-socket.io'
 Vue.use(new VueSocketIO({
-  debug:true,
+  debug:false,
   connection:'http://119.23.248.175:3000',
 }));
 

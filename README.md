@@ -575,3 +575,6 @@ const mousey = event.offsetY;
 
 ## 4/26 辣鸡chrome乱来
 斗地主桌面图片大小改了一下，现在没有重叠问题了
+
+## 5/5 修改1
+改了一些css样式
