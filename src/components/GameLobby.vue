@@ -26,7 +26,7 @@
       </el-card>
     </div>
     <!-- 创建房间 -->
-    <el-button type="primary" id="create-room" @click="dialogVisible = true">创建房间</el-button>
+    <el-button type="danger" id="create-room" @click="dialogVisible = true">创建房间</el-button>
     <!-- 弹窗区 -->
     <el-dialog title="创建房间" :visible.sync="dialogVisible" width="350px">
       <!-- <p>游戏名称：{{gameInfo.name}}</p> -->
@@ -133,6 +133,7 @@ export default {
 <style lang="scss" scoped>
 .lobby-container {
   background-color: rgb(161, 180, 241);
+  background: url('../assets/lobbyback.jpg') repeat-x 0px -245px;
   height: 100%;
 }
 .game-room {
@@ -143,6 +144,10 @@ export default {
 // 主体区域
 .el-card {
   margin-top: 10px;
+  border-radius: 10px;
+  border: 1px solid #c4e4fb;
+  // background-color: rgba($color: #c4e4fb, $alpha: 0.7);
+
 }
 .el-button {
   font-size: 16px;
@@ -159,7 +164,7 @@ export default {
     img {
       width: 100%;
       height: 100%;
-      border-radius: 5px;
+      border-radius: 15px;
     }
   }
   .game-join {

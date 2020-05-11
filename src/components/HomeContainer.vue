@@ -16,7 +16,7 @@
         <!-- 侧边栏用户信息区 -->
         <div class="userinfo">
           <img width="50px" height="50px" :src="userinfo.avatar" />
-          <span style="font-size:18px">{{userinfo.username}}</span>
+          <span style="font-size:16px">{{userinfo.username}}</span>
         </div>
         <!-- 侧边栏菜单区 -->
         <el-menu
@@ -174,6 +174,7 @@ export default {
     }
     span {
       margin-top: 10px;
+      color: #fff;
     }
   }
   .el-menu {
