@@ -580,3 +580,7 @@ const mousey = event.offsetY;
 改了一些css样式
 ## 5/5 修改2
 socket断连问题
+
+## 5/13 修改3
+之前一次修改了大厅背景图片和一些小细节<br>
+修改了cookie时间为7天自动登录

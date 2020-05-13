@@ -129,7 +129,7 @@ export default {
         }
         this.$message.success("登录成功");
         if (this.loginForm.autologin) {
-          this.$cookies.set("token", res.token, "1d");
+          this.$cookies.set("token", res.token, "7d");
         } else {
           this.$cookies.set("token", res.token, 0);
         }
